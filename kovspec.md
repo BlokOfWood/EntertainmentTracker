@@ -8,6 +8,13 @@ Jelenleg a szórakoztató médiák számontartása különböző appokon és web
 ## Vágyálom rendszer
 A projekt célja egy olyan rendszer kialakítása, ami a különböző médiák fogyasztását egy felületen kezeli. A művek egy táblázatban kerülnek megjelenítésre, mely különböző tulajdonságok alapján szűréssel kereshető. Ezen a felületen tárolásra kerülhet az adott műbeli haladás, ilyen állapotokkal: még nem kezdte el a felhasználó, de szeretné megnézni vagy már nem szeretné folytatni. A program saját eszközön tárolt adatokkal dolgozik, így a személyes adatok nincsenek veszélynek kitéve.
 
+## Funkcionális követelmények
+- Művek megjelenítése
+- Előrehaladás megjelenítése
+- Új művek hozzáadása
+- Művek módosítása
+- Művek szűrése
+
 ## Követelménylista
 |Modul|ID|Név|v. |Kifejtés|
 |:----|:-|:--|:--|:-------|
