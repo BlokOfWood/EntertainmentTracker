@@ -1,3 +1,4 @@
 # EntertainmentTracker
 ## Fontos dokumentumok
-- [Követelmény specifikáció](kovspec.md) 
+- [Követelmény specifikáció](kovspec.md)
+- [Funkcionális specifikáció](funkspec.md)
