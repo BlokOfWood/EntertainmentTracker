@@ -17,6 +17,7 @@ A projekt célja egy olyan rendszer kialakítása, ami a különböző médiák 
 
 ## Rendszerre vonatkozó törvények, szabványok, ajánlások
 A rendszernek jogszabályi kérdésekkel nem kell foglalkoznia, mert a minimális személyes adatok, amik a program működéséhez szükségesek is lokálisan kerülnek tárolásra, nem távoli szerveren.
+A rendszerre fejenként 100-200 kódsoros és 4 hetes határidő megszorítás vonatkozik.
 
 ## Követelménylista
 |Modul|ID|Név|v. |Kifejtés|
