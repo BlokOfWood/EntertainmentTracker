@@ -39,3 +39,13 @@ Nem cél, hogy az előrehaladás követése automatikusan történjen, ezt a fel
 ### Művek szűrése
 - leírás: a felhasználó a tárolt művek között szűr, a rendszer csak a szűrésnek megfelelő műveket jeleníti meg
 - előfeltételek: az első indítás megtörtént
+
+## Megfeleltetés
+|Használati Esetek|Követelmény ID|
+|:----------------|:--------------|
+|Első indítás|K8|
+|Új mű hozzáadása|K2,K5|
+|Meglévő mű szerkesztése|K2,K4,K6|
+|Meglévő mű törlése|K7|
+|Művek megtekíntése|K1|
+|Művek szűrése|K3|
