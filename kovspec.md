@@ -27,3 +27,4 @@ A rendszernek jogszabályi kérdésekkel nem kell foglalkoznia, mert a minimáli
 |Felület|K4|Mű előrehaladás kezelése|1.0|A különböző típusú művekkel az előrehaladást típusnak megfelelően lehet követni. Például: Könyvnél lap szám/max lapszám, filmnél idő/max idő|
 |Modifikáció|K5|Mű felvétele|1.0|A felhasználó fel tudjon venni egy új művet.|
 |Modifikáció|K6|Mű módosítása|1.0|A felhasználó egy meglévő művön tudja módosítani a nevet, állapotát és előrehaladást a művel.|
+|Perziesztencia|K7|1.0|Művek tárolása a rendszer indítások között.|
