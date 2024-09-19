@@ -49,3 +49,7 @@ Nem cél, hogy az előrehaladás követése automatikusan történjen, ezt a fel
 |Meglévő mű törlése|K5, K8|
 |Művek megtekíntése|K1|
 |Művek szűrése|K3|
+
+## Forgatókönyvek
+- Haladását módosítja egy adott műben a felhasználó: mű melletti szerkesztés gomb -> módosítás ablak -> átírja a haladást -> mentés
+- Új mű hozzáadása: új mű gomb -> új mű ablak -> kitölti az űrlapot -> mentés gomb
