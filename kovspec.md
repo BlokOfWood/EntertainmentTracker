@@ -25,7 +25,8 @@ A rendszernek jogszabályi kérdésekkel nem kell foglalkoznia, mert a minimáli
 |Felület|K2|Mű hozzáadás/módosítás ablak|1.0|A felület, amelyen új követett művet lehet felvenni vagy módosítani egy meglévőt.|
 |Felület|K3|Művek szűrése|1.0|Lehessen szűrni a műveket a név és állapot alapján.|
 |Felület|K4|Mű előrehaladás kezelése|1.0|A különböző típusú művekkel az előrehaladást típusnak megfelelően lehet követni. Például: Könyvnél lap szám/max lapszám, filmnél idő/max idő|
-|Modifikáció|K5|Mű felvétele|1.0|A felhasználó fel tudjon venni egy új művet.|
-|Modifikáció|K6|Mű módosítása|1.0|A felhasználó egy meglévő művön tudja módosítani a nevet, állapotát és előrehaladást a művel.|
-|Modifikáció|K7|Mű törlése|1.0|A felhasználó egy meglévő művet töröl a rendszerből.|
-|Perziesztencia|K8|Művek perzisztenciája|1.0|Művek tárolása a rendszer indítások között.|
+|Felület|K5|Mű törlése megerősítése|1.0|A törlés megerősítésére szolgáló felugró ablak.|
+|Modifikáció|K6|Mű felvétele|1.0|A felhasználó fel tudjon venni egy új művet.|
+|Modifikáció|K7|Mű módosítása|1.0|A felhasználó egy meglévő művön tudja módosítani a nevet, állapotát és előrehaladást a művel.|
+|Modifikáció|K8|Mű törlése|1.0|A felhasználó egy meglévő művet töröl a rendszerből.|
+|Perziesztencia|K9|Művek perzisztenciája|1.0|Művek tárolása a rendszer indítások között.|
