@@ -50,6 +50,16 @@ Nem cél, hogy az előrehaladás követése automatikusan történjen, ezt a fel
 |Művek megtekíntése|K1|
 |Művek szűrése|K3|
 
+## Képernyő tervek
+### Művek megtekintése képernyő
+![Művek megtekintése képernyő](./assets/main_screen.jpg)
+
+### Mű hozzáadás vagy módisítás képernyő
+![Mű hozzáadás vagy módisítás képernyő](./assets/add_or_modify_screen.jpg)
+
+### Törlés megerősítés képernyő
+![Törlés megerősítés képernyő](./assets/alert.jpg)
+
 ## Forgatókönyvek
 - Haladását módosítja egy adott műben a felhasználó: mű melletti szerkesztés gomb -> módosítás ablak -> átírja a haladást -> mentés
 - Új mű hozzáadása: új mű gomb -> új mű ablak -> kitölti az űrlapot -> mentés gomb
