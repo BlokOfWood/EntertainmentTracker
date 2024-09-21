@@ -44,9 +44,9 @@ Nem cél, hogy az előrehaladás követése automatikusan történjen, ezt a fel
 |Használati Esetek|Követelmény ID|
 |:----------------|:--------------|
 |Első indítás|K9|
-|Új mű hozzáadása|K2, K6|
-|Meglévő mű szerkesztése|K2, K4, K7|
-|Meglévő mű törlése|K5, K8|
+|Új mű hozzáadása|K2, K6, K9|
+|Meglévő mű szerkesztése|K2, K4, K7, K9|
+|Meglévő mű törlése|K5, K8, K9|
 |Művek megtekíntése|K1|
 |Művek szűrése|K3|
 
