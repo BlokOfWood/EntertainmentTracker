@@ -23,15 +23,15 @@ Nem cél, hogy az előrehaladás követése automatikusan történjen, ezt a fel
 - utófeltételek: a rendszerben tárolásra került az új mű
 - egyéb: a mű hozzáadás után megtekinthető
 ### Meglévő mű szerkesztése
-- leírás: a felhasználó a rendszerben már szereplő műről tárolt adatokat frissíti, a rendszer frissíti a mű adatai
+- leírás: a felhasználó a rendszerben már szereplő műről tárolt adatokat frissíti, a rendszer frissíti a mű adatait
 - előfeltételek: a mű már létezik a rendszerben
 - utófeltételek: a rendszer a művet a frissített adatokkal tárolja
-- egyéb: a mű a frissített adatokkal tekinthető meg
+- egyéb: a mű a frissített adatokkal megtekinthető
 ### Meglévő mű törlése
 - leírás: a felhasználó a rendszerben már szereplő művet töröl, a rendszer eltávolítja a művet és a róla tárolt adatokat
 - előfeltételek: a mű már létezik a rendszerben
 - utófeltételek: a rendszer nem tárolja a művet
-- egyéb: a mű többé nem tekintehtő meg
+- egyéb: a mű többé nem megtekinthető
 ### Művek megtekintése
 - leírás: a felhasználó megtekinti a rendszerben tárolt műveket
 - előfeltételek: az első indítás megtörtént
