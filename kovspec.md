@@ -14,6 +14,7 @@ A projekt célja egy olyan rendszer kialakítása, ami a különböző médiák 
 - Új művek hozzáadása
 - Művek módosítása
 - Művek szűrése
+- Művek törlése
 
 ## Rendszerre vonatkozó törvények, szabványok, ajánlások
 A rendszernek jogszabályi kérdésekkel nem kell foglalkoznia, mert a minimális személyes adatok, amik a program működéséhez szükségesek is lokálisan kerülnek tárolásra, nem távoli szerveren.
