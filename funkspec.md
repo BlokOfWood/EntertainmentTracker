@@ -54,7 +54,7 @@ Nem cél, hogy az előrehaladás követése automatikusan történjen, ezt a fel
 ### Művek megtekintése képernyő
 ![Művek megtekintése képernyő](./assets/main_screen.jpg)
 
-### Mű hozzáadás vagy módisítás képernyő
+### Mű hozzáadás vagy módisítása képernyő
 ![Mű hozzáadás vagy módisítás képernyő](./assets/add_or_modify_screen.jpg)
 
 ### Törlés megerősítés képernyő
