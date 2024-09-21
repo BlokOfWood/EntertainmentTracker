@@ -63,3 +63,6 @@ Nem cél, hogy az előrehaladás követése automatikusan történjen, ezt a fel
 ## Forgatókönyvek
 - Haladását módosítja egy adott műben a felhasználó: mű melletti szerkesztés gomb -> módosítás ablak -> átírja a haladást -> mentés
 - Új mű hozzáadása: új mű gomb -> új mű ablak -> kitölti az űrlapot -> mentés gomb
+- Mű szerkesztése: adott művön szerkesztés gomb -> mű szerkesztés ablak -> átírja amit szeretne -> mentés gomb
+- Mű törlése: mű törlése gomb -> törlés megerősítés felugró ablak -> megerősítés gomb
+- Művek szűrése: adott kategória szűrő mező -> szűrési minta beírása
