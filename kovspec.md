@@ -42,6 +42,9 @@ A projekt célja egy olyan rendszer kialakítása, ami a különböző médiák 
 - Művek módosítása
 - Művek szűrése
 - Művek törlése
+- Metaadat letöltése a művekhez
+- Felhasználók kezelése
+- Bejegyzések megosztása más felhasználókkal
 
 ## Rendszerre vonatkozó törvények, szabványok, ajánlások
 A rendszernek jogszabályi kérdésekkel nem kell foglalkoznia, mert a minimális személyes adatok, amik a program működéséhez szükségesek is lokálisan kerülnek tárolásra, nem távoli szerveren.
@@ -59,3 +62,7 @@ A rendszerre fejenként 100-200 kódsoros és 4 hetes határidő megszorítás v
 |Modifikáció|K7|Mű módosítása|1.0|A felhasználó egy meglévő művön tudja módosítani a nevet, állapotot és előrehaladást a művel.|
 |Modifikáció|K8|Mű törlése|1.0|A felhasználó egy meglévő művet töröl a rendszerből.|
 |Perziesztencia|K9|Művek perzisztenciája|1.0|Művek tárolása a rendszer indítások között.|
+|Felhasználó kezelés|K10|Felhasználó regisztráció|1.0|Egy regisztrálatlan felhasználó fel tudja magát venni a rendszerbe.|
+|Felhasználó kezelés|K11|Felhasználó bejelentkezés|1.0|Egy regisztrált felhasználó be tud jelentkezni a rendszerbe.|
+|Felület|K12|Metaadat letöltése|1.0|A felhasználó láthat külső forrásból információkat anélkül, hogy meg kell adnia.|
+|Felhasználó kezelés|K13|Bejegyzés megosztása másik felhasználóval|1.0|Egy felhasználó meg tud osztani egy saját bejegyzést egy másik felhasználóval.|
