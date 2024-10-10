@@ -1,4 +1,31 @@
 # Entertainment Tracker
+
+## Szabadriport
+Egy olyan rendszer, amiben követni lehet a könyvekkel, Netflix és egyéb sorozatokkal, filmekkel, YouTube videókkal való haladást. Külön megjelenítés jó lenne médiatípusonként, a rendszer az adott művekhez automatikusan begyűjti az adatokat külső forrásból. A tárolt művek közül lehessen törölni.
+Különböző eszközökön való bejelentkezés után ugyanazt lássa a felhasználó.
+Az adatok táblázatosan kerüljenek megjelenítésre.
+
+## Irányítottriport
+- Külső forrsából begyűjtött adatokként pontosan mire gondol a megrendelő?
+- Megjelenési dátum, stáblista/író, összefoglaló.
+
+- Homescreen-t szeretne-e a felhasználó?
+- Nem, lehessen választani.
+
+- Külön megjelenítés médiatípusonként pontosan mit jelent?
+- A haladáskövetés médiatípusonként specifikusan legyen, sorozatoknál a haladást jelző csík epizódoknak megfelelő számú rublikákra legyen bontva.
+
+- Legyen-e beágyazva a YouTube videó?
+- Nem, csak kattintással vigyen át a videóhoz.
+
+- Szerkeszthet-e több felhasználó egy műhöz tárolt haladást?
+- Igen.
+- Legyen külön nézet a "megosztott bejegyzések" vagy "saját bejegyzések"-nek?
+- Ne, csak lehessen szűrni.
+
+- Pontosan mire lehessen szűrni?
+- Név, hossz és saját vagy megosztott bejegyzés
+
 ## Áttekíntés
 Mindannyian sok filmet, könyvet vagy sorozatot elkezdünk aztán félbehagyunk, elfelejtve hogy meddig jutottunk. Ez az applikáció ezt a problémát segítené azzal, hogy lehetővé teszi a megkezdett szórakoztató tartalmak feljegyzését és a haladás megjelölését.
 
