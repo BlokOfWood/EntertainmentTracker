@@ -6,24 +6,30 @@ Különböző eszközökön való bejelentkezés után ugyanazt lássa a felhasz
 Az adatok táblázatosan kerüljenek megjelenítésre.
 
 ## Irányítottriport
-- Külső forrsából begyűjtött adatokként pontosan mire gondol a megrendelő?
+
+- **Külső forrsából begyűjtött adatokként pontosan mire gondol a megrendelő?**
 - Megjelenési dátum, stáblista/író, összefoglaló.
+<br>
 
-- Homescreen-t szeretne-e a felhasználó?
+- **Homescreen-t szeretne-e a felhasználó?**
 - Nem, lehessen választani.
+<br>
 
-- Külön megjelenítés médiatípusonként pontosan mit jelent?
+- **Külön megjelenítés médiatípusonként pontosan mit jelent?**
 - A haladáskövetés médiatípusonként specifikusan legyen, sorozatoknál a haladást jelző csík epizódoknak megfelelő számú rublikákra legyen bontva.
+<br>
 
-- Legyen-e beágyazva a YouTube videó?
+- **Legyen-e beágyazva a YouTube videó?**
 - Nem, csak kattintással vigyen át a videóhoz.
+<br>
 
-- Szerkeszthet-e több felhasználó egy műhöz tárolt haladást?
+- **Szerkeszthet-e több felhasználó egy műhöz tárolt haladást?**
 - Igen.
-- Legyen külön nézet a "megosztott bejegyzések" vagy "saját bejegyzések"-nek?
+- **Legyen külön nézet a "megosztott bejegyzések", "saját bejegyzések"-nek?**
 - Ne, csak lehessen szűrni.
+<br>
 
-- Pontosan mire lehessen szűrni?
+- **Pontosan mire lehessen szűrni?**
 - Név, hossz és saját vagy megosztott bejegyzés
 
 ## Áttekíntés
@@ -47,8 +53,8 @@ A projekt célja egy olyan rendszer kialakítása, ami a különböző médiák 
 - Bejegyzések megosztása más felhasználókkal
 
 ## Rendszerre vonatkozó törvények, szabványok, ajánlások
-A rendszernek jogszabályi kérdésekkel nem kell foglalkoznia, mert a minimális személyes adatok, amik a program működéséhez szükségesek is lokálisan kerülnek tárolásra, nem távoli szerveren.
-A rendszerre fejenként 100-200 kódsoros és 4 hetes határidő megszorítás vonatkozik.
+A rendszernek jogszabályi kérdésekkel nem kell foglalkoznia, mert a nem kezel, nem fér hozzá a GDPR-ban személyes vagy speciális adakként definiált adatokhoz.
+A rendszerre fejenként 300-600 kódsoros és 8 hetes határidő megszorítás vonatkozik.
 
 ## Követelménylista
 |Modul|ID|Név|v. |Kifejtés|
