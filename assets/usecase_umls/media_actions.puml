@@ -1,0 +1,25 @@
+@startuml
+left to right direction
+
+actor :Felhasználó: as User
+
+package SystemBoundary {
+  usecase "Művek megtekintése" as Dashboard
+  usecase "Új mű hozzáadása" as AddMedia
+  usecase "Mű szerkesztése" as EditMedia
+  usecase "Mű törlése" as DeleteMedia
+  usecase "Mű megosztása" as ShareMedia
+  Dashboard ..> AddMedia : <<extend>>
+  Dashboard ..> EditMedia : <<extend>>
+  Dashboard ..> DeleteMedia: <<extend>>
+  Dashboard ..> ShareMedia: <<extend>>
+  AddMedia ..> Dashboard : <<include>>
+  EditMedia ..> Dashboard : <<include >>
+  DeleteMedia ..> Dashboard : <<include >>
+  ShareMedia ..> Dashboard : <<include >>
+}
+AddMedia <-- User
+EditMedia <-- User
+DeleteMedia <-- User
+ShareMedia <-- User
+@enduml
