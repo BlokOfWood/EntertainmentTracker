@@ -136,3 +136,6 @@ Edit Media - YouTube: A felhasználó meg tudja változtatni a videó követett 
 - Mű szerkesztése: adott művön szerkesztés gomb -> mű szerkesztés ablak -> átírja amit szeretne -> mentés gomb
 - Mű törlése: mű törlése gomb -> törlés megerősítés felugró ablak -> megerősítés gomb
 - Művek szűrése: adott kategória szűrő mező -> szűrési minta beírása
+- Regsiztáció: email cím megadása -> felhasználó név megadása -> jelszó megadása -> regisztráció gomb megnyomása
+- Bejelentkezés: felhasználó név megadása -> jelszó megadása -> bejelentkezés gomb megnyomása
+- Mű megosztása: megosztás gomb művön -> megadása a felhasználó email címének akivel megosztjuk a művet -> megosztás gomb
