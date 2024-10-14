@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+
+actor :Felhasználó: as User
+
+package SystemBoundary {
+  usecase "Bejelentkezés" as Login
+  usecase "Regisztráció" as Register
+  usecase "Művek megtekintése" as Dashboard
+  Login ..> Dashboard : <<include>>
+  Register ..> Dashboard : <<include>>
+}
+User --> Login
+User --> Register
+@enduml
