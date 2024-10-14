@@ -62,50 +62,69 @@ Regisztráció/belépés:
 ### Register Page
 Felhasználó új fiókot tud megadni, e-mail cím, felhasználónév és jelszó megadásával majd a 'Register' gombra kattintva.
 
+![Register Page](./assets/figma/register_page.png)
+
 ### Login Page
 Már regisztrált felhasználó be tud jelentkezni e-mail címmel és jelszóval.
 
+![Login Page](./assets/figma/login_page.png)
+
 ### Navbar Component
 A felhasználó a navigációs sáv Dashboard gombjára kattintva megtekintheti a Dashboard-ot, Add Media gombbal új művet tud hozzáadni, valamint profilképére mozdítva a kurzort, a Logout-ra kattintva pedig ki tud lépni.
+
+![Navbar Component](./assets/figma/navbar.png)
 
 ### Dashboard
 A felhasználó meg tudja tekinteni a hozzáadott műveket, ezeket tudja szerkeszteni a ceruza ikonra vagy törölni a piros szemetesláda ikonra kattintva, vagy meg tudja osztani másik felhasználóval.
 A felhasználó a Title, Type és Progress fejléc elemekkel tudja változtatni a tárolt művek megjelenítési sorrendjét.
 
+![Dashboard](./assets/figma/dashboard.png)
+
 ### Share with Friend
 E-mail cím megadásával meg oszthatja a felhasználó egy másik felhasználóval a haladását egy médiában.
 
+![Share with Friend](./assets/figma/share_with_friend.png)
+
 ### Add Media
 A felhasználó az Add Media oldalon tudja kiválasztani milyen médiatípust szeretne hozzáadni - könyvet, sorozatot, filmet, YouTube videót.
+
+![Add Media](./assets/figma/add_media.png)
 
 #### Add Content - Component
 
 Add Media - Books: a felhasználó cím vagy ISBN azonosítóval tud keresni az ISBN adatbázisban és a találatok közül tud felvenni a követett művei közé könyvet.
 
+![Add Content - Component](./assets/figma/add_book.png)
+
 Add Media - TV Shows: a felhasználó cím vagy IMBDb azonosítóval tud keresni az IMDb adatbázisban és a találatok közül tud felvenni a követett művei közé sorozatot.
+
+![Add Content - Component](./assets/figma/add_tv_show.png)
 
 Add Media - Movies: a felhasználó cím vagy IMBDb azonosítóval tud keresni az IMDb adatbázisban és a találatok közül tud felvenni a követett művei közé filmet.
 
+![Add Content - Component](./assets/figma/add_movie.png)
+
 Add Media - YouTube: a felhasználó URL-el és megjelenítési név megadásával tud hozzáadni YouTube videót a követett műveihez.
+
+![Add Content - Component](./assets/figma/add_youtube.png)
 
 ### Edit Media
 
 Edit Media - Books: A felhasználó frissíteni tudja hanyadik oldalon tart a könyvben.
 
+![Edit Media - Books](./assets/figma/edit_book.png)
+
 Edit Media - TV Shows: A felhasználó frissíeni tudja hanyadik epizódnál tart a sorozatban.
+
+![Edit Media - TV Shows](./assets/figma/edit_tv_show.png)
 
 Edit Media - Movies: A felhasználó frissíteni tudja hanyadik percnél tart a filmben.
 
+![Edit Media - Movies](./assets/figma/edit_movie.png)
+
 Edit Media - YouTube: A felhasználó meg tudja változtatni a videó követett művei közötti megjelenítési nevét.
 
-### Művek megtekintése képernyő
-![Művek megtekintése képernyő](./assets/main_screen.jpg)
-
-### Mű hozzáadás vagy módisítása képernyő
-![Mű hozzáadás vagy módisítás képernyő](./assets/add_or_modify_screen.jpg)
-
-### Törlés megerősítés képernyő
-![Törlés megerősítés képernyő](./assets/alert.jpg)
+![Edit Media - YouTube](./assets/figma/edit_youtube.png)
 
 ## Forgatókönyvek
 - Haladását módosítja egy adott műben a felhasználó: mű melletti szerkesztés gomb -> módosítás ablak -> átírja a haladást -> mentés
