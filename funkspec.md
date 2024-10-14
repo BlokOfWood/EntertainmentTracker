@@ -12,6 +12,13 @@ Nem cél, hogy az előrehaladás követése automatikusan történjen, ezt a fel
 ## [Követelménylista](https://github.com/BlokOfWood/EntertainmentTracker/blob/main/kovspec.md#k%C3%B6vetelm%C3%A9nylista)
 
 ## Használati esetek
+
+Regisztráció/belépés:
+![Regisztráció/belépés use case ábra](./assets/usecase_umls/login_register_uml.jpg)
+
+Új mű hozzáadása, mű szerkesztése, mű törlése, mű megosztása:
+![Új mű hozzáadása, mű szerkesztése, mű törlése, mű megosztása use case ábra](./assets/usecase_umls/media_actions_uml.jpg)
+
 ### Első indítás
 - leírás: a felhasználó első alkalommal elindítja a rendszert, a rendszer inicializálja a működés feltételeit
 - előfeltételek: az aktuális indítás a rendszer első indítása
@@ -51,6 +58,46 @@ Nem cél, hogy az előrehaladás követése automatikusan történjen, ezt a fel
 |Művek szűrése|K3|
 
 ## Képernyő tervek
+
+### Register Page
+Felhasználó új fiókot tud megadni, e-mail cím, felhasználónév és jelszó megadásával majd a 'Register' gombra kattintva.
+
+### Login Page
+Már regisztrált felhasználó be tud jelentkezni e-mail címmel és jelszóval.
+
+### Navbar Component
+A felhasználó a navigációs sáv Dashboard gombjára kattintva megtekintheti a Dashboard-ot, Add Media gombbal új művet tud hozzáadni, valamint profilképére mozdítva a kurzort, a Logout-ra kattintva pedig ki tud lépni.
+
+### Dashboard
+A felhasználó meg tudja tekinteni a hozzáadott műveket, ezeket tudja szerkeszteni a ceruza ikonra vagy törölni a piros szemetesláda ikonra kattintva, vagy meg tudja osztani másik felhasználóval.
+A felhasználó a Title, Type és Progress fejléc elemekkel tudja változtatni a tárolt művek megjelenítési sorrendjét.
+
+### Share with Friend
+E-mail cím megadásával meg oszthatja a felhasználó egy másik felhasználóval a haladását egy médiában.
+
+### Add Media
+A felhasználó az Add Media oldalon tudja kiválasztani milyen médiatípust szeretne hozzáadni - könyvet, sorozatot, filmet, YouTube videót.
+
+#### Add Content - Component
+
+Add Media - Books: a felhasználó cím vagy ISBN azonosítóval tud keresni az ISBN adatbázisban és a találatok közül tud felvenni a követett művei közé könyvet.
+
+Add Media - TV Shows: a felhasználó cím vagy IMBDb azonosítóval tud keresni az IMDb adatbázisban és a találatok közül tud felvenni a követett művei közé sorozatot.
+
+Add Media - Movies: a felhasználó cím vagy IMBDb azonosítóval tud keresni az IMDb adatbázisban és a találatok közül tud felvenni a követett művei közé filmet.
+
+Add Media - YouTube: a felhasználó URL-el és megjelenítési név megadásával tud hozzáadni YouTube videót a követett műveihez.
+
+### Edit Media
+
+Edit Media - Books: A felhasználó frissíteni tudja hanyadik oldalon tart a könyvben.
+
+Edit Media - TV Shows: A felhasználó frissíeni tudja hanyadik epizódnál tart a sorozatban.
+
+Edit Media - Movies: A felhasználó frissíteni tudja hanyadik percnél tart a filmben.
+
+Edit Media - YouTube: A felhasználó meg tudja változtatni a videó követett művei közötti megjelenítési nevét.
+
 ### Művek megtekintése képernyő
 ![Művek megtekintése képernyő](./assets/main_screen.jpg)
 
