@@ -46,6 +46,9 @@ Regisztráció/belépés:
 ### Művek szűrése
 - leírás: a felhasználó a tárolt művek között szűr, a rendszer csak a szűrésnek megfelelő műveket jeleníti meg
 - előfeltételek: az első indítás megtörtént
+### Mű megosztása
+- leírás: a felhasználó a tárolt műveket más felhasználókkal meg tudja osztani
+- előfeltételek: az első indítás megtörtént, a felhasználó be van jelentkezve
 
 ## Megfeleltetés
 |Használati Esetek|Követelmény ID|
@@ -54,8 +57,9 @@ Regisztráció/belépés:
 |Új mű hozzáadása|K2, K6, K9|
 |Meglévő mű szerkesztése|K2, K4, K7, K9|
 |Meglévő mű törlése|K5, K8, K9|
-|Művek megtekíntése|K1|
+|Művek megtekíntése|K1,K12|
 |Művek szűrése|K3|
+|Mű megosztása|K13|
 
 ## Képernyő tervek
 
