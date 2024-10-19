@@ -21,6 +21,10 @@ Regisztráció/belépés:
 
 ![Új mű hozzáadása, mű szerkesztése, mű törlése, mű megosztása use case ábra](./assets/usecase_umls/media_actions_uml.jpg)
 
+Művek megtekintése, művek szűrése, kijelentkezés:
+
+![Művek megtekintése, művek szűrése, kijelentkezés use case ábra](./assets/usecase_umls/check-media_filter-media_log-out_uml.jpg)
+
 ### Regisztáció
 - leírás: a felhasználó felveszi magát mint új még nem szereplő elem a rendszerben
 - előfeltételek: a felhasználó még nem szerepel a rendszerben
