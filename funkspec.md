@@ -64,7 +64,9 @@ Regisztráció/belépés:
 ## Megfeleltetés
 |Használati Esetek|Követelmény ID|
 |:----------------|:--------------|
-|Első indítás|K9|
+|Regisztráció|K10|
+|Bejelentkezés|K11|
+|Kijelentkezés|K14|
 |Új mű hozzáadása|K2, K6, K9|
 |Meglévő mű szerkesztése|K2, K4, K7, K9|
 |Meglévő mű törlése|K5, K8, K9|
