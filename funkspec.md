@@ -151,4 +151,5 @@ Edit Media - YouTube: A felhasználó meg tudja változtatni a videó követett 
 - Művek szűrése: adott kategória szűrő mező -> szűrési minta beírása
 - Regsiztáció: email cím megadása -> felhasználó név megadása -> jelszó megadása -> regisztráció gomb megnyomása
 - Bejelentkezés: felhasználó név megadása -> jelszó megadása -> bejelentkezés gomb megnyomása
+- Kijelentkezés: jobb felül profil gomb -> kijelentkezés gomb
 - Mű megosztása: megosztás gomb művön -> megadása a felhasználó email címének akivel megosztjuk a művet -> megosztás gomb
