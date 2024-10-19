@@ -1,7 +1,7 @@
 # Entertainment Tracker
 ## A rendszer céljai és nem céljai
-Cél, hogy a projekt segítsen a szórakoztató médiák fogyasztásának a felhasználó általi követésében, hogy ne kelljen több különböző oldalt használni, amelyek nem is erre a célra lettek elkészítve. 
-Nem cél, hogy az előrehaladás követése automatikusan történjen, ezt a felhasználónak saját magának kell, hogy kövesse. Nem cél az sem, hogy ezekhez a művekhez a rendszer automatikusan szolgáltasson metaadatot.
+Cél, hogy a projekt segítsen a szórakoztató médiák fogyasztásának a felhasználó általi követésében, hogy ne kelljen több különböző oldalt használni, amelyek nem is erre a célra lettek elkészítve.  Cél az is, hogy az adott művekhez a metaadatot a rendszer automatikusan szerezze és a felhasználó eszközei között az adatok szinkronizálása.
+Nem cél, hogy az előrehaladás követése automatikusan történjen, ezt a felhasználónak saját magának kell, hogy kövesse.
 
 ## [Jelenlegi helyzet](https://github.com/BlokOfWood/EntertainmentTracker/blob/main/kovspec.md#jelenlegi-helyzet)
 
