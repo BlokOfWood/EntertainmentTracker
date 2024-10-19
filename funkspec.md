@@ -21,36 +21,45 @@ Regisztráció/belépés:
 
 ![Új mű hozzáadása, mű szerkesztése, mű törlése, mű megosztása use case ábra](./assets/usecase_umls/media_actions_uml.jpg)
 
-### Első indítás
-- leírás: a felhasználó első alkalommal elindítja a rendszert, a rendszer inicializálja a működés feltételeit
-- előfeltételek: az aktuális indítás a rendszer első indítása
-- utófeltételek: a rendszer készen áll a további működésre
-- egyéb: létrehozza a helyi adatbázist
+### Regisztáció
+- leírás: a felhasználó felveszi magát mint új még nem szereplő elem a rendszerben
+- előfeltételek: a felhasználó még nem szerepel a rendszerben
+- utófeltételek: a felhasználó képes bejelentkezni a létrehozott fiókba
+### Bejelentkezés
+- leírás: a felhasználó azonosítja magát mint egy meglévő elem a rendszerben
+- előfeltételek: a felhasználó szerepel a rendszerben
+- utófeltételek: a felhasználó hozzáférést kap az adott fiókhoz
+- egyéb: a felhasználó megtekíntheti a nyomonkövetett műveket és módosíthatja azokat
+### Kijelentkezés
+- leírás: a felhasználó kijelentkezik a rendszerből
+- előfeltételek: a felhasználó be van jelentkezve
+- utófeltételek: a felhasználó ha a fiókhoz hozzá szeretne férni, újra be kell jelentkeznie
+- egyéb: a felhasználó visszakerül a bejelentkezés felületre
 ### Új mű hozzáadása
 - leírás: a felhasználó a rendszerben még nem szereplő művet vesz fel, a rendszer hozzáadja az új művet
-- előfeltételek: a mű még nem szerepel a rendszerben, az első indítás megtörtént
+- előfeltételek: a mű még nem szerepel a rendszerben, a felhasználó bejelentkezve van
 - utófeltételek: a rendszerben tárolásra került az új mű
 - egyéb: a mű hozzáadás után megtekinthető
 ### Meglévő mű szerkesztése
 - leírás: a felhasználó a rendszerben már szereplő műről tárolt adatokat frissíti, a rendszer frissíti a mű adatait
-- előfeltételek: a mű már létezik a rendszerben
+- előfeltételek: a mű már létezik a rendszerben, a felhasználó bejelentkezve van
 - utófeltételek: a rendszer a művet a frissített adatokkal tárolja
 - egyéb: a mű a frissített adatokkal megtekinthető
 ### Meglévő mű törlése
 - leírás: a felhasználó a rendszerben már szereplő művet töröl, a rendszer eltávolítja a művet és a róla tárolt adatokat
-- előfeltételek: a mű már létezik a rendszerben
+- előfeltételek: a mű már létezik a rendszerben, a felhasználó bejelentkezve van
 - utófeltételek: a rendszer nem tárolja a művet
 - egyéb: a mű többé nem megtekinthető
 ### Művek megtekintése
 - leírás: a felhasználó megtekinti a rendszerben tárolt műveket
-- előfeltételek: az első indítás megtörtént
+- előfeltételek: a felhasználó bejelentkezve van
 - egyéb: az összes tárolt mű megtekinthető
 ### Művek szűrése
 - leírás: a felhasználó a tárolt művek között szűr, a rendszer csak a szűrésnek megfelelő műveket jeleníti meg
-- előfeltételek: az első indítás megtörtént
+- előfeltételek: a felhasználó bejelentkezve van
 ### Mű megosztása
 - leírás: a felhasználó a tárolt műveket más felhasználókkal meg tudja osztani
-- előfeltételek: az első indítás megtörtént, a felhasználó be van jelentkezve
+- előfeltételek: a felhasználó be van jelentkezve és létezik a másik felhasználó
 
 ## Megfeleltetés
 |Használati Esetek|Követelmény ID|
