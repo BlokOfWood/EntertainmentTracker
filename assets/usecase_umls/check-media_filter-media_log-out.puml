@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+package SystemBoundary {
+  usecase "Kijelentkezés" as LogOut
+  usecase "Művek megtekintése" as Dashboard
+  usecase "Művek szűrése" as FilterLogs
+  LogOut <. Dashboard : <<extend>>
+  Dashboard .> FilterLogs : <<extend>>
+  FilterLogs .> Dashboard : <<include>>
+}
+:Felhasználó: --> Dashboard
+:Felhasználó: --> LogOut
+:Felhasználó: --> FilterLogs
+@enduml
