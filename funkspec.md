@@ -14,9 +14,11 @@ Nem cél, hogy az előrehaladás követése automatikusan történjen, ezt a fel
 ## Használati esetek
 
 Regisztráció/belépés:
+
 ![Regisztráció/belépés use case ábra](./assets/usecase_umls/login_register_uml.jpg)
 
 Új mű hozzáadása, mű szerkesztése, mű törlése, mű megosztása:
+
 ![Új mű hozzáadása, mű szerkesztése, mű törlése, mű megosztása use case ábra](./assets/usecase_umls/media_actions_uml.jpg)
 
 ### Első indítás
