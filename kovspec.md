@@ -53,8 +53,13 @@ A projekt célja egy olyan rendszer kialakítása, ami a különböző médiák 
 - Bejegyzések megosztása más felhasználókkal
 
 ## Rendszerre vonatkozó törvények, szabványok, ajánlások
-A rendszernek jogszabályi kérdésekkel nem kell foglalkoznia, mert a nem kezel, nem fér hozzá a GDPR-ban személyes vagy speciális adakként definiált adatokhoz.
-A rendszerre fejenként 300-600 kódsoros és 8 hetes határidő megszorítás vonatkozik.
+### Adatvédelem és adatkezelés
+A rendszer, amely a felhasználók email-címét, felhasználónevét, jelszavának hashelt változatát és előrehaladási adatait tárolja, köteles betartani a [GDPR (General Data Protection Regulation)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02016R0679-20160504) szabályait. Ez magában foglalja a felhasználók adatainak védelmét, az adatok biztonságos tárolását és a felhasználók jogainak tiszteletben tartását, mint például az adatkezelési tájékoztatás, hozzáférés, adatmódosítás és törlés lehetősége.
+
+### Szerzői jogok és API-k használata
+Az alkalmazásban tárolt vagy felhasznált harmadik féltől származó adatokra vonatkozóan be kell tartani a szerzői jogi és licencelési szabályokat:
+- TheMovieDB: https://www.themoviedb.org/api-terms-of-use
+- Google API: https://developers.google.com/books/terms
 
 ## Követelménylista
 |Modul|ID|Név|v. |Kifejtés|
