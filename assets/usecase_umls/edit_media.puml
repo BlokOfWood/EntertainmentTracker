@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+
+actor :Bejelentkezett \n felhasználó: as LoggedInUser
+
+usecase "Már hozzáadott \n mű szerkesztése" as EditMedia
+usecase "A mű adatai \n frissítésre kerülnek" as UpdateMedia
+usecase "Mű a frissített \n adatokkal jelenik meg \n a tárolt művek között" as DisplayEditedMedia
+
+LoggedInUser --> EditMedia
+EditMedia --> UpdateMedia
+UpdateMedia --> DisplayEditedMedia
+
+@enduml

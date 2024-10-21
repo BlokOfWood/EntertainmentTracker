@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+
+actor :Új felhasználó: as NewUser
+
+usecase "Regisztráció" as Register
+usecase "Új felhasználó bekerül a rendszerbe" as NewUserAddedToSystem
+usecase "Dashboard megjelenítése" as OpenDashboard
+
+NewUser --> Register
+Register --> NewUserAddedToSystem
+NewUserAddedToSystem --> OpenDashboard
+
+@enduml

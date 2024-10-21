@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+
+actor :Bejelentkezett \n felhasználó: as LoggedInUser
+
+usecase "Már hozzáadott \n mű törlése" as DeleteMedia
+usecase "A mű adatai \n törlésre kerülnek" as MediaDeleted
+usecase "Mű nem jelenik meg \n a tárolt művek között" as CanTDisplayMedia
+
+LoggedInUser --> DeleteMedia
+DeleteMedia --> MediaDeleted
+MediaDeleted --> CanTDisplayMedia
+
+@enduml

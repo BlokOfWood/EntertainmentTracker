@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+
+actor :Bejelentkezett \n felhasználó: as LoggedInUser
+
+usecase "Már hozzáadott \n művek megtekintése" as ViewSavedMedia
+
+LoggedInUser --> ViewSavedMedia
+
+@enduml

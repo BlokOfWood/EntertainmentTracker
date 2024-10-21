@@ -1,0 +1,16 @@
+@startuml
+left to right direction
+
+actor :Felhasználó: as User
+
+usecase "Bejelentkezés" as Login
+usecase "Bejelentkezési adatok ellenőrzése" as CheckLoginCredentials
+usecase "Dashboard megjelenítése" as OpenDashboard
+usecase "Hibás e-mailcím vagy jelszó" as WrongEmailPassword
+
+User --> Login
+Login --> CheckLoginCredentials
+CheckLoginCredentials --> OpenDashboard : sikeres bejelentkezés
+CheckLoginCredentials --> WrongEmailPassword : sikertelen bejelentkezés
+
+@enduml

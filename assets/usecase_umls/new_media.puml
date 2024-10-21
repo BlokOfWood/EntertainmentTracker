@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+
+actor :Bejelentkezett \n felhasználó: as LoggedInUser
+
+usecase "Új mű hozzáadása" as AddNewMedia
+usecase "Új mű bekerül a \n tárolt művek közé" as NewMediaAdded
+usecase "Mű megjelenik a \n tárolt művek között" as DisplayNewMedia
+
+LoggedInUser --> AddNewMedia
+AddNewMedia --> NewMediaAdded
+NewMediaAdded --> DisplayNewMedia
+
+@enduml

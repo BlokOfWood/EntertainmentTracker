@@ -1,0 +1,16 @@
+@startuml
+left to right direction
+
+actor :Bejelentkezett \n felhasználó: as LoggedInUser
+
+usecase "Már hozzáadott \n műveben való \n haladás megosztása" as ShareMedia
+usecase "Azon felhasználó \n e-mail címének megadása, \n akivel megosztásra kerül" as FillInEmail
+usecase "Mű megosztásra kerül" as MediaShared
+usecase "Hibás e-mail cím" as InvalidEmail
+
+LoggedInUser --> ShareMedia
+ShareMedia --> FillInEmail
+FillInEmail --> MediaShared : sikeres megosztás
+FillInEmail --> InvalidEmail : sikertelen megosztás
+
+@enduml
