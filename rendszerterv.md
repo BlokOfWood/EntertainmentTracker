@@ -86,6 +86,50 @@ Menü-hierarchiák:
   - megjelenítési név megadása
   - YouTube URL megadása
 
+## Adatbázis terv
+```mermaid
+erDiagram
+    USERS {
+        INTEGER user_id PK "Unique identifier for users"
+        TEXT username "Username"
+        TEXT password "Password (hashed)"
+        TEXT email "Email for login"
+        DATETIME created_at "User creation date"
+    }
+    
+    MEDIA_ENTRIES {
+        INTEGER entry_id PK "Unique identifier for media entries"
+        INTEGER user_id FK "User who added the media"
+        TEXT title "Title of the media"
+        TEXT type "Type of the media (book, tv show, movie, youtube)"
+        TEXT status "Status of the media (not started, in progress, completed)"
+        DATETIME created_at "Media entry creation date"
+        DATETIME updated_at "Last update date"
+    }
+    
+    PROGRESS {
+        INTEGER progress_id PK "Unique identifier for progress"
+        INTEGER entry_id FK "Media entry being tracked"
+        INTEGER current "Current progress"
+        INTEGER target "Target progress"
+        DATETIME updated_at "Last update date"
+    }
+    
+    SHARED_ENTRIES {
+        INTEGER share_id PK "Unique identifier for shared entries"
+        INTEGER entry_id FK "Media entry being shared"
+        INTEGER shared_by FK "User who shared the media"
+        INTEGER shared_with FK "User who the media is shared with"
+        DATETIME created_at "Share creation date"
+    }
+
+    USERS ||--o{ MEDIA_ENTRIES : "1:n owns"
+    USERS ||--o{ SHARED_ENTRIES : "1:n shares"
+    MEDIA_ENTRIES ||--|| PROGRESS : "1:1 tracks"
+    MEDIA_ENTRIES }o--o{ SHARED_ENTRIES : "n:m is shared in"
+```
+
+
 ## Frontend tesztterv
 
 A tesztelés célja a frontend megfelelő működésének vizsgálata.
