@@ -86,6 +86,30 @@ Menü-hierarchiák:
   - megjelenítési név megadása
   - YouTube URL megadása
 
+## Architekturális terv
+### Backend
+A backend egy Go nyelven írt REST API, amely a felhasználók és a mentett művek adatait kezeli. Az adatok egy SQLite adatbázisban tárolódnak. Az architektúra a következő komponensekből áll:
+- API végpontok: Az egyes funkciókat megvalósító végpontok, például felhasználók regisztrálása, bejelentkezése, művek hozzáadása, szerkesztése, törlése.
+- Adat modell: Az adatbázis tábláinak, kapcsolatainak leírása és a rajtuk végzett műveletek megvalósítása.
+- Middleware: Az autentikációt és autorizációt végző middleware, amely biztosítja, hogy csak bejelentkezett felhasználók érhessék el a védett végpontokat.
+- Adatbázis: Az SQLite adatbázis, amelyben a felhasználók és művek adatai tárolódnak.
+- Konfiguráció: A backend konfigurációs fájlja, amelyben az adatbázis elérési útja, külső API kulcsok, stb. találhatók.
+
+```mermaid
+graph LR
+    subgraph Backend_API
+        API_végpontok --> Middleware
+        API_végpontok --> Adat_modell
+        Middleware --> Adat_modell
+    end
+    Frontend --> API_végpontok
+    Backend_API --> Adatbázis
+    Backend_API --> Konfiguráció
+```
+
+### Frontend
+TODO
+
 ## Adatbázis terv
 ```mermaid
 erDiagram
