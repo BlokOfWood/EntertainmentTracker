@@ -103,7 +103,7 @@ graph LR
         Middleware --> Adat_modell
     end
     Frontend --> API_végpontok
-    Backend_API --> Adatbázis
+    Adat_modell --> Adatbázis
     Backend_API --> Konfiguráció
 ```
 
