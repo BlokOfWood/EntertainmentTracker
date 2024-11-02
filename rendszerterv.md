@@ -107,7 +107,38 @@ Menü-hierarchiák:
   - megjelenítési név megadása
   - YouTube URL megadása
 
+## Fizikai környezet
+Fizikai környezet szempontjából a rendzser két részre bontható.
+### Frontend
+A frontend a felület amelyen keresztül a rendszer funkciói elérhetőek lesznek a felhasználó számára. Ez egy weboldal lesz, amely a Svelte keretrendszert fogja használni a felület megvalósításához a Vite frontend build szoftverrel. A weboldal kinézetének fejlesztéséhez a Tailwind CSS keretrendszert fogjuk használni. Mivel fordítás után a végtermék rendes html, css és javascript fájlok a felület elérhetővé tevése bármilyen web szerverrel lehetséges. **megbeszélni milyen webszerver**
+### Backend
+A backend a szerver amelyen keresztül a frontend képes lesz ellátni funkcióit. Alapvetően egy Go nyelven írt REST API, amely a funkcióit alapvetően a **bálint tudja** framework-kel látja el. Az adattároláshoz az SQLite beépített adatbázis könyvtárat használja, mely azt jelenti, hogy külön adatbázis szervert nem lesz szükséges fenntartani. Több külső API-t használni fog: a filmek és tv sorozatok metaadat szerzéséhez az IMDb API-t, a YouTube videók metaadat szerzéséhez a YouTube API-t és a könyvek metaadat szerzéséhez a **bálint tudja** API-t.
+ 
 ## Architekturális terv
+### Frontend
+A frontend egy Svelteben írt weboldal mely a következő komponensekből áll:
+- Felhasználókezelés: Ide tartozik a bejelentkezés és regisztrációs oldalak, a felhasználói adatokat kezelő osztály és a felhasználói adatokkal kapcsolatos backend kéréseket végző függvények.
+- Művek: Ide tartozik a művek tábla, a mű módosítása/létrehozása ablak és az ezzel kapcsolatos backend kéréseket végző függvények.
+- Megosztott: Ide tartozik minden olyan függvény amelyet a rendszer több része használ, például a backend kéréseket végző osztály.
+- Konfiguráció: A frontend konfigurációs fájlja, amelyben megtalálható a backend szerver elérési útja.
+
+```mermaid
+graph LR
+    subgraph Felhasználókezelés
+        Felhasználókezelés_felület --> Felhasználói_adatok_osztály --> Felhasználókezelés_API_hívások
+    end
+    Felhasználókezelés_API_hívások --> API_kliens
+    subgraph Művek
+        Művek_felület --> Művek_API_hívások
+    end
+    Művek_API_hívások --> API_kliens
+    subgraph Osztott
+        API_kliens
+    end
+    API_kliens --> Backend
+    API_kliens --> Konfiguráció
+```
+
 ### Backend
 A backend egy Go nyelven írt REST API, amely a felhasználók és a mentett művek adatait kezeli. Az adatok egy SQLite adatbázisban tárolódnak. Az architektúra a következő komponensekből áll:
 - API végpontok: Az egyes funkciókat megvalósító végpontok, például felhasználók regisztrálása, bejelentkezése, művek hozzáadása, szerkesztése, törlése.
