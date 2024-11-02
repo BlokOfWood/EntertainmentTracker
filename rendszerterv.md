@@ -12,6 +12,27 @@ MediaMind üzleti folyamatainak modellje:
 
 ![MediaMind üzleti folyamatainak modellje](./assets/uzleti_folyamatok_abrak/mediamind_uzleti_folyamata_abra.jpg)
 
+## Követelmények
+|Modul|ID|Név|v. |Kifejtés|
+|:----|:-|:--|:--|:-------|
+|Felület|K1|Mű táblázat|1.0|A felület, amelyen az összes követett mű kijelzésre kerül.|
+|Felület|K2|Mű hozzáadás/módosítás ablak|1.0|A felület, amelyen új követett művet lehet felvenni vagy módosítani egy meglévőt.|
+|Felület|K3|Művek szűrése|1.0|Lehessen szűrni a műveket a név és állapot alapján.|
+|Felület|K4|Mű előrehaladás kezelése|1.0|A különböző típusú művekkel az előrehaladást típusnak megfelelően lehet követni. Például: Könyvnél lap szám/max lapszám, filmnél idő/max idő|
+|Felület|K5|Mű törlése megerősítése|1.0|A törlés megerősítésére szolgáló felugró ablak.|
+|Modifikáció|K6|Mű felvétele|1.0|A felhasználó fel tudjon venni egy új művet.|
+|Modifikáció|K7|Mű módosítása|1.0|A felhasználó egy meglévő művön tudja módosítani a nevet, állapotot és előrehaladást a művel.|
+|Modifikáció|K8|Mű törlése|1.0|A felhasználó egy meglévő művet töröl a rendszerből.|
+|Perziesztencia|K9|Művek perzisztenciája|1.0|Művek tárolása a rendszer indítások között.|
+|Felhasználó kezelés|K10|Felhasználó regisztráció|1.0|Egy regisztrálatlan felhasználó fel tudja magát venni a rendszerbe.|
+|Felhasználó kezelés|K11|Felhasználó bejelentkezés|1.0|Egy regisztrált felhasználó be tud jelentkezni a rendszerbe.|
+|Felület|K12|Metaadat letöltése|1.0|A felhasználó láthat külső forrásból információkat anélkül, hogy meg kell adnia.|
+|Felhasználó kezelés|K13|Bejegyzés megosztása másik felhasználóval|1.0|Egy felhasználó meg tud osztani egy saját bejegyzést egy másik felhasználóval.|
+|Felhasználó kezelés|K14|A felhasználó kijelentkeztetése a rendszerből|1.0|Egy bejelentkezett felhasználó kijelentkezik a rendszerből.|
+|Törvényi megfelelés|K15|GDPR megfelelés|1.0|A rendszer nem tárolhat a GDPR által személyes adatnak minősíthető információt.|
+|Felület|K16|Regisztrációs oldal|1.0|A felület, amelyen a felhasználó regisztrálhatja magát a rendszerbe.|
+|Felület|K17|Bejelentkezési oldal|1.0|A felület, amelyen a felhasználó bejelentkezhet a rendszerbe.|
+
 ## Funkcionális terv
 
 Rendszerszereplők:
