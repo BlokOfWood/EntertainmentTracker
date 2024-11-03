@@ -116,6 +116,7 @@ Menü-hierarchiák:
 - Dashboard:
   - mentett művek megtekintése
   - szűrés mentett művek között
+  - művek rendszerezése
   - műben való haladás megosztása
   - mű szerkesztése
   - mű törlése
@@ -124,18 +125,32 @@ Menü-hierarchiák:
   - sorozat hozzáadása
   - film hozzáadása
   - YouTube video hozzáadása
-- Books:
+- Add Media - Books:
   - könyv keresése cím, ISBN azonosító alapján
   - találatok közüli könyv hozzáadása
-- TV Shows:
+- Add Media - TV Shows:
   - sorozat keresése cím, IMDb ID alapján
   - találatok közüli könyv hozzáadása
-- Movies:
+- Add Media - Movies:
   - film keresése cím, IMDb ID alapján
   - találatok közüli könyv hozzáadása
-- YouTube:
+- Add Media - YouTube:
   - megjelenítési név megadása
   - YouTube URL megadása
+- Edit Media - Books:
+  - oldalszám frissítése
+  - változások mentése
+- Edit Media - TV Shows:
+  - epizódszám frissítése
+  - változások mentése
+- Edit Media - Movies:
+  - percszám frissítése
+  - változások mentése
+- Edit Media - YouTube:
+  - változások mentése
+- Share With Friend:
+  - barát e-mailcímének megadása
+  - megosztás
 
 ## Fizikai környezet
 Fizikai környezet szempontjából a rendzser két részre bontható.
