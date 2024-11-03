@@ -2,6 +2,36 @@
 
 ## [Rendszer céljai és nemcéljai](https://github.com/BlokOfWood/EntertainmentTracker/blob/main/funkspec.md#a-rendszer-céljai-és-nem-céljai)
 
+## Projekt terv
+### Projekt munkások
+- Kozák Bálint: backend fejlesztő, web designer
+- Pap Sándor Dániel: frontend fejlesztő, scrum master
+- Szász Hanna Rebeka: frontend fejlesztő, jegyző
+### Projekt szerepkörök
+- Backend fejlesztő: A backend architektúra fejlesztéséért felelős, pl. adatbázis-tervezés, API tervezés.
+- Web designer: A weboldalak kinézetének megtervezéséért felelős, pl. képernyőtervek megvalósítása.
+- Frontend fejlesztő: A frontend megvalósításáért felelős, pl. a képernyőtervek implementációja a weboldalon, a UX kialakítása.
+- Scrum master: A csapat irányításáért és a terméktulajdonossal való kommunikációért felelős.
+- Jegyző: A meeting-ek jegyzeteléséért és a projektre vonatkozó információk gyűjtéséért felelős.
+### Ütemterv és mérföldkövek
+#### Sprint 1 - Fejlesztés
+- Felhasználókezelés (Bejelentkezés, Regisztráció, Kijelentkezés, Felhasználó-specifikus adatok)
+- Művek megjelenítése tábla
+- Backend: Művek módosítása, törlése, létrehozása endpoint
+#### Sprint 2 - Fejlesztés
+- Művek módosítása, törlése
+- Művek hozzáadása third party api-ok alapján
+- Művek szűrése
+Mérföldkő: A rendszer funkcionális, használható és tesztelhető.
+#### Sprint 3 - Fejlesztés
+- Demós visszajelzés feldolgozása, észrevételek megfontolása
+#### Sprint 4 - Tesztelés
+- Frontend/backend önálló áttesztelése, unit tesztek írása
+#### Sprint 5 - Tesztelés
+- Integrációs tesztelés, felhasználói szemszögből ellenőrzése a rendszernek
+Mérföldkő: A rendszer kész állapotba jut.
+
+
 ## Üzleti folyamatok modellje
 
 Kiváltandó üzleti folyamatok modellje:
