@@ -140,9 +140,9 @@ Menü-hierarchiák:
 ## Fizikai környezet
 Fizikai környezet szempontjából a rendzser két részre bontható.
 ### Frontend
-A frontend a felület amelyen keresztül a rendszer funkciói elérhetőek lesznek a felhasználó számára. Ez egy weboldal lesz, amely a Svelte keretrendszert fogja használni a felület megvalósításához a Vite frontend build szoftverrel. A weboldal kinézetének fejlesztéséhez a Tailwind CSS keretrendszert fogjuk használni. Mivel fordítás után a végtermék rendes html, css és javascript fájlok a felület elérhetővé tevése bármilyen web szerverrel lehetséges. **megbeszélni milyen webszerver**
+A frontend a felület amelyen keresztül a rendszer funkciói elérhetőek lesznek a felhasználó számára. Ez egy weboldal lesz, amely a Svelte keretrendszert fogja használni a felület megvalósításához a Vite frontend build szoftverrel. A weboldal kinézetének fejlesztéséhez a Tailwind CSS keretrendszert fogjuk használni. Mivel fordítás után a végtermék rendes html, css és javascript fájlok a felület elérhetővé tevése bármilyen web szerverrel lehetséges, de konkrétan az NGINX szerver fogja ellátni ezt a feladatot.
 ### Backend
-A backend a szerver amelyen keresztül a frontend képes lesz ellátni funkcióit. Alapvetően egy Go nyelven írt REST API, amely a funkcióit alapvetően a **bálint tudja** framework-kel látja el. Az adattároláshoz az SQLite beépített adatbázis könyvtárat használja, mely azt jelenti, hogy külön adatbázis szervert nem lesz szükséges fenntartani. Több külső API-t használni fog: a filmek és tv sorozatok metaadat szerzéséhez az IMDb API-t, a YouTube videók metaadat szerzéséhez a YouTube API-t és a könyvek metaadat szerzéséhez a **bálint tudja** API-t.
+A backend a szerver amelyen keresztül a frontend képes lesz ellátni funkcióit. Alapvetően egy Go nyelven írt REST API, amely a funkcióit alapvetően a nyelv által nyújtott stdlib-en belüli http framework-kel látja el. Az adattároláshoz az SQLite beépített adatbázis könyvtárat használja, mely azt jelenti, hogy külön adatbázis szervert nem lesz szükséges fenntartani. Több külső API-t fog használni: a filmek és tv sorozatok metaadat szerzéséhez az TMDb API-t, a YouTube videók metaadat szerzéséhez a YouTube API-t és a könyvek metaadat szerzéséhez a Google Books API-t.
  
 ## Architekturális terv
 ### Frontend
