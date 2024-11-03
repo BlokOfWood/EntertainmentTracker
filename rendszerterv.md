@@ -147,6 +147,7 @@ Menü-hierarchiák:
   - percszám frissítése
   - változások mentése
 - Edit Media - YouTube:
+  - megjelenítési név frissítése
   - változások mentése
 - Share With Friend:
   - barát e-mailcímének megadása
