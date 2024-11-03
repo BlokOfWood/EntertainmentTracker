@@ -204,9 +204,6 @@ graph LR
     Backend_API --> Konfiguráció
 ```
 
-### Frontend
-TODO
-
 ## Adatbázis terv
 ```mermaid
 erDiagram
