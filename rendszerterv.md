@@ -252,7 +252,7 @@ erDiagram
 
 A tesztelés célja a frontend megfelelő működésének vizsgálata.
 
-A frontendnek a felület megnyitásakor a felhasználónak elérhetőve kell tenni a regisztráció vagy bejelentkezés opciót.
+A frontendnek a felület megnyitásakor a felhasználónak elérhetővé kell tenni a regisztráció vagy bejelentkezés opciót.
 Bejelentkezés után a Dashboard-on a mentett műveknek megtekinhetőnek kell lenniük, köztük szűrni lehessen, új mű hozzáadásának vagy már létező mű szerkesztésének, törlésének lehetségesnek kell lenni.
 A felhasználónak lehetősége kell legyen műben való haladást megosztani, megosztott műben való haladást megtekinteni.
 
