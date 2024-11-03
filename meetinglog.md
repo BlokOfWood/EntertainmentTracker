@@ -35,3 +35,14 @@ rendszertervbeli feladatok meghatározása:
 - adatbázis terv
 - tesztterv - backend, frontend
 - telepítési terv - backend, frontend
+
+## 2024.11.03. - 1 óra 40 perc
+projektterv megírása:
+ - szerepkörök meghatározása
+ - sprintekben elvégzendő feladatok meghatározása
+ - mérföldkövek meghatározása
+
+rendszerterv átnézése:
+- menü-hierarchiák javítása
+- fizikai környezet kiegészítése
+- adatbázis terv frissítése
