@@ -1,2 +1,8 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script>
+    import Header from './header.svelte';
+</script>
+
+<!--Ezt csak azért raktam ide, hogy át lehessen navigálni a dashboard és addmedia oldalakra vele, nyugodtan vedd ki-->
+<div class="absolute inset-0 bg-background bg-fixed overflow-auto">
+    <Header></Header>
+</div>
