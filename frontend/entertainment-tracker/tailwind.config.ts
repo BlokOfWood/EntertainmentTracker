@@ -4,7 +4,13 @@ export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 
 	theme: {
-		extend: {}
+		extend: {
+			colors:{
+				header: '#1E293B',
+				background: '#0F172A',
+				delete: '#E82222'
+			}
+		}
 	},
 
 	plugins: []
