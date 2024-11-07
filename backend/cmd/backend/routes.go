@@ -11,7 +11,9 @@ func (app *application) routes() http.Handler {
 
 	router.HandlerFunc(http.MethodGet, "/v1/healthcheck", app.healthcheckHandler)
 
-	router.HandlerFunc(http.MethodPost, "/v1/users", app.createUserHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/users/register", app.createUserHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/users/login", app.createAuthenticationTokenHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/users/logout", app.requireAuthenticatedUser(app.invalidateAuthenticationTokenHandler))
 
-	return app.recoverPanic(app.enableCORS(router))
+	return app.recoverPanic(app.enableCORS(app.authenticate(router)))
 }
