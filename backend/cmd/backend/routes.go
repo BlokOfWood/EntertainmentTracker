@@ -14,6 +14,7 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodPost, "/v1/users/register", app.createUserHandler)
 	router.HandlerFunc(http.MethodPost, "/v1/users/login", app.createAuthenticationTokenHandler)
 	router.HandlerFunc(http.MethodGet, "/v1/users/logout", app.requireAuthenticatedUser(app.invalidateAuthenticationTokenHandler))
+	router.HandlerFunc(http.MethodGet, "/v1/users/me", app.requireAuthenticatedUser(app.getUserHandler))
 
 	router.HandlerFunc(http.MethodGet, "/v1/mediaentries", app.requireAuthenticatedUser(app.listMediaEntriesHandler))
 	router.HandlerFunc(http.MethodPost, "/v1/mediaentries", app.requireAuthenticatedUser(app.createMediaEntryHandler))
