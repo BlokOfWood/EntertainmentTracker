@@ -11,16 +11,6 @@
     let mediaType="YouTubeVideo";
 </script>
 
-<svelte:head>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
-</svelte:head>
-
-<style>
-    .Ubuntu-font {
-        font-family: 'Ubuntu', sans-serif;
-    }
-</style>
-
 <div class="relative h-screen flex flex-col bg-background">
     <Header/>
     <div class="relative flex-grow flex items-center justify-center py-3 px-40 z-0">

@@ -1,58 +1,63 @@
 <script lang="ts">
-    import { writable } from 'svelte/store';
-    import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
+	import { onMount } from 'svelte';
 
-    const initialUrl = writable(typeof window !== 'undefined' ? window.location.href : '');
+	const initialUrl = writable(typeof window !== 'undefined' ? window.location.href : '');
 
-    $: currentUrlValue = $initialUrl;
+	$: currentUrlValue = $initialUrl;
 
-    const isDashboardPage = () => currentUrlValue.includes('dashboard');
-    const isAddMediaPage = () => currentUrlValue.includes('addmedia');
+	const isDashboardPage = () => currentUrlValue.includes('dashboard');
+	const isAddMediaPage = () => currentUrlValue.includes('addmedia');
 
-    let showLogout = false;
+	let showLogout = false;
 
-    function toggleLogout() {
-        showLogout = !showLogout;
-    }
+	function toggleLogout() {
+		showLogout = !showLogout;
+	}
 
-    function hideLogout(event: MouseEvent) {
-        const profileButton = document.querySelector('.profile-picture-button')!;
-        if (!profileButton.contains(event.target as Node)) {
-            showLogout = false;
-        }
-    }
+	function hideLogout(event: MouseEvent) {
+		const profileButton = document.querySelector('.profile-picture-button')!;
+		if (!profileButton.contains(event.target as Node)) {
+			showLogout = false;
+		}
+	}
 
-    onMount(() => {
-        document.addEventListener('click', hideLogout);
-    });
+	onMount(() => {
+		document.addEventListener('click', hideLogout);
+	});
 </script>
 
-<svelte:head>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
-</svelte:head>
-
-<style>
-    .Ubuntu-font {
-        font-family: 'Ubuntu', sans-serif;
-    }
-</style>
-
-<div class="relative flex justify-between items-center w-100 bg-header shadow-md pr-3 pl-3">
-    <div class="flex items-center">
-        <div class="pl-2 pr-1 w-fit text-white text-right">
-            <img src="/mediamindlogo.png" alt="MediaMind Logo" class="w-6 h-6" />
-        </div>
-        <div class="pr-8 w-fit text-white text-2xl text-left Ubuntu-font">MediaMind</div>
-        <a href="/dashboard" class="p-2 w-fit text-white text-l {isDashboardPage() ? 'font-bold' : ''} Ubuntu-font">Dashboard</a>
-        <a href="/addmedia" class="p-2 w-fit text-white text-l {isAddMediaPage() ? 'font-bold' : ''} Ubuntu-font">Add Media</a>
-    </div>
-    <button class="bg-header text-white p-2 rounded-full flex items-center profile-picture-button" on:click|stopPropagation={toggleLogout} aria-expanded={showLogout}>
-        <img src="/profilepicture.png" alt="Profile" class="rounded-full w-10 h-10"/>
-    </button>
-    {#if showLogout}
-    <!--TODO: Add logout functionality-->
-    <a href="/" class="absolute right-0 top-full z-50 block w-fit bg-header pr-3 pl-3 pt-2 pb-2 rounded-br-md rounded-bl-md text-white shadow-md Ubuntu-font text-right">
-        Logout
-    </a>
-    {/if}
+<div class="w-100 bg-header relative flex items-center justify-between pl-3 pr-3 shadow-md">
+	<div class="flex items-center">
+		<div class="w-fit pl-2 pr-1 text-right text-white">
+			<img src="/mediamindlogo.png" alt="MediaMind Logo" class="h-6 w-6" />
+		</div>
+		<div class="Ubuntu-font w-fit pr-8 text-left text-2xl text-white">MediaMind</div>
+		<a
+			href="/dashboard"
+			class="text-l w-fit p-2 text-white {isDashboardPage() ? 'font-bold' : ''} Ubuntu-font"
+			>Dashboard</a
+		>
+		<a
+			href="/addmedia"
+			class="text-l w-fit p-2 text-white {isAddMediaPage() ? 'font-bold' : ''} Ubuntu-font"
+			>Add Media</a
+		>
+	</div>
+	<button
+		class="bg-header profile-picture-button flex items-center rounded-full p-2 text-white"
+		on:click|stopPropagation={toggleLogout}
+		aria-expanded={showLogout}
+	>
+		<img src="/profilepicture.png" alt="Profile" class="h-10 w-10 rounded-full" />
+	</button>
+	{#if showLogout}
+		<!--TODO: Add logout functionality-->
+		<a
+			href="/"
+			class="bg-header Ubuntu-font absolute right-0 top-full z-50 block w-fit rounded-bl-md rounded-br-md pb-2 pl-3 pr-3 pt-2 text-right text-white shadow-md"
+		>
+			Logout
+		</a>
+	{/if}
 </div>
