@@ -46,3 +46,24 @@ rendszerterv átnézése:
 - menü-hierarchiák javítása
 - fizikai környezet kiegészítése
 - adatbázis terv frissítése
+
+## 2024.11.09. - 1 óra 20 perc
+
+### Code review:
+
+#### backend észrevételek/teendők:
+- project felépítés refaktorálása
+- .env fájl betöltése indításkor
+- hibakezelés igazítása
+- register objektum pontosítása - meeting során megoldva
+- README.md frissítése a változtatások alapján
+
+#### frontend észrevételek/teendők:
+
+felhasználókezelés:
+- átirányítás igazítása
+- input binding igazítása - meeting során megoldva
+- access token kezelés implementálása
+
+dashboard:
+- header igazítás kód egyszerűsítés céljából
