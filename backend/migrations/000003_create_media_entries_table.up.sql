@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS media_entries (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    third_party_id TEXT,
+    title TEXT NOT NULL,
+    type TEXT NOT NULL,
+    status TEXT NOT NULL,
+    current_progress INTEGER NOT NULL,
+    target_progress INTEGER NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    version INTEGER NOT NULL DEFAULT 1,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);

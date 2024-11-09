@@ -7,7 +7,7 @@
 ## Telepítés
 1. Klónozd le a repót:
     ```bash
-    git clone https://github.com/BlokOfWood/CSK4-szamtan-gyakorlo.git
+    git clone https://github.com/BlokOfWood/EntertainmentTracker.git
     ```
 2. Navigálj a backend mappába:
     ```bash
