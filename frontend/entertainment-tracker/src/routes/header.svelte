@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
+	import { logout as logoutRequest } from '$lib/user.api';
+	import { redirect } from '@sveltejs/kit';
 
 	const initialUrl = writable(typeof window !== 'undefined' ? window.location.href : '');
 
@@ -20,6 +22,17 @@
 		if (!profileButton.contains(event.target as Node)) {
 			showLogout = false;
 		}
+	}
+
+	function logout() {
+		logoutRequest().then((response) => {
+			if (response.ok) {
+				console.log('Logout successful');
+				redirect(302, '/login');
+			} else {
+				console.log('Logout failed');
+			}
+		});
 	}
 
 	onMount(() => {
@@ -53,11 +66,11 @@
 	</button>
 	{#if showLogout}
 		<!--TODO: Add logout functionality-->
-		<a
-			href="/"
+		<button
+			on:click={logout}
 			class="bg-header Ubuntu-font absolute right-0 top-full z-50 block w-fit rounded-bl-md rounded-br-md pb-2 pl-3 pr-3 pt-2 text-right text-white shadow-md"
 		>
 			Logout
-		</a>
+		</button>
 	{/if}
 </div>
