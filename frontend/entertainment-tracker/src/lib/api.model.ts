@@ -1,12 +1,13 @@
 export type ApiResponse<T> = {
     statusCode: number;
+    ok: boolean;
     body: T;
 }
 
 export type RegisterRequest = {
     email: string;
+    username: string;
     password: string;
-    name: string;
 }
 
 export type LoginRequest = {
