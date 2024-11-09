@@ -65,7 +65,6 @@
 		<img src="/profilepicture.png" alt="Profile" class="h-10 w-10 rounded-full" />
 	</button>
 	{#if showLogout}
-		<!--TODO: Add logout functionality-->
 		<button
 			on:click={logout}
 			class="bg-header Ubuntu-font absolute right-0 top-full z-50 block w-fit rounded-bl-md rounded-br-md pb-2 pl-3 pr-3 pt-2 text-right text-white shadow-md"
