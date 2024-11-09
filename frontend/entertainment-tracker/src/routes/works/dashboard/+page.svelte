@@ -1,5 +1,5 @@
 <script>
-    import Header from '../header.svelte';
+    import Header from '$lib/header.svelte';
     import { writable } from 'svelte/store';
     
     //TODO: get the media from backend to loop through it

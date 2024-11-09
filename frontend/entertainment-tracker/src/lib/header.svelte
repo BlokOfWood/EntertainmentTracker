@@ -47,12 +47,12 @@
 		</div>
 		<div class="Ubuntu-font w-fit pr-8 text-left text-2xl text-white">MediaMind</div>
 		<a
-			href="/dashboard"
+			href="/works/dashboard"
 			class="text-l w-fit p-2 text-white {isDashboardPage() ? 'font-bold' : ''} Ubuntu-font"
 			>Dashboard</a
 		>
 		<a
-			href="/addmedia"
+			href="/works/addmedia"
 			class="text-l w-fit p-2 text-white {isAddMediaPage() ? 'font-bold' : ''} Ubuntu-font"
 			>Add Media</a
 		>
