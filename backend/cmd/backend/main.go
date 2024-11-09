@@ -7,7 +7,6 @@ import (
 	"log/slog"
 	"os"
 	"strconv"
-	"strings"
 	"sync"
 
 	"github.com/BlokOfWood/EntertainmentTracker/backend/internal/data"
@@ -26,7 +25,7 @@ type config struct {
 		db_path string
 	}
 	cors struct {
-		trustedOrigins []string
+		trustedOrigins string
 	}
 }
 
@@ -47,10 +46,11 @@ func main() {
 	flag.IntVar(&cfg.port, "port", port, "API server port")
 	flag.StringVar(&cfg.env, "env", os.Getenv("API_ENV"), "Environment (development|production)")
 	flag.StringVar(&cfg.db.db_path, "db-path", os.Getenv("API_DB_PATH"), "Path to SQLite database file")
-	flag.Func("cors-trusted-origins", "Trusted CORS origins (space separated)", func(val string) error {
+	flag.StringVar(&cfg.cors.trustedOrigins, "cors-trusted-origins", os.Getenv("CORS_TRUSTED_ORIGINS"), "Trusted CORS origins (space separated)")
+	/*flag.Func("cors-trusted-origins", "Trusted CORS origins (space separated)", func(val string) error {
 		cfg.cors.trustedOrigins = strings.Fields(val)
 		return nil
-	})
+	})*/
 	flag.Parse()
 
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
