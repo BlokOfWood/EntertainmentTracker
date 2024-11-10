@@ -1,60 +1,80 @@
 <script>
-    import Header from '$lib/header.svelte';
-    import { writable } from 'svelte/store';
-    
-    //TODO: get the media from backend to loop through it
+	import Header from '$lib/header.svelte';
+	import { getWorks } from '$lib/works.api';
+	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
 
-    function sortByTitle(){
-        //TODO: write sort by title function
-    }
+	//TODO: get the media from backend to loop through it
 
-    function sortByType(){
-        //TODO: write sort by type function
-    }
+	onMount(async () => {
+		getWorks().then((response) => {
+			if (response.ok) {
+				console.log('Works fetched successfully');
+				console.log(response.body);
+			}
+		});
+	});
 
-    function sortByProgress(){
-        //TODO: write sort by progress
-    }
+	function sortByTitle() {
+		//TODO: write sort by title function
+	}
 
-    function shareMedia(){
-        //TODO: write share media function
-    }
+	function sortByType() {
+		//TODO: write sort by type function
+	}
 
-    function editMedia(){
-        //TODO: write edit media function
-    }
+	function sortByProgress() {
+		//TODO: write sort by progress
+	}
 
-    function deleteMedia(){
-        //TODO: write delete media function
-    }
+	function shareMedia() {
+		//TODO: write share media function
+	}
+
+	function editMedia() {
+		//TODO: write edit media function
+	}
+
+	function deleteMedia() {
+		//TODO: write delete media function
+	}
 </script>
 
-<div class="relative h-screen flex flex-col bg-background">
-    <Header/>
-    <div class="relative flex-grow flex items-center justify-center py-3 px-40 z-0">
-        <div class="w-full h-full bg-white rounded-lg grid grid-cols-4">
-            <div class="border-0 p-2 flex justify-center items-start">
-                <button class="text-black text-lg font-bold Ubuntu-font flex items-center space-x-2" on:click={sortByTitle}>
-                    <span>Title</span>
-                    <img src="/chevron-down.png" alt="Chevron-down" class="w-4 h-4" />
-                </button>
-            </div>
-            <div class="border-0 p-2 flex justify-center items-start">
-                <button class="text-black text-lg font-bold Ubuntu-font flex items-center space-x-2" on:click={sortByType}>
-                    <span>Type</span>
-                    <img src="/chevrons-up-down.png" alt="Chevron-down" class="w-4 h-4" />
-                </button>
-            </div>
-            <div class="border-0 p-2 flex justify-center items-start">
-                <button class="text-black text-lg font-bold Ubuntu-font flex items-center space-x-2" on:click={sortByProgress}>
-                    <span>Progress</span>
-                    <img src="/chevrons-up-down.png" alt="Chevron-down" class="w-4 h-4" />
-                </button>
-            </div>
-            
-            <!--TODO: check and correct it once media can be fetched from backend and replace the variables with the proper ones
+<div class="bg-background relative flex h-screen flex-col">
+	<Header />
+	<div class="relative z-0 flex flex-grow items-center justify-center px-40 py-3">
+		<div class="grid h-full w-full grid-cols-4 rounded-lg bg-white">
+			<div class="flex items-start justify-center border-0 p-2">
+				<button
+					class="Ubuntu-font flex items-center space-x-2 text-lg font-bold text-black"
+					on:click={sortByTitle}
+				>
+					<span>Title</span>
+					<img src="/chevron-down.png" alt="Chevron-down" class="h-4 w-4" />
+				</button>
+			</div>
+			<div class="flex items-start justify-center border-0 p-2">
+				<button
+					class="Ubuntu-font flex items-center space-x-2 text-lg font-bold text-black"
+					on:click={sortByType}
+				>
+					<span>Type</span>
+					<img src="/chevrons-up-down.png" alt="Chevron-down" class="h-4 w-4" />
+				</button>
+			</div>
+			<div class="flex items-start justify-center border-0 p-2">
+				<button
+					class="Ubuntu-font flex items-center space-x-2 text-lg font-bold text-black"
+					on:click={sortByProgress}
+				>
+					<span>Progress</span>
+					<img src="/chevrons-up-down.png" alt="Chevron-down" class="h-4 w-4" />
+				</button>
+			</div>
+
+			<!--TODO: check and correct it once media can be fetched from backend and replace the variables with the proper ones
             I just did it with parasztlogika, couldn't test it-->
-            <!--{#each media as medium}
+			<!--{#each media as medium}
                 <div class="border-0 p-2 text-black text-lg Ubuntu-font">{medium.title}</div>
                 <div class="border-0 p-2 text-black text-lg Ubuntu-font">{medium.type}</div>
                 <div class="border-0 p-2 text-black text-lg Ubuntu-font">{medium.progress}</div>
@@ -96,6 +116,6 @@
                 </button>
             </div>
             {/each}-->
-        </div>
-    </div>
+		</div>
+	</div>
 </div>

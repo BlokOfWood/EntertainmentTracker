@@ -27,4 +27,8 @@ export type LoginResponse = {
 	};
 };
 
+export type Work = {
+	
+};
+
 export type AuthToken = LoginResponse['authentication_token'];
