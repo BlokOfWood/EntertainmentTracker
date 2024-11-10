@@ -209,29 +209,32 @@ graph LR
 ```mermaid
 erDiagram
     USERS {
-        INTEGER user_id PK "Unique identifier for users"
-        TEXT username "Username"
-        TEXT password "Password (hashed)"
+        INTEGER id PK "Unique identifier for users"
+        TEXT name "Username"
         TEXT email "Email for login"
+        BLOB password_hash "Password (hashed)"
         DATETIME created_at "User creation date"
+        INTEGER version "User data version"
+    }
+
+    TOKENS {
+      BLOB hash PK "Unique identifier for tokens"
+      INTEGER user_id FK "User who the token belongs to"
+      DATETIME expiry "Token expiry date"
     }
     
     MEDIA_ENTRIES {
-        INTEGER entry_id PK "Unique identifier for media entries"
+        INTEGER id PK "Unique identifier for media entries"
         INTEGER user_id FK "User who added the media"
+        TEXT third_party_id "Third party identifier for the media."
         TEXT title "Title of the media"
         TEXT type "Type of the media (book, tv show, movie, youtube)"
         TEXT status "Status of the media (not started, in progress, completed)"
+        INTEGER current_progress "Current progress of the media"
+        INTEGER target_progress "Target progress of the media"
         DATETIME created_at "Media entry creation date"
         DATETIME updated_at "Last update date"
-    }
-    
-    PROGRESS {
-        INTEGER progress_id PK "Unique identifier for progress"
-        INTEGER entry_id FK "Media entry being tracked"
-        INTEGER current "Current progress"
-        INTEGER target "Target progress"
-        DATETIME updated_at "Last update date"
+        INTEGER version "Media entry data version"
     }
     
     SHARED_ENTRIES {
@@ -242,9 +245,9 @@ erDiagram
         DATETIME created_at "Share creation date"
     }
 
+    USERS ||--o{ TOKENS : "1:n has"
     USERS ||--o{ MEDIA_ENTRIES : "1:n owns"
     USERS ||--o{ SHARED_ENTRIES : "1:n shares"
-    MEDIA_ENTRIES ||--|| PROGRESS : "1:1 tracks"
     MEDIA_ENTRIES }o--o{ SHARED_ENTRIES : "n:m is shared in"
 ```
 
