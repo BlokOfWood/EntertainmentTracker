@@ -28,7 +28,16 @@ export type LoginResponse = {
 };
 
 export type Work = {
-	
+	id: number;
+	third_party_id: string;
+	title: string;
+	status: string;
+	type: string;
+	current_progress: number;
+	target_progress: number;
+	version: number;
+	created_at: number;
+	updated_at: Date;
 };
 
 export type AuthToken = LoginResponse['authentication_token'];
