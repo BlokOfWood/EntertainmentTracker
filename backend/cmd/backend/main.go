@@ -7,12 +7,14 @@ import (
 	"log/slog"
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/BlokOfWood/EntertainmentTracker/backend/internal/data"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/sqlite"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/joho/godotenv"
 	_ "modernc.org/sqlite"
 )
 
@@ -22,10 +24,10 @@ type config struct {
 	port int
 	env  string
 	db   struct {
-		db_path string
+		path string
 	}
 	cors struct {
-		trustedOrigins string
+		trustedOrigins []string
 	}
 }
 
@@ -38,22 +40,33 @@ type application struct {
 }
 
 func main() {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	var cfg config
+
+	err := godotenv.Load()
+	if err != nil {
+		logger.Warn("Error loading .env file")
+	}
+
 	port, err := strconv.Atoi(os.Getenv("API_PORT"))
 	if err != nil {
 		port = 4000
 	}
-	flag.IntVar(&cfg.port, "port", port, "API server port")
-	flag.StringVar(&cfg.env, "env", os.Getenv("API_ENV"), "Environment (development|production)")
-	flag.StringVar(&cfg.db.db_path, "db-path", os.Getenv("API_DB_PATH"), "Path to SQLite database file")
-	flag.StringVar(&cfg.cors.trustedOrigins, "cors-trusted-origins", os.Getenv("CORS_TRUSTED_ORIGINS"), "Trusted CORS origins (space separated)")
-	/*flag.Func("cors-trusted-origins", "Trusted CORS origins (space separated)", func(val string) error {
-		cfg.cors.trustedOrigins = strings.Fields(val)
-		return nil
-	})*/
-	flag.Parse()
+	cfg.port = port
+	cfg.env = os.Getenv("API_ENV")
+	cfg.db.path = os.Getenv("API_DB_PATH")
+	cfg.cors.trustedOrigins = strings.Fields(os.Getenv("CORS_TRUSTED_ORIGINS"))
 
-	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+	flag.IntVar(&cfg.port, "port", cfg.port, "API server port")
+	flag.StringVar(&cfg.env, "env", cfg.env, "Environment (development|production)")
+	flag.StringVar(&cfg.db.path, "db-path", cfg.db.path, "Path to SQLite database file")
+	flag.Func("cors-trusted-origins", "Trusted CORS origins (space separated)", func(val string) error {
+		if val != "" {
+			cfg.cors.trustedOrigins = strings.Fields(val)
+		}
+		return nil
+	})
+	flag.Parse()
 
 	db, err := openDB(cfg)
 	if err != nil {
@@ -79,7 +92,7 @@ func main() {
 }
 
 func openDB(cfg config) (*sql.DB, error) {
-	db, err := sql.Open("sqlite", cfg.db.db_path)
+	db, err := sql.Open("sqlite", cfg.db.path)
 	if err != nil {
 		return nil, err
 	}
