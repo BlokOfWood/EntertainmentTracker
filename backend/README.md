@@ -19,12 +19,11 @@
     ```
 4. Hozd létre a .env fájlt a következő tartalommal:
     ```env
-    DB_PATH=<DB_PATH> # Az SQLite adatbázis elérési útja
-    GOOGLE_BOOKS_API_KEY=<GOOGLE_BOOKS_API_KEY> # A Google Books API kulcsa
-    TMDB_API_KEY=<TMDB_API_KEY> # A The Movie Database API kulcsa
-    API_PORT=<API_PORT> # Az API portja
-    CORS_TRUSTED_ORIGINS=<CORS_ORIGINS> # A CORS engedélyezett eredetek szóközzel elválasztva
-    JWT_SECRET=<JWT_SECRET> # A JWT titkosításhoz használt kulcs
+    API_PORT=6969 # Port, amin a szerver futni fog
+    API_ENV="development" # Környezet, amin a szerver futni fog
+    API_DB_PATH="db.db" # Adatbázis fájl elérési útja
+    CORS_TRUSTED_ORIGINS="http://localhost:3000 http://localhost:3001" # Megbízhat a CORS originok
+    AUTH_EXPIRE_TIME=14 # Auth token lejárati ideje napokban
     ```
 5. Indítsd el a szervert:
     ```bash
