@@ -1,15 +1,12 @@
-<script lang="ts">
-	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
-	import '../app.css';
-	import { api } from '$lib/api';
+<script>
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import { api } from '$lib/api';
+	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 
-	let { children } = $props();
-
 	onMount(async () => {
-		if ($page.url.pathname === '/') {
+		if ($page.status === 404) {
 			if (get(api).validToken) {
 				await goto('/works/dashboard');
 			} else {
@@ -18,5 +15,3 @@
 		}
 	});
 </script>
-
-{@render children()}

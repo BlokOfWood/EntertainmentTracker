@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
-	import { onMount } from 'svelte';
 	import { logout as logoutRequest } from '$lib/user.api';
-	import { redirect } from '@sveltejs/kit';
+	import { goto } from '$app/navigation';
+	import api from './api';
 
 	const initialUrl = writable(typeof window !== 'undefined' ? window.location.href : '');
 
@@ -18,6 +18,8 @@
 	}
 
 	function hideLogout(event: MouseEvent) {
+		if(typeof window === 'undefined') return;
+
 		const profileButton = document.querySelector('.profile-picture-button')!;
 		if (!profileButton.contains(event.target as Node)) {
 			showLogout = false;
@@ -25,21 +27,19 @@
 	}
 
 	function logout() {
-		logoutRequest().then((response) => {
+		logoutRequest().then(async (response) => {
+			api.setToken(null);
 			if (response.ok) {
 				console.log('Logout successful');
-				redirect(302, '/login');
 			} else {
 				console.log('Logout failed');
 			}
+			await goto('/user/login');
 		});
 	}
 
-	onMount(() => {
-		document.addEventListener('click', hideLogout);
-	});
 </script>
-
+<svelte:document on:click={hideLogout} />
 <div class="w-100 bg-header relative flex items-center justify-between pl-3 pr-3 shadow-md">
 	<div class="flex items-center">
 		<div class="w-fit pl-2 pr-1 text-right text-white">

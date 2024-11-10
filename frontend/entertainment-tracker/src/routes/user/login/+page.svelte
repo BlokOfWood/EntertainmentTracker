@@ -1,24 +1,25 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import api from '$lib/api';
 	import { login as sendLoginRequest } from '$lib/user.api';
-	import { redirect } from '@sveltejs/kit';
 
 	let email = '';
 	let password = '';
 
-	function login() {
+	async function login() {
 		const requestBody = {
 			email,
 			password
 		};
 
-		sendLoginRequest(requestBody).then((response) => {
-			if (response.ok) {
-				console.log('Login successful');
-				redirect(302, '/dashboard');
-			} else {
-				console.log('Login failed');
-			}
-		});
+		const response = await sendLoginRequest(requestBody);
+		if (response.ok) {
+			console.log('Login successful');
+			api.setToken(response.body.authentication_token);
+			await goto('/works/dashboard');
+		} else {
+			console.log('Login failed');
+		}
 	}
 </script>
 
@@ -40,12 +41,24 @@
 
 		<div>
 			<label class="block text-left" for="email">Email</label>
-			<input class="mt-2 w-full p-1" id="email" type="email" placeholder="Email" />
+			<input
+				bind:value={email}
+				class="mt-2 w-full p-1"
+				id="email"
+				type="email"
+				placeholder="Email"
+			/>
 		</div>
 
 		<div class="mb-8 mt-4">
 			<label class="block text-left" for="password">Password</label>
-			<input class="mt-2 w-full p-1" id="password" type="password" placeholder="Password" />
+			<input
+				bind:value={password}
+				class="mt-2 w-full p-1"
+				id="password"
+				type="password"
+				placeholder="Password"
+			/>
 		</div>
 
 		<button class="bg-background rounded-md px-4 py-2 text-sm text-white">Login</button>

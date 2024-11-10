@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { register as sendRegisterRequest } from '$lib/user.api';
-	import { redirect } from '@sveltejs/kit';
+	import { goto } from '$app/navigation';
+	import { register as sendRegisterRequest, login } from '$lib/user.api';
 
 	let email = '';
 	let username = '';
@@ -9,14 +9,15 @@
 	function register() {
 		const requestBody = {
 			email,
-			username,
+			name: username,
 			password
 		};
 
 		sendRegisterRequest(requestBody).then((response) => {
 			if (response.ok) {
 				console.log('Registration successful');
-				redirect(302, '/dashboard')
+				login({ email, password });
+				goto('/works/dashboard');
 			} else {
 				console.log('Registration failed');
 			}
