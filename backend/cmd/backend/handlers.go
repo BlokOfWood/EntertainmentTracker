@@ -129,7 +129,8 @@ func (app *application) createAuthenticationTokenHandler(w http.ResponseWriter, 
 		return
 	}
 
-	token, err := app.models.Tokens.New(user.ID, 24*time.Hour)
+	hours := app.config.auth.expireTime * 24
+	token, err := app.models.Tokens.New(user.ID, time.Duration(hours)*time.Hour)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return

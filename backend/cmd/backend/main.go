@@ -29,6 +29,9 @@ type config struct {
 	cors struct {
 		trustedOrigins []string
 	}
+	auth struct {
+		expireTime int
+	}
 }
 
 type application struct {
@@ -56,6 +59,10 @@ func main() {
 	cfg.env = os.Getenv("API_ENV")
 	cfg.db.path = os.Getenv("API_DB_PATH")
 	cfg.cors.trustedOrigins = strings.Fields(os.Getenv("CORS_TRUSTED_ORIGINS"))
+	cfg.auth.expireTime, err = strconv.Atoi(os.Getenv("AUTH_EXPIRE_TIME"))
+	if err != nil {
+		cfg.auth.expireTime = 14
+	}
 
 	flag.IntVar(&cfg.port, "port", cfg.port, "API server port")
 	flag.StringVar(&cfg.env, "env", cfg.env, "Environment (development|production)")
@@ -66,6 +73,7 @@ func main() {
 		}
 		return nil
 	})
+	flag.IntVar(&cfg.auth.expireTime, "auth-expire-time", cfg.auth.expireTime, "Auth token expire time in days")
 	flag.Parse()
 
 	db, err := openDB(cfg)
