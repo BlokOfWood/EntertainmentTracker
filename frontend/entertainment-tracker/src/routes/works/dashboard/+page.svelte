@@ -5,8 +5,7 @@
 	import { onMount } from 'svelte';
 
 	let works: Work[] = [];
-	let originalWorks: Work[] = [];
-	let sortedByTitle: boolean=false;
+	let originalWorks: Work[] = []; // To store the original order of works
 
 	onMount(async () => {
 		getWorks().then((response) => {
@@ -19,47 +18,93 @@
 				//TODO: remove example test works once adding works, deleting works and edit works are implemented.
 				const movieExample: Work = { id: 3, third_party_id: 'tp789', title: 'Movie', status: 'Pending', type: 'movie', current_progress: 10, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
 				works.push(movieExample);
-				const TVShowExample: Work = { id: 3, third_party_id: 'tp789', title: 'TVShow', status: 'Pending', type: 'TVshow', current_progress: 10, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				const TVShowExample: Work = { id: 3, third_party_id: 'tp789', title: 'TVShow', status: 'Pending', type: 'TVshow', current_progress: 20, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
 				works.push(TVShowExample);
-				const YouTubeVideoExample: Work = { id: 3, third_party_id: 'tp789', title: 'YouTubeVideo', status: 'Pending', type: 'YouTubeVideo', current_progress: 10, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				const YouTubeVideoExample: Work = { id: 3, third_party_id: 'tp789', title: 'YouTubeVideo', status: 'Pending', type: 'YouTubeVideo', current_progress: 80, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
 				works.push(YouTubeVideoExample);
-				const bookExample: Work = { id: 3, third_party_id: 'tp789', title: 'Book', status: 'Pending', type: 'book', current_progress: 10, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				const TVShowExampleSecond: Work = { id: 3, third_party_id: 'tp789', title: 'TVShowSecond', status: 'Pending', type: 'TVshow', current_progress: 15, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				works.push(TVShowExampleSecond);
+				const bookExample: Work = { id: 3, third_party_id: 'tp789', title: 'Book', status: 'Pending', type: 'book', current_progress: 40, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
 				works.push(bookExample);
+				const YouTubeVideoExampleSecond: Work = { id: 3, third_party_id: 'tp789', title: 'Cooking', status: 'Pending', type: 'YouTubeVideo', current_progress: 40, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				works.push(YouTubeVideoExampleSecond);
+
+				originalWorks=works;
 			}
 		});
 	});
 
-	function sortByTitle() {
-		//TODO: correct sort function. make it actually functional. It does something though. Not exactly sure what.
-		/*if(sortedByTitle){
-			sortedByTitle=false;
-			originalWorks=works;
-		}
-		else{
-			sortedByTitle=true;
-		}
+	let sortedByTitle = false;
+	let sortedByType = false;
+	let sortedByProgress = false;
 
-    	if(sortedByTitle){
-			let ascending: boolean=true;
-    		works.sort((a, b) => {
-				if (a.title < b.title) return ascending ? -1 : 1;
-				if (a.title > b.title) return ascending ? 1 : -1;
-				return 0;
+	function sortByTitle() {
+		works = originalWorks;
+
+		sortedByType=false;
+		sortedByProgress=false;
+
+		if (sortedByTitle) {
+			sortedByTitle = false;
+			console.log("not sorted by title");
+		} else {
+			sortedByTitle = true;
+
+			// Sort and create a new reference for works
+			works = [...works].sort((a, b) => {
+				if (a.title < b.title) return -1; // a comes before b
+				if (a.title > b.title) return 1;  // a comes after b
+				return 0; // a and b are equal
 			});
+			
 			console.log("sort by title");
 		}
-		else{
-			works=originalWorks;
-			console.log("not sorted by title");
-		}*/
 	}
 
 	function sortByType() {
-		//TODO: write sort by type function
+		works = originalWorks;
+
+		sortedByTitle=false;
+		sortedByProgress=false;
+
+		if (sortedByType) {
+			sortedByType = false;
+			console.log("not sorted by type");
+		} else {
+			sortedByType = true;
+
+			// Sort and create a new reference for works
+			works = [...works].sort((a, b) => {
+				if (a.type < b.type) return -1; // a comes before b
+				if (a.type > b.type) return 1;  // a comes after b
+				return 0; // a and b are equal
+			});
+			
+			console.log("sort by type");
+		}
 	}
 
 	function sortByProgress() {
-		//TODO: write sort by progress
+		works = originalWorks;
+
+		sortedByTitle=false;
+		sortedByType=false;
+
+		if (sortedByProgress) {
+			sortedByProgress = false;
+			console.log("not sorted by progress");
+		} else {
+			sortedByProgress = true;
+
+			// Sort and create a new reference for works
+			works = [...works].sort((a, b) => {
+				if (a.target_progress/a.current_progress < b.target_progress/b.current_progress) return -1; // a comes before b
+				if (a.target_progress/a.current_progress > b.target_progress/b.current_progress) return 1;  // a comes after b
+				return 0; // a and b are equal
+			});
+			
+			console.log("sort by progress");
+		}
 	}
 
 	function shareMedia() {
