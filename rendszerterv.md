@@ -296,4 +296,5 @@ A backendnek biztosítania kell az adatbázis műveletek megfelelő végrehajtá
 - **Módszer:** Manuális tesztelés a rendszer teljes funkcionalitásának ellenőrzésére, különböző felhasználói szituációk szimulálása, hibás adatokkal való próbálkozás.
 
 ## Telepítési terv
+### [Frontend telepítési útmutató](frontend/README.md)
 ### [Backend telepítési útmutató](backend/README.md)
