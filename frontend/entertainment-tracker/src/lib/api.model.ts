@@ -27,6 +27,23 @@ export type LoginResponse = {
 	};
 };
 
+export type UpdateWorkRequest = {
+	title: string;
+	type: string;
+	status: string;
+	current_progress: number;
+	target_progress: number;
+};
+
+export type CreateWorkRequest = {
+	third_party_id: string;
+	title: string;
+	type: string;
+	status: string;
+	current_progress: number;
+	target_progress: number;
+};
+
 export type Work = {
 	id: number;
 	third_party_id: string;
