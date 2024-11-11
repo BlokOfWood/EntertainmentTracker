@@ -37,6 +37,40 @@ class Api {
 		return this.processResponse(response, options);
 	}
 
+	public async patch<T>(
+		endpoint: string,
+		data: object,
+		options?: ApiOptions
+	): Promise<ApiResponse<T>> {
+		const headers = new Headers();
+		headers.append('Content-Type', 'application/json');
+		if (this.token !== null && !options?.skipAuth) {
+			headers.append('Authorization', `Bearer ${this.token.token}`);
+		}
+
+		const response = await fetch(this.apiBaseAddress + endpoint, {
+			method: 'PATCH',
+			headers,
+			body: JSON.stringify(data)
+		});
+
+		return this.processResponse(response, options);
+	}
+
+	public async delete<T>(endpoint: string, options?: ApiOptions): Promise<ApiResponse<T>> {
+		const headers = new Headers();
+		if (this.token !== null && !options?.skipAuth) {
+			headers.append('Authorization', `Bearer ${this.token.token}`);
+		}
+
+		const response = await fetch(this.apiBaseAddress + endpoint, {
+			method: 'DELETE',
+			headers
+		});
+
+		return this.processResponse(response, options);
+	}
+
 	public setToken(token: AuthToken | null) {
 		this.token = token;
 
