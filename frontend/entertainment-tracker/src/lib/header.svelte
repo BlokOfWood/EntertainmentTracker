@@ -1,15 +1,13 @@
 <script lang="ts">
-	import { writable } from 'svelte/store';
 	import { logout as logoutRequest } from '$lib/user.api';
 	import { goto } from '$app/navigation';
 	import api from './api';
+    import { page } from '$app/stores';
 
-	const initialUrl = writable(typeof window !== 'undefined' ? window.location.href : '');
+    $: currentUrlValue = $page.url.pathname;
 
-	$: currentUrlValue = $initialUrl;
-
-	const isDashboardPage = () => currentUrlValue.includes('dashboard');
-	const isAddMediaPage = () => currentUrlValue.includes('addmedia');
+    const isDashboardPage = () => currentUrlValue.includes('dashboard');
+    const isAddMediaPage = () => currentUrlValue.includes('addmedia');
 
 	let showLogout = false;
 
