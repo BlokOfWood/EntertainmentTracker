@@ -107,8 +107,20 @@
 		}
 	}
 
+	let checkingDashboard=true;
+	let sharingMedia=false;
+
 	function shareMedia() {
-		//TODO: write share media function
+		checkingDashboard=false;
+		sharingMedia=true;
+	}
+
+	let friendEmail='';
+
+	function shareWithFriend(){
+		console.log('Sharing with:', friendEmail);
+
+		//TODO: implement the proper function, so it's not just placeholder
 	}
 
 	function editMedia() {
@@ -118,8 +130,14 @@
 	function deleteMedia() {
 		//TODO: write delete media function
 	}
+
+	function returnToDashboard(){
+		checkingDashboard=true;
+		sharingMedia=false;
+	}
 </script>
 
+{#if checkingDashboard}
 <div class="relative z-0 flex flex-grow items-center justify-center px-40 py-3">
 	<div class="h-full w-full rounded-lg bg-white flex justify-center items-start">
 		<div class="grid  grid-cols-4 w-full">
@@ -194,3 +212,34 @@
 		</div>
 	</div>
 </div>
+{/if}
+{#if sharingMedia}
+<div class="relative z-0 flex flex-grow items-center justify-center px-80 py-3">
+	<div class="h-full w-full rounded-lg bg-white">
+		<div class="flex flex-col">
+			<div class="flex items-start justify-between p-2">
+				<button class="flex items-center justify-center border-0 pl-6 pt-4" on:click={returnToDashboard}>
+					<img src="/back-button.png" alt="Return to dashboard" class="w-5 h-5"/>
+				</button>
+				<div class="flex-grow text-center text-lg font-bold Ubuntu-font pt-3"> 
+					Share your progress with a friend
+				</div>
+			</div>
+		</div>
+		<div class="w-full p-2 flex flex-col justify-center items-center">
+			<div class="inline-flex flex-col ml-20">
+				<div class="Ubuntu-font text-sm p-1">
+					Your friend's email:
+				</div>
+				<div>
+					<input type="email" placeholder="Email" bind:value={friendEmail} class="border rounded-md p-1.5 mr-1" /> 
+					<button class="bg-background text-white rounded-md py-1.5 px-6" on:click={shareWithFriend}> 
+						Share
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{/if}
+
