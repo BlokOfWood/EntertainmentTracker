@@ -365,3 +365,185 @@ func (app *application) deleteMediaEntryHandler(w http.ResponseWriter, r *http.R
 		app.serverErrorResponse(w, r, err)
 	}
 }
+
+func (app *application) searchMoviesByTitleHandler(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("q")
+	if query == "" {
+		app.badRequestResponse(w, r, errors.New("missing q query parameter"))
+		return
+	}
+
+	movies, err := app.tmdb.GetSearchMovies(query, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"movies": movies}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
+func (app *application) getMoviesByIMDbHandler(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Query().Get("id")
+	if id == "" {
+		app.badRequestResponse(w, r, errors.New("missing id query parameter"))
+		return
+	}
+
+	results, err := app.tmdb.GetFindByID(id, map[string]string{"external_source": "imdb_id"})
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	if len(results.MovieResults) == 0 {
+		app.notFoundResponse(w, r)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"movies": results.MovieResults}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
+func (app *application) getMovieHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readIDParam(r)
+	if err != nil {
+		app.notFoundResponse(w, r)
+		return
+	}
+
+	movie, err := app.tmdb.GetMovieDetails(int(id), nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"movie": movie}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
+func (app *application) searchTVShowsByTitleHandler(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("q")
+	if query == "" {
+		app.badRequestResponse(w, r, errors.New("missing q query parameter"))
+		return
+	}
+
+	tvShows, err := app.tmdb.GetSearchTVShow(query, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"tvshows": tvShows}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
+func (app *application) getTVShowsByIMDbHandler(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Query().Get("id")
+	if id == "" {
+		app.badRequestResponse(w, r, errors.New("missing id query parameter"))
+		return
+	}
+
+	results, err := app.tmdb.GetFindByID(id, map[string]string{"external_source": "imdb_id"})
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	if len(results.TvResults) == 0 {
+		app.notFoundResponse(w, r)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"tvshows": results.TvResults}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
+func (app *application) getTVShowHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readIDParam(r)
+	if err != nil {
+		app.notFoundResponse(w, r)
+		return
+	}
+
+	tvShow, err := app.tmdb.GetTVDetails(int(id), nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"tvshow": tvShow}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
+func (app *application) searchBooksByTitleHandler(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("q")
+	if query == "" {
+		app.badRequestResponse(w, r, errors.New("missing q query parameter"))
+		return
+	}
+
+	books, err := app.books.Volumes.List(query).Do()
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"books": books}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
+func (app *application) searchBooksByISBNHandler(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("id")
+	if query == "" {
+		app.badRequestResponse(w, r, errors.New("missing id query parameter"))
+		return
+	}
+	query = "isbn:" + query
+
+	books, err := app.books.Volumes.List(query).Do()
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"books": books}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
+func (app *application) getBookHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readGoogleIDParam(r)
+	if err != nil {
+		app.notFoundResponse(w, r)
+		return
+	}
+
+	book, err := app.books.Volumes.Get(id).Do()
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"book": book}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
