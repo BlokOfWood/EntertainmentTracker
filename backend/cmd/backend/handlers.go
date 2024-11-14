@@ -153,7 +153,7 @@ func (app *application) invalidateAuthenticationTokenHandler(w http.ResponseWrit
 		return
 	}
 
-	w.WriteHeader(http.StatusNoContent)
+	w.WriteHeader(http.StatusOK)
 }
 
 func (app *application) listMediaEntriesHandler(w http.ResponseWriter, r *http.Request) {
@@ -715,6 +715,11 @@ func (app *application) searchBooksByISBNHandler(w http.ResponseWriter, r *http.
 	}
 
 	result := resp.Items[0]
+	thumbnail := ""
+	if result.VolumeInfo.ImageLinks != nil {
+		thumbnail = result.VolumeInfo.ImageLinks.Thumbnail
+	}
+
 	var book bookResponse
 	book = bookResponse{
 		ID:            result.Id,
@@ -723,7 +728,7 @@ func (app *application) searchBooksByISBNHandler(w http.ResponseWriter, r *http.
 		Author:        strings.Join(result.VolumeInfo.Authors, ", "),
 		Description:   result.VolumeInfo.Description,
 		PageCount:     int(result.VolumeInfo.PageCount),
-		Thumbnail:     result.VolumeInfo.ImageLinks.Thumbnail,
+		Thumbnail:     thumbnail,
 		Categories:    result.VolumeInfo.Categories,
 		PublishedDate: result.VolumeInfo.PublishedDate,
 		Publisher:     result.VolumeInfo.Publisher,
@@ -759,6 +764,10 @@ func (app *application) getBookHandler(w http.ResponseWriter, r *http.Request) {
 	if resp.VolumeInfo.IndustryIdentifiers[0] != nil {
 		isbn = resp.VolumeInfo.IndustryIdentifiers[0].Identifier
 	}
+	thumbnail := ""
+	if resp.VolumeInfo.ImageLinks != nil {
+		thumbnail = resp.VolumeInfo.ImageLinks.Thumbnail
+	}
 
 	book = bookResponse{
 		ID:            resp.Id,
@@ -767,7 +776,7 @@ func (app *application) getBookHandler(w http.ResponseWriter, r *http.Request) {
 		Author:        strings.Join(resp.VolumeInfo.Authors, ", "),
 		Description:   resp.VolumeInfo.Description,
 		PageCount:     int(resp.VolumeInfo.PageCount),
-		Thumbnail:     resp.VolumeInfo.ImageLinks.Thumbnail,
+		Thumbnail:     thumbnail,
 		Categories:    resp.VolumeInfo.Categories,
 		PublishedDate: resp.VolumeInfo.PublishedDate,
 		Publisher:     resp.VolumeInfo.Publisher,
