@@ -788,3 +788,73 @@ func (app *application) getBookHandler(w http.ResponseWriter, r *http.Request) {
 		app.serverErrorResponse(w, r, err)
 	}
 }
+
+func (app *application) shareMediaEntryHandler(w http.ResponseWriter, r *http.Request) {
+	user := app.contextGetUser(r)
+	var input struct {
+		MediaEntry int    `json:"media_entry"`
+		ShareWith  string `json:"share_with"`
+	}
+
+	err := app.readJSON(w, r, &input)
+	if err != nil {
+		app.logger.Error(err.Error())
+		app.badRequestResponse(w, r, err)
+		return
+	}
+
+	mediaEntry, err := app.models.MediaEntries.Get(int64(input.MediaEntry), user.ID)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrRecordNotFound):
+			app.notFoundResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+		return
+	}
+
+	sharedWith, err := app.models.Users.GetByEmail(input.ShareWith)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrRecordNotFound):
+			app.notFoundResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+		return
+	}
+
+	validator := validator.New()
+	data.ValidateIds(validator, user.ID, int64(sharedWith.ID))
+	if !validator.Valid() {
+		app.failedValidationResponse(w, r, validator.Errors)
+		return
+	}
+
+	err = app.models.SharedEntries.Insert(mediaEntry.ID, user.ID, sharedWith.ID)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusCreated, envelope{"message": "media entry shared successfully"}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
+func (app *application) listSharedEntriesHandler(w http.ResponseWriter, r *http.Request) {
+	user := app.contextGetUser(r)
+
+	sharedEntries, err := app.models.SharedEntries.GetBySharedWithID(user.ID)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"sharedEntries": sharedEntries}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
