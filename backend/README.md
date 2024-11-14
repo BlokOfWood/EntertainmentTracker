@@ -967,3 +967,86 @@ Status Code|Error Message|Description
 --- | --- | ---
 404|Not Found|Nem található a könyv
 500|Internal Server Error|An error occurred on the server
+
+### 20. Share Media Entry
+
+### Endpoint
+```http
+POST /share
+```
+
+### Description
+Megosztja a média bejegyzést.
+
+### Parameters
+Name|Type|Description
+--- | --- | ---
+media_entry|number|Média bejegyzés azonosító
+share_with|string|Email cím
+
+### Request Example
+```http
+POST /share
+Content-Type: application/json
+
+{
+    "media_entry": 1,
+    "share_with": "john.doe@example.com"
+}
+```
+
+### Response
+
+Status: `200 OK`
+
+### Example Response:
+No content
+
+### Error Responses
+Status Code|Error Message|Description
+--- | --- | ---
+400|Bad Request|Hibás kérés
+404|Not Found|Nem található a bejegyzés
+500|Internal Server Error|An error occurred on the server
+
+### 21. Get Shared Media Entries
+
+### Endpoint
+```http
+GET /shared
+```
+
+### Description
+Visszaadja a megosztott média bejegyzéseket.
+
+### Parameters
+Nincsenek
+
+### Request Example
+```http
+GET /shared
+```
+
+### Response
+
+Status: `200 OK`
+
+### Example Response:
+```json
+{
+    "sharedEntries": [
+        {
+            "id": 1,
+            "entry_id": 1,
+            "shared_by": 2,
+            "shared_with": 1,
+            "created_at": "2024-11-14T18:18:08Z"
+        }
+    ]
+}
+```
+
+### Error Responses
+Status Code|Error Message|Description
+--- | --- | ---
+500|Internal Server Error|An error occurred on the server
