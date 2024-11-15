@@ -9,7 +9,10 @@ export default {
 				header: '#1E293B',
 				background: '#0F172A',
 				delete: '#E82222'
-			}
+			},
+			fontSize: {
+				'xxs': '0.5rem'
+			},
 		}
 	},
 
