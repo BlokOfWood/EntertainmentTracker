@@ -1,5 +1,12 @@
 import api from './api';
-import type { ApiResponse, CreateWorkRequest, UpdateWorkRequest, Work } from './api.model';
+import type {
+	ApiResponse,
+	CreateWorkRequest,
+	SharedWork,
+	ShareWorkRequest,
+	UpdateWorkRequest,
+	Work
+} from './api.model';
 
 export async function getWorks(): ApiResponse<{ mediaEntries: Work[] }> {
 	return api.get('/mediaentries');
@@ -19,4 +26,12 @@ export async function updateWork(id: number, work: UpdateWorkRequest): ApiRespon
 
 export async function deleteWork(id: number): ApiResponse<void> {
 	return api.delete(`/mediaentries/${id}`);
+}
+
+export async function shareWork(req: ShareWorkRequest): ApiResponse<void> {
+	return api.post('/share', req);
+}
+
+export async function getSharedWorks(): ApiResponse<{ sharedEntries: SharedWork[] }> {
+	return api.get('/shared');
 }

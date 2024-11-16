@@ -44,6 +44,25 @@ export type CreateWorkRequest = {
 	target_progress: number;
 };
 
+export type ShareWorkRequest = {
+	/**
+	 * The ID of the work to share.
+	 */
+	media_entry: number;
+	/**
+	 * The email of the user to share the work with.	
+	 */
+	share_with: string;
+};
+
+export type SharedWork = {
+	id: number;
+	entry_id: number;
+	shared_by: number;
+	shared_with: number;
+	created_at: Date;
+};
+
 export type Work = {
 	id: number;
 	third_party_id: string;

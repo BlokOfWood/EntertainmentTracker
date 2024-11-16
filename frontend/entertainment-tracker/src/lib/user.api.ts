@@ -1,7 +1,7 @@
 import api from './api';
 import type { ApiResponse, LoginRequest, LoginResponse, RegisterRequest } from './api.model';
 
-export async function register(request: RegisterRequest): ApiResponse<void>{
+export async function register(request: RegisterRequest): ApiResponse<void> {
 	return api.post('/users/register', request, { skipAuth: true });
 }
 
