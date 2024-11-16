@@ -3,11 +3,11 @@ export type ApiOptions = Partial<{
 	responseFormat: 'json' | 'none';
 }>;
 
-export type ApiResponse<T> = {
+export type ApiResponse<T> = Promise<{
 	statusCode: number;
 	ok: boolean;
 	body: T;
-};
+}>;
 
 export type RegisterRequest = {
 	email: string;

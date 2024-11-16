@@ -4,7 +4,7 @@ class Api {
 	private apiBaseAddress = 'http://localhost:5000/v1';
 	private token: AuthToken | null;
 
-	public async get<T>(endpoint: string, options?: ApiOptions): Promise<ApiResponse<T>> {
+	public async get<T>(endpoint: string, options?: ApiOptions): ApiResponse<T> {
 		const headers = new Headers();
 		if (this.token !== null && !options?.skipAuth) {
 			headers.append('Authorization', `Bearer ${this.token.token}`);
@@ -21,7 +21,7 @@ class Api {
 		endpoint: string,
 		data: object,
 		options?: ApiOptions
-	): Promise<ApiResponse<T>> {
+	): ApiResponse<T> {
 		const headers = new Headers();
 		headers.append('Content-Type', 'application/json');
 		if (this.token !== null && !options?.skipAuth) {
@@ -41,7 +41,7 @@ class Api {
 		endpoint: string,
 		data: object,
 		options?: ApiOptions
-	): Promise<ApiResponse<T>> {
+	): ApiResponse<T> {
 		const headers = new Headers();
 		headers.append('Content-Type', 'application/json');
 		if (this.token !== null && !options?.skipAuth) {
@@ -57,7 +57,7 @@ class Api {
 		return this.processResponse(response, options);
 	}
 
-	public async delete<T>(endpoint: string, options?: ApiOptions): Promise<ApiResponse<T>> {
+	public async delete<T>(endpoint: string, options?: ApiOptions):ApiResponse<T> {
 		const headers = new Headers();
 		if (this.token !== null && !options?.skipAuth) {
 			headers.append('Authorization', `Bearer ${this.token.token}`);
@@ -108,7 +108,7 @@ class Api {
 	private async processResponse<T>(
 		response: Response,
 		options: ApiOptions | undefined
-	): Promise<ApiResponse<T>> {
+	): ApiResponse<T> {
 		let responseBody = null;
 
 		switch (options?.responseFormat) {
