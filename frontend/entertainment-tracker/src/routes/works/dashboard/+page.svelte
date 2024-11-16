@@ -1,7 +1,6 @@
 <script lang=ts>
-	import type { Work } from '$lib/api.model';
-	import Header from '$lib/header.svelte';
-	import { getWorks } from '$lib/works.api';
+	import type { Work, UpdateWorkRequest } from '$lib/api.model';
+	import { deleteWork, getWorks, updateWork } from '$lib/works.api';
 	import { onMount } from 'svelte';
 
 	let works: Work[] = [];
@@ -16,17 +15,17 @@
 				works.forEach(work => { console.log(work); }); //ez a foreach hibát dob a consol-ra, mintha üres lenne a works.
 				
 				//TODO: remove example test works once adding works, deleting works and edit works are implemented.
-				const movieExample: Work = { id: 3, third_party_id: 'tp789', title: 'Movie', status: 'Pending', type: 'movie', current_progress: 10, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				const movieExample: Work = { id: 23132, third_party_id: 'tp789', title: 'Movie', status: 'Pending', type: 'movie', current_progress: 10, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
 				works.push(movieExample);
-				const TVShowExample: Work = { id: 3, third_party_id: 'tp789', title: 'TVShow', status: 'Pending', type: 'TVshow', current_progress: 20, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				const TVShowExample: Work = { id: 235478, third_party_id: 'tp789', title: 'TVShow', status: 'Pending', type: 'TVshow', current_progress: 20, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
 				works.push(TVShowExample);
-				const YouTubeVideoExample: Work = { id: 3, third_party_id: 'tp789', title: 'YouTubeVideo', status: 'Pending', type: 'YouTubeVideo', current_progress: 80, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				const YouTubeVideoExample: Work = { id: 4365879, third_party_id: 'https://youtu.be/dQw4w9WgXcQ?feature=shared', title: 'YouTubeVideo', status: 'Pending', type: 'YouTubeVideo', current_progress: 80, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
 				works.push(YouTubeVideoExample);
-				const TVShowExampleSecond: Work = { id: 3, third_party_id: 'tp789', title: 'TVShowSecond', status: 'Pending', type: 'TVshow', current_progress: 15, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				const TVShowExampleSecond: Work = { id: 345768, third_party_id: 'tp789', title: 'TVShowSecond', status: 'Pending', type: 'TVshow', current_progress: 15, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
 				works.push(TVShowExampleSecond);
-				const bookExample: Work = { id: 3, third_party_id: 'tp789', title: 'Book', status: 'Pending', type: 'book', current_progress: 40, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				const bookExample: Work = { id: 1343456, third_party_id: 'ISBN12:32749632', title: 'Book', status: 'Pending', type: 'book', current_progress: 40, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
 				works.push(bookExample);
-				const YouTubeVideoExampleSecond: Work = { id: 3, third_party_id: 'tp789', title: 'Cooking', status: 'Pending', type: 'YouTubeVideo', current_progress: 40, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				const YouTubeVideoExampleSecond: Work = { id: 354678987, third_party_id: 'https://youtu.be/Y1ujpoDlgRU?feature=shared', title: 'YouTubeVideo2', status: 'Pending', type: 'YouTubeVideo', current_progress: 40, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
 				works.push(YouTubeVideoExampleSecond);
 
 				originalWorks=works;
@@ -124,25 +123,20 @@
 		//TODO: implement the proper function, so it's not just placeholder
 	}
 
-	let title="";
-	let type="";
+	let currentWork!: Work;
 	let mediaArtSource="/placeholderForEditMediaCoverArt.png";
 	let description="";
 	let categories!: String[];
-	let aimProgress!: number;
 	let author="";
-	let ISBNnumber=""
 	let YTURL="https://www.youtube.com/embed/dQw4w9WgXcQ?si=dourAMMy3-5pBbJr";
 
-	let newProgress!: number;
-	let newVideoTitle="hehe";
+	let newProgress=-1;
+	let newVideoTitle="";
 
-	function editMedia(currentTitle: string, currentType: string, goal: number) {
+	function editMedia(work: Work) {
+		currentWork=work;
 		checkingDashboard=false;
 		editingMedia=true;
-		title=currentTitle;
-		type=currentType;
-		aimProgress=goal;
 		//TODO: get the proper description for the media
 		description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 		//TODO: get the proper categories for the media
@@ -153,24 +147,17 @@
 		]
 		categories=newCategories;
 
-		if(type=="book"){
+		if(work.type=="book"){
 			//TODO: get the author properly
 			author="XY";
-			//TODO: get the author properly
-			ISBNnumber="ISBN1234567890";
 		}
 
-		if(type!="YouTubeVideo"){
+		if(work.type!="YouTubeVideo"){
 			//TODO: get the poster/coverart properly
 			mediaArtSource="/placeholderForEditMediaCoverArt.png";
 		}
 		else {
-			//TODO: get the proper url that's added by the user
-			YTURL="https://youtu.be/dQw4w9WgXcQ?feature=shared"
-
-			//TODO: REMOVE. These are for tests to see if the embedding works for diff vids
-			//YTURL="https://youtu.be/XGNeFrnhlvw?feature=shared"
-			//YTURL="https://youtu.be/Y1ujpoDlgRU?feature=shared"
+			YTURL=work.third_party_id;
 
 			//Converts the shared URL to the embed URL~
 			let videoId = YTURL.split("https://youtu.be/")[1].split("?")[0];
@@ -180,17 +167,48 @@
 
 	}
 
-	function mediaEdited(){
-		if(type=="YouTubeVideo"){
-			console.log("New title for video: " + newVideoTitle);
-		}
-		else{
-			console.log("New progress: " + newProgress);
-		}
+	function setNewProgress(event: Event){
+		const target = event.target as HTMLInputElement;
+		const value = target.value;
+		newProgress=Number(value);
 	}
 
-	function deleteMedia() {
-		//TODO: write delete media function
+	function setNewTitle(event: Event){
+		const target = event.target as HTMLInputElement;
+		const value = target.value;
+		newVideoTitle=value;
+	}
+
+	function mediaEdited(){
+		let newDetails: UpdateWorkRequest = {
+			title: currentWork.title,
+			type: currentWork.type,
+			status: currentWork.status,
+			current_progress: currentWork.current_progress,
+			target_progress: currentWork.target_progress
+		};
+
+		if(newProgress!=-1){
+			newDetails.current_progress=newProgress;
+			console.log("New progress: " + newDetails.current_progress);
+		}
+
+		if(currentWork.type=="YouTubeVideo" && newVideoTitle!=""){
+			newDetails.title=newVideoTitle;
+			console.log("New title for video: " + newDetails.title);
+		}
+
+		//TODO: uncomment this
+		//updateWork(currentWork.id, newDetails);
+
+		//reset these values so it can be checked wether the user filled the fields or not
+		newProgress=-1;
+		newVideoTitle="";
+	}
+
+	function deleteMedia(id: number) {
+		//TODO: uncomment this
+		//deleteWork(id);
 	}
 
 	function returnToDashboard(){
@@ -264,10 +282,10 @@
 					<button class="share-button" on:click={shareMedia}>
 						<img src="/share.png" alt="Share" class="w-5 h-5" />
 					</button>
-					<button class="edit-button" on:click={() => editMedia(work.title, work.type, work.target_progress)}>
+					<button class="edit-button" on:click={() => editMedia(work)}>
 						<img src="/edit.png" alt="Edit" class="w-5 h-5" />
 					</button>
-					<button class="delete-button" on:click={deleteMedia}>
+					<button class="delete-button" on:click={() => deleteMedia(work.id)}>
 						<img src="/trash.png" alt="Delete" class="w-5 h-5" />
 					</button>
 				</div>
@@ -316,13 +334,13 @@
 			</div>
 			<div></div>
 		</div>
-		{#if type!=="YouTubeVideo"}
+		{#if currentWork.type!=="YouTubeVideo"}
 		<div class="flex p-4 items-start ">
 			<div class="flex flex-col ml-10 mr-4">
 				<img src={mediaArtSource} alt="Return to dashboard" class="w-full rounded-md"/>
-				{#if type==="book"}
+				{#if currentWork.type==="book"}
 					<div class="text-center text-xxs Ubuntu-font pt-1">
-						{ISBNnumber}
+						{currentWork.third_party_id}
 					</div>
 				{/if}
 				<div class="text-center text-xxs Ubuntu-font p-1">
@@ -336,9 +354,9 @@
 			</div>
 			<div class="mr-8 ml-4">
 				<div class="text-center text-sm font-bold Ubuntu-font">
-					{title}
+					{currentWork.title}
 				</div>
-				{#if type==="book"}
+				{#if currentWork.type==="book"}
 					<div class="text-center text-xs font-bold Ubuntu-font">
 						{author}
 					</div>
@@ -350,14 +368,14 @@
 					Progress
 				</div>
 				<div>
-					{#if type==="TVshow"}
-						<input type="progress" placeholder="Episode number / {aimProgress}" bind:value={newProgress} class="border rounded-md p-1.5 mr-1 text-sm" /> 
+					{#if currentWork.type==="TVshow"}
+						<input type="progress" placeholder="Episode number / {currentWork.target_progress}" on:input={setNewProgress} class="border rounded-md p-1.5 mr-1 text-sm" /> 
 					{/if}
-					{#if type==="book"}
-						<input type="progress" placeholder="Page number / {aimProgress}" bind:value={newProgress} class="border rounded-md p-1.5 mr-1 text-sm" /> 
+					{#if currentWork.type==="book"}
+						<input type="progress" placeholder="Page number / {currentWork.target_progress}" on:input={setNewProgress} class="border rounded-md p-1.5 mr-1 text-sm" /> 
 					{/if}
-					{#if type==="movie"}
-						<input type="progress" placeholder="Minutes / {aimProgress}" bind:value={newProgress} class="border rounded-md p-1.5 mr-1 text-sm" /> 
+					{#if currentWork.type==="movie"}
+						<input type="progress" placeholder="Minutes / {currentWork.target_progress}" on:input={setNewProgress} class="border rounded-md p-1.5 mr-1 text-sm" /> 
 					{/if}
 					<button class="bg-background text-white rounded-md py-1.5 px-6 text-sm" on:click={mediaEdited}> 
 						Save
@@ -366,7 +384,7 @@
 			</div>
 		</div>
 		{/if}
-		{#if type==="YouTubeVideo"}
+		{#if currentWork.type==="YouTubeVideo"}
 			<div class="flex flex-col mt-6 ml-24 mr-24">
 				<div class="flex justify-center items-center">
 					<iframe title="video" class="w-full aspect-[18/10]"
@@ -377,7 +395,13 @@
 					Set Display name
 				</div>
 				<div class="flex pt-1">
-					<input type="displayTitle" placeholder="Name" bind:value={newVideoTitle} class="border rounded-md p-1.5 mr-1 text-sm w-64"/> 
+					<input type="displayTitle" placeholder="Name" on:input={setNewTitle} class="border rounded-md p-1.5 mr-1 text-sm w-64"/> 
+				</div>
+				<div class="Ubuntu-font text-xs pt-2 pb-1">
+					Progress
+				</div>
+				<div class="flex">
+					<input type="progress" placeholder="Minutes / {currentWork.target_progress}" on:input={setNewProgress} class="border rounded-md p-1.5 mr-1 text-sm" /> 
 					<button class="bg-background text-white rounded-md py-1.5 px-6 text-sm" on:click={mediaEdited}> 
 						Save
 					</button>
