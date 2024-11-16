@@ -169,7 +169,7 @@ Status: `201 Created`
 ```json
 {
     "authentication_token": {
-        "token": "GF433ERQINPBI24A2OBH5MZ5LI",       
+        "token": "GF433ERQINPBI24A2OBH5MZ5LI",
         "expiry": "2024-11-28T17:41:42.6475501+01:00"
     }
 }
@@ -236,7 +236,7 @@ Status: `200 OK`
 ### Example Response:
 ```json
 {
-    "user": {       
+    "user": {
         "id": 1,
         "created_at": "2024-11-14T14:06:37Z",
         "name": "John Doe",
@@ -277,7 +277,7 @@ Status: `200 OK`
 ```json
 {
     "mediaEntries": [
-        {        
+        {
             "id": 1,
             "user_id": 1,
             "third_party_id": "12345",
@@ -389,8 +389,8 @@ Status: `200 OK`
 ### Example Response:
 ```json
 {
-    "mediaEntry": {      
-        "id": 1,     
+    "mediaEntry": {
+        "id": 1,
         "user_id": 1,
         "third_party_id": "12345",
         "title": "Media Title",
@@ -452,8 +452,8 @@ Status: `200 OK`
 ### Example Response:
 ```json
 {
-    "mediaEntry": {      
-        "id": 1,     
+    "mediaEntry": {
+        "id": 1,
         "user_id": 1,
         "third_party_id": "12345",
         "title": "Updated Media Title",
@@ -900,8 +900,8 @@ Status: `200 OK`
         "id": 1396,
         "title": "Breaking Bad",
         "first_air_date": "2008-01-20",
-        "overview": "Walter White, a New Mexico chemistry teacher, is diagnosed with Stage III cancer and given a prognosis of only 
-two years left to live. He becomes filled with a sense of fearlessness and an unrelenting desire to secure his family's financial future at 
+        "overview": "Walter White, a New Mexico chemistry teacher, is diagnosed with Stage III cancer and given a prognosis of only
+two years left to live. He becomes filled with a sense of fearlessness and an unrelenting desire to secure his family's financial future at
 any cost as he enters the dangerous world of drugs and crime.",
         "popularity": 841.54,
         "thumbnail": "https://image.tmdb.org/t/p/w92/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg",
@@ -1034,15 +1034,46 @@ Status: `200 OK`
 ### Example Response:
 ```json
 {
-    "sharedEntries": [
-        {
-            "id": 1,
-            "entry_id": 1,
-            "shared_by": 2,
-            "shared_with": 1,
-            "created_at": "2024-11-14T18:18:08Z"
-        }
-    ]
+  "sharedEntries": [
+    {
+      "id": 1,
+      "shared_by": "joe.doe@example.com",
+      "shared_with": "joe.doe2@example.com",
+      "media_entry": {
+        "id": 1,
+        "user_id": 1,
+        "third_party_id": "1234",
+        "title": "asd",
+        "type": "movie",
+        "status": "completed",
+        "current_progress": 10,
+        "target_progress": 10,
+        "created_at": "2024-11-16T15:27:29Z",
+        "updated_at": "2024-11-16T15:27:29Z",
+        "version": 1
+      },
+      "created_at": "2024-11-16T15:29:47Z"
+    },
+    {
+      "id": 2,
+      "shared_by": "joe.doe@example.com",
+      "shared_with": "joe.doe2@example.com",
+      "media_entry": {
+        "id": 3,
+        "user_id": 1,
+        "third_party_id": "1234",
+        "title": "asd3",
+        "type": "movie",
+        "status": "completed",
+        "current_progress": 10,
+        "target_progress": 10,
+        "created_at": "2024-11-16T15:27:43Z",
+        "updated_at": "2024-11-16T15:27:43Z",
+        "version": 1
+      },
+      "created_at": "2024-11-16T15:29:56Z"
+    }
+  ]
 }
 ```
 

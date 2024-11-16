@@ -844,6 +844,14 @@ func (app *application) shareMediaEntryHandler(w http.ResponseWriter, r *http.Re
 	}
 }
 
+type sharedEntryResponse struct {
+	ID         int64           `json:"id"`
+	SharedBy   string          `json:"shared_by"`
+	SharedWith string          `json:"shared_with"`
+	MediaEntry data.MediaEntry `json:"media_entry"`
+	CreatedAt  string          `json:"created_at"`
+}
+
 func (app *application) listSharedEntriesHandler(w http.ResponseWriter, r *http.Request) {
 	user := app.contextGetUser(r)
 
@@ -853,7 +861,30 @@ func (app *application) listSharedEntriesHandler(w http.ResponseWriter, r *http.
 		return
 	}
 
-	err = app.writeJSON(w, http.StatusOK, envelope{"sharedEntries": sharedEntries}, nil)
+	var sharedEntriesResponse []sharedEntryResponse
+	for _, sharedEntry := range sharedEntries {
+		sharedBy, err := app.models.Users.Get(sharedEntry.SharedBy)
+		if err != nil {
+			app.serverErrorResponse(w, r, err)
+			return
+		}
+
+		mediaEntry, err := app.models.MediaEntries.Get(sharedEntry.EntryID, sharedEntry.SharedBy)
+		if err != nil {
+			app.serverErrorResponse(w, r, err)
+			return
+		}
+
+		sharedEntriesResponse = append(sharedEntriesResponse, sharedEntryResponse{
+			ID:         sharedEntry.ID,
+			SharedBy:   sharedBy.Email,
+			SharedWith: user.Email,
+			MediaEntry: *mediaEntry,
+			CreatedAt:  sharedEntry.CreatedAt,
+		})
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"sharedEntries": sharedEntriesResponse}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
