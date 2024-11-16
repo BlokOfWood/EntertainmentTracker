@@ -76,4 +76,68 @@ export type Work = {
 	updated_at: Date;
 };
 
+export type MovieSearchResponse = {
+	id: number;
+	title: string;
+	release_date: string;
+	popularity: number;
+	thumbnail: string;
+};
+
+export type Movie = {
+	id: number;
+	title: string;
+	release_date: string;
+	overview: string;
+	popularity: number;
+	thumbnail: string;
+	genres: string[];
+	runtime: number;
+};
+
+export type TvSearchResponse = {
+	id: number;
+	title: string;
+	first_air_date: string;
+	popularity: number;
+	thumbnail: string;
+};
+
+export type TvShow = {
+	id: number;
+	title: string;
+	first_air_date: string;
+	overview: string;
+	popularity: number;
+	thumbnail: string;
+	genres: string[];
+	number_of_seasons: number;
+	number_of_episodes: number;
+};
+
+
+export type BookSearchResponse = {
+	id: string;
+	isbn: string;
+	title: string;
+	author: string;
+	page_count: number;
+	thumbnail: string;
+};
+
+export type Book = {
+	id: string;
+	isbn: string;
+	title: string;
+	author: string;
+	description: string;
+	page_count: number;
+	thumbnail: string;
+	categories: string[];
+	published_date: string;
+	publisher: string;
+	language: string;
+}
+
+
 export type AuthToken = LoginResponse['authentication_token'];
