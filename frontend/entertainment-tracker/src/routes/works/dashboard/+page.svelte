@@ -401,7 +401,7 @@
 					Progress
 				</div>
 				<div class="flex">
-					<input type="progress" placeholder="Minutes / {currentWork.target_progress}" on:input={setNewProgress} class="border rounded-md p-1.5 mr-1 text-sm" /> 
+					<input type="progress" placeholder="Minutes" on:input={setNewProgress} class="border rounded-md p-1.5 mr-1 text-sm" /> 
 					<button class="bg-background text-white rounded-md py-1.5 px-6 text-sm" on:click={mediaEdited}> 
 						Save
 					</button>
