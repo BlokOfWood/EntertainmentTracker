@@ -17,8 +17,12 @@
 				//TODO: remove example test works once adding works, deleting works and edit works are implemented.
 				const movieExample: Work = { id: 23132, third_party_id: 'tp789', title: 'Movie', status: 'Pending', type: 'movie', current_progress: 10, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
 				works.push(movieExample);
+				const bookExample4: Work = { id: 1343456, third_party_id: 'ISBN12:32749632', title: 'The Shadow over Innsmouth', status: 'Pending', type: 'book', current_progress: 40, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				works.push(bookExample4);
 				const TVShowExample: Work = { id: 235478, third_party_id: 'tp789', title: 'TVShow', status: 'Pending', type: 'TVshow', current_progress: 20, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
 				works.push(TVShowExample);
+				const bookExample3: Work = { id: 1343456, third_party_id: 'ISBN12:32749632', title: 'Strange Case of Dr Jekyll and Mr Hyde', status: 'Pending', type: 'book', current_progress: 40, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				works.push(bookExample3);
 				const YouTubeVideoExample: Work = { id: 4365879, third_party_id: 'https://youtu.be/dQw4w9WgXcQ?feature=shared', title: 'YouTubeVideo', status: 'Pending', type: 'YouTubeVideo', current_progress: 80, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
 				works.push(YouTubeVideoExample);
 				const TVShowExampleSecond: Work = { id: 345768, third_party_id: 'tp789', title: 'TVShowSecond', status: 'Pending', type: 'TVshow', current_progress: 15, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
@@ -27,6 +31,8 @@
 				works.push(bookExample);
 				const YouTubeVideoExampleSecond: Work = { id: 354678987, third_party_id: 'https://youtu.be/Y1ujpoDlgRU?feature=shared', title: 'YouTubeVideo2', status: 'Pending', type: 'YouTubeVideo', current_progress: 40, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
 				works.push(YouTubeVideoExampleSecond);
+				const bookExample2: Work = { id: 1343456, third_party_id: 'ISBN12:32749632', title: 'Dracula', status: 'Pending', type: 'book', current_progress: 40, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				works.push(bookExample2);
 
 				originalWorks=works;
 			}
@@ -204,24 +210,82 @@
 		//reset these values so it can be checked wether the user filled the fields or not
 		newProgress=-1;
 		newVideoTitle="";
+
+		returnToDashboard();
 	}
 
+	let idOfDeletedWork!: number;
+
 	function deleteMedia(id: number) {
+		console.log("deleting media");
+		idOfDeletedWork=id;
+
+		const popup = document.getElementById('popup');
+		if (popup){
+			popup.classList.remove('hidden');
+		}
+	}
+
+	function mediaDeleted(){
+		const popup = document.getElementById('popup');
+		if (popup){
+			popup.classList.add('hidden');
+		}
+		
 		//TODO: uncomment this
-		//deleteWork(id);
+		//deleteWork(idOfDeletedWork);
+		console.log("Media deleted");
+		returnToDashboard();
+	}
+
+	function cancelDeletingMedia(){
+		const popup = document.getElementById('popup');
+		if (popup){
+			popup.classList.add('hidden');
+		}
 	}
 
 	function returnToDashboard(){
 		checkingDashboard=true;
 		sharingMedia=false;
 		editingMedia=false;
+
+		getWorks().then((response) => {
+			if (response.ok) {
+				console.log('Works fetched successfully');
+				console.log(response.body);
+				works=response.body.mediaEntries;
+
+				//TODO: remove example test works once adding works, deleting works and edit works are implemented.
+				const movieExample: Work = { id: 23132, third_party_id: 'tp789', title: 'Movie', status: 'Pending', type: 'movie', current_progress: 10, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				works.push(movieExample);
+				const bookExample4: Work = { id: 1343456, third_party_id: 'ISBN12:32749632', title: 'The Shadow over Innsmouth', status: 'Pending', type: 'book', current_progress: 40, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				works.push(bookExample4);
+				const TVShowExample: Work = { id: 235478, third_party_id: 'tp789', title: 'TVShow', status: 'Pending', type: 'TVshow', current_progress: 20, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				works.push(TVShowExample);
+				const bookExample3: Work = { id: 1343456, third_party_id: 'ISBN12:32749632', title: 'Strange Case of Dr Jekyll and Mr Hyde', status: 'Pending', type: 'book', current_progress: 40, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				works.push(bookExample3);
+				const YouTubeVideoExample: Work = { id: 4365879, third_party_id: 'https://youtu.be/dQw4w9WgXcQ?feature=shared', title: 'YouTubeVideo', status: 'Pending', type: 'YouTubeVideo', current_progress: 80, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				works.push(YouTubeVideoExample);
+				const TVShowExampleSecond: Work = { id: 345768, third_party_id: 'tp789', title: 'TVShowSecond', status: 'Pending', type: 'TVshow', current_progress: 15, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				works.push(TVShowExampleSecond);
+				const bookExample: Work = { id: 1343456, third_party_id: 'ISBN12:32749632', title: 'Book', status: 'Pending', type: 'book', current_progress: 40, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				works.push(bookExample);
+				const YouTubeVideoExampleSecond: Work = { id: 354678987, third_party_id: 'https://youtu.be/Y1ujpoDlgRU?feature=shared', title: 'YouTubeVideo2', status: 'Pending', type: 'YouTubeVideo', current_progress: 40, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				works.push(YouTubeVideoExampleSecond);
+				const bookExample2: Work = { id: 1343456, third_party_id: 'ISBN12:32749632', title: 'Dracula', status: 'Pending', type: 'book', current_progress: 40, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
+				works.push(bookExample2);
+
+				originalWorks=works;
+			}
+		})
 	}
 </script>
 
 {#if checkingDashboard}
 <div class="relative z-0 flex flex-grow items-center justify-center px-40 py-3 h-full">
-	<div class="h-full w-full rounded-lg bg-white flex justify-center items-start overflow-auto">
-		<div class="grid  grid-cols-4 w-full">
+	<div class="h-full w-full rounded-lg bg-white flex flex-col overflow-auto">
+		<div class="grid grid-cols-4 w-full sticky top-0 bg-white z-10">
 			<div class="flex items-start justify-center border-0 p-2">
 				<button
 					class="Ubuntu-font flex items-center space-x-2 text-lg font-bold text-black"
@@ -250,30 +314,32 @@
 				</button>
 			</div>
 			<div class="flex items-start justify-center border-0 p-2"></div>
+		</div>
+		<div class="grid grid-cols-4 w-full">
 			{#each works as work}
-				<div class="border-0 p-2 text-black text-lg Ubuntu-font flex justify-center items-center">{work.title}</div>
-				<div class="border-0 p-2 text-black text-lg Ubuntu-font flex justify-center items-center">{work.type}</div>
+				<div class="border-0 p-2 text-black text-lg Ubuntu-font flex justify-center items-center text-center">{work.title}</div>
+				<div class="border-0 p-2 text-black text-lg Ubuntu-font flex justify-center items-center text-center">{work.type}</div>
 				<div class="border-0 p-2 flex justify-center items-center">
 					{#if work.target_progress==work.current_progress}
 					<img src="/done.png" alt="Done" class="w-4 h-4" />
 					{/if}
 					{#if work.target_progress!=work.current_progress && work.type=="book"}
-					<div class=" text-black text-lg Ubuntu-font">
+					<div class="text-black text-lg Ubuntu-font">
 						{work.current_progress}/{work.target_progress} pages
 					</div>
 					{/if}
 					{#if work.target_progress!=work.current_progress && work.type=="TVshow"}
-					<div class=" text-black text-lg Ubuntu-font">
+					<div class="text-black text-lg Ubuntu-font">
 						{work.current_progress}/{work.target_progress} episodes
 					</div>
 					{/if}
 					{#if work.target_progress!=work.current_progress && work.type=="movie"}
-					<div class=" text-black text-lg Ubuntu-font">
+					<div class="text-black text-lg Ubuntu-font">
 						{work.current_progress}/{work.target_progress} mins
 					</div>
 					{/if}
 					{#if work.target_progress!=work.current_progress && work.type=="YouTubeVideo"}
-					<div class=" text-black text-lg Ubuntu-font">
+					<div class="text-black text-lg Ubuntu-font">
 						{work.current_progress} mins
 					</div>
 					{/if}
@@ -292,6 +358,20 @@
 			{/each}
 		</div>
 	</div>
+</div>
+<div id="popup" class="fixed inset-0 bg-background bg-opacity-75 hidden flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-1/3">
+        <div class="Ubuntu-font text-lg font-bold mb-4 text-center">Delete Media Entry</div>
+        <div class="Ubuntu-font mb-4">Are you sure you'd like to delete this media entry?</div>
+		<div class="flex justify-center">
+			<button class="bg-red-500 text-white Ubuntu-font px-4 py-2 rounded mr-4" on:click={mediaDeleted}>
+				Delete
+			</button>
+			<button class="text-white bg-slate-500 Ubuntu-font px-4 py-2 rounded" on:click={cancelDeletingMedia}>
+				Cancel
+			</button>
+		</div>
+    </div>
 </div>
 {/if}
 {#if sharingMedia}
