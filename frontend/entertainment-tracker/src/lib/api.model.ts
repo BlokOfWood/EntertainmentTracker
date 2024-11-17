@@ -57,9 +57,9 @@ export type ShareWorkRequest = {
 
 export type SharedWork = {
 	id: number;
-	entry_id: number;
 	shared_by: number;
 	shared_with: number;
+	media_entry: Work;
 	created_at: Date;
 };
 
