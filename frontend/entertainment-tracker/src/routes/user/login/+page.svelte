@@ -19,6 +19,7 @@
 			await goto('/works/dashboard');
 		} else {
 			console.log('Login failed');
+			alert('Invalid email or password');
 		}
 	}
 </script>

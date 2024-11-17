@@ -20,6 +20,7 @@
 				goto('/works/dashboard');
 			} else {
 				console.log('Registration failed');
+				alert('Registration failed');
 			}
 		});
 	}
