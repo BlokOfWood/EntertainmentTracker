@@ -199,7 +199,7 @@
 		}
 
 		//TODO: uncomment this
-		//updateWork(currentWork.id, newDetails);
+		updateWork(currentWork.id, newDetails);
 
 		//reset these values so it can be checked wether the user filled the fields or not
 		newProgress=-1;
@@ -219,8 +219,8 @@
 </script>
 
 {#if checkingDashboard}
-<div class="relative z-0 flex flex-grow items-center justify-center px-40 py-3">
-	<div class="h-full w-full rounded-lg bg-white flex justify-center items-start">
+<div class="relative z-0 flex flex-grow items-center justify-center px-40 py-3 h-full">
+	<div class="h-full w-full rounded-lg bg-white flex justify-center items-start overflow-auto">
 		<div class="grid  grid-cols-4 w-full">
 			<div class="flex items-start justify-center border-0 p-2">
 				<button
