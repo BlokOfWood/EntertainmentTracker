@@ -8,10 +8,10 @@
 	let { children } = $props();
 
 	onMount(async () => {
-		if (api.validToken && $page.url.pathname === '/') {
-			await goto('/works/dashboard');
-		} else {
+		if (!api.validToken) {
 			await goto('/user/login');
+		} else if ($page.url.pathname === '/works') {
+			await goto('/works/dashboard');
 		}
 	});
 </script>

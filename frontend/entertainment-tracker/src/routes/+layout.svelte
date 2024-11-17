@@ -4,15 +4,16 @@
 	import '../app.css';
 	import { api } from '$lib/api';
 	import { goto } from '$app/navigation';
-	import { get } from 'svelte/store';
 
 	let { children } = $props();
 
 	onMount(async () => {
-		if (!get(api).validToken) {
-			await goto('/user/login');
-		} else if ($page.url.pathname === '/') {
-			await goto('/works/dashboard');
+		if ($page.url.pathname === '/') {
+			if (!api.validToken) {
+				await goto('/user/login');
+			} else {
+				await goto('/works/dashboard');
+			}
 		}
 	});
 </script>
