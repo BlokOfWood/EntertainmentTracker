@@ -19,6 +19,7 @@ import (
 	"github.com/joho/godotenv"
 	"google.golang.org/api/books/v1"
 	"google.golang.org/api/option"
+	"google.golang.org/api/youtube/v3"
 	_ "modernc.org/sqlite"
 )
 
@@ -43,13 +44,14 @@ type config struct {
 }
 
 type application struct {
-	config config
-	logger *slog.Logger
-	db     *sql.DB
-	models data.Models
-	tmdb   *tmdb.Client
-	books  *books.Service
-	wg     sync.WaitGroup
+	config  config
+	logger  *slog.Logger
+	db      *sql.DB
+	models  data.Models
+	tmdb    *tmdb.Client
+	books   *books.Service
+	youtube *youtube.Service
+	wg      sync.WaitGroup
 }
 
 func main() {
@@ -115,13 +117,22 @@ func main() {
 
 	logger.Info("Google Books client initialized")
 
+	youtubeClient, err := youtube.NewService(context.Background(), option.WithAPIKey(cfg.api_keys.google))
+	if err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
+	}
+
+	logger.Info("YouTube client initialized")
+
 	app := &application{
-		config: cfg,
-		logger: logger,
-		db:     db,
-		tmdb:   tmdbClient,
-		books:  booksClient,
-		models: data.NewModels(db),
+		config:  cfg,
+		logger:  logger,
+		db:      db,
+		tmdb:    tmdbClient,
+		books:   booksClient,
+		youtube: youtubeClient,
+		models:  data.NewModels(db),
 	}
 
 	err = app.serve()
