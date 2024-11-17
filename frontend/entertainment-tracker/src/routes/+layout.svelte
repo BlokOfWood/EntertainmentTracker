@@ -9,12 +9,10 @@
 	let { children } = $props();
 
 	onMount(async () => {
-		if ($page.url.pathname === '/') {
-			if (get(api).validToken) {
-				await goto('/works/dashboard');
-			} else {
-				await goto('/user/login');
-			}
+		if (!get(api).validToken) {
+			await goto('/user/login');
+		} else if ($page.url.pathname === '/') {
+			await goto('/works/dashboard');
 		}
 	});
 </script>

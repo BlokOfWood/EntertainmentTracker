@@ -3,17 +3,22 @@
 	import { api } from '$lib/api';
 	import { onMount } from 'svelte';
 	import Header from '$lib/header.svelte';
+	import { page } from '$app/stores';
 
 	let { children } = $props();
 
 	onMount(async () => {
-		if (api.validToken) {
+		if (api.validToken && $page.url.pathname === '/') {
 			await goto('/works/dashboard');
+		} else {
+			await goto('/user/login');
 		}
 	});
 </script>
 
 <div class="bg-background relative flex h-screen flex-col">
 	<Header />
-	{@render children()}
+	<div class="flex-grow overflow-auto">
+		{@render children()}
+	</div>
 </div>

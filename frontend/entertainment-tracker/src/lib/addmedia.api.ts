@@ -1,18 +1,3 @@
-/**
- * 
-	router.HandlerFunc(http.MethodGet, "/v1/search/movies", app.requireAuthenticatedUser(app.searchMoviesByTitleHandler))
-	router.HandlerFunc(http.MethodGet, "/v1/find/movie", app.requireAuthenticatedUser(app.getMoviesByIMDbHandler))
-	router.HandlerFunc(http.MethodGet, "/v1/movies/:id", app.requireAuthenticatedUser(app.getMovieHandler))
-
-	router.HandlerFunc(http.MethodGet, "/v1/search/tvshows", app.requireAuthenticatedUser(app.searchTVShowsByTitleHandler))
-	router.HandlerFunc(http.MethodGet, "/v1/find/tvshow", app.requireAuthenticatedUser(app.getTVShowsByIMDbHandler))
-	router.HandlerFunc(http.MethodGet, "/v1/tvshows/:id", app.requireAuthenticatedUser(app.getTVShowHandler))
-
-	router.HandlerFunc(http.MethodGet, "/v1/search/books", app.requireAuthenticatedUser(app.searchBooksByTitleHandler))
-	router.HandlerFunc(http.MethodGet, "/v1/find/book", app.requireAuthenticatedUser(app.searchBooksByISBNHandler))
-	router.HandlerFunc(http.MethodGet, "/v1/books/:id", app.requireAuthenticatedUser(app.getBookHandler))
- */
-
 import api from './api';
 import type {
 	ApiResponse,
