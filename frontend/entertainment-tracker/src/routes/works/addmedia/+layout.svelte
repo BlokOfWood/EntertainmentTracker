@@ -1,10 +1,18 @@
 <script>
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
 
 	let { children } = $props();
+
+	onMount(async () => {
+		if ($page.url.pathname === '/works/addmedia') {
+			await goto('/works/addmedia/books');
+		}
+	});
 </script>
 
-<div class="mx-auto mt-8 w-full max-w-screen-md rounded bg-white p-6">
+<div class="mx-auto my-8 w-full max-w-screen-md rounded bg-white p-6">
 	<div class="mb-6 flex justify-center text-xl gap-6">
 		<a
 			href="/works/addmedia/books"
