@@ -72,19 +72,21 @@ class Api {
 	}
 
 	public setToken(token: AuthToken | null) {
-		this.token = token;
-
 		if (token === null) {
-			console.log('removing token');
+			this.token = null;
 			localStorage.removeItem('token');
 			return;
 		}
-		localStorage.setItem('token', JSON.stringify(token));
+
+		this.token = {
+			token: token!.token,
+			expiry: new Date(token.expiry)
+		};
+
+		localStorage.setItem('token', JSON.stringify(this.token));
 	}
 
 	public get validToken(): boolean {
-        console.log(this.token);
-
 		return this.token !== null && this.token.expiry > new Date();
 	}
 
@@ -95,7 +97,6 @@ class Api {
 		const token = localStorage.getItem('token');
 		if (token !== null) {
 			try {
-				console.log(token);
 				this.token = JSON.parse(token);
 				this.token!.expiry = new Date(this.token!.expiry);
 			} catch (e) {
