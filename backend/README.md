@@ -1081,3 +1081,49 @@ Status: `200 OK`
 Status Code|Error Message|Description
 --- | --- | ---
 500|Internal Server Error|An error occurred on the server
+
+### 22. Get YouTube Video Info  
+
+### Endpoint
+```http
+GET /youtube
+```
+
+### Description
+Videó információk lekérése YouTube ID alapján.
+
+### Parameters
+Name|Type|Description
+--- | --- | ---
+id|string|YouTube azonosító
+
+### Request Example
+```http
+GET /youtube?id=dQw4w9WgXcQ
+```
+
+### Response
+
+Status: `200 OK`
+
+### Example Response:
+```json
+{
+    "video": {
+        "video_id": "dQw4w9WgXcQ",
+        "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "title": "Rick Astley - Never Gonna Give You Up (Official Music Video)",
+        "channel": "Rick Astley",
+        "thumbnail": "https://i.ytimg.com/vi/dQw4w9WgXcQ/default.jpg",
+        "duration": 213,
+        "published": "2009-10-25T06:57:33Z"
+    }
+}
+```
+
+### Error Responses
+Status Code|Error Message|Description
+--- | --- | ---
+400|Bad Request|Hibás kérés
+404|Not Found|Nem található a videó
+500|Internal Server Error|An error occurred on the server

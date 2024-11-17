@@ -34,6 +34,8 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodGet, "/v1/find/book", app.requireAuthenticatedUser(app.searchBooksByISBNHandler))
 	router.HandlerFunc(http.MethodGet, "/v1/books/:id", app.requireAuthenticatedUser(app.getBookHandler))
 
+	router.HandlerFunc(http.MethodGet, "/v1/youtube", app.requireAuthenticatedUser(app.getYoutubeVideoHandler))
+
 	router.HandlerFunc(http.MethodPost, "/v1/share", app.requireAuthenticatedUser(app.shareMediaEntryHandler))
 	router.HandlerFunc(http.MethodGet, "/v1/shared", app.requireAuthenticatedUser(app.listSharedEntriesHandler))
 

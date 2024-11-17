@@ -789,6 +789,58 @@ func (app *application) getBookHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+type youtubeVideoResponse struct {
+	VideoID   string `json:"video_id"`
+	VideoURL  string `json:"video_url"`
+	Title     string `json:"title"`
+	Channel   string `json:"channel"`
+	Thumbnail string `json:"thumbnail"`
+	Duration  int    `json:"duration"`
+	Published string `json:"published"`
+}
+
+func (app *application) getYoutubeVideoHandler(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Query().Get("id")
+	if id == "" {
+		app.badRequestResponse(w, r, errors.New("missing id query parameter"))
+		return
+	}
+
+	resp, err := app.youtube.Videos.List([]string{"snippet", "contentDetails"}).Id(id).Do()
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	if len(resp.Items) == 0 {
+		app.notFoundResponse(w, r)
+		return
+	}
+
+	video := resp.Items[0]
+	thumbnail := video.Snippet.Thumbnails.Default.Url
+	duration, err := app.parseDuration(video.ContentDetails.Duration)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	ytVideo := youtubeVideoResponse{
+		VideoID:   video.Id,
+		VideoURL:  "https://www.youtube.com/watch?v=" + video.Id,
+		Title:     video.Snippet.Title,
+		Channel:   video.Snippet.ChannelTitle,
+		Thumbnail: thumbnail,
+		Duration:  duration,
+		Published: video.Snippet.PublishedAt,
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"video": ytVideo}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
 func (app *application) shareMediaEntryHandler(w http.ResponseWriter, r *http.Request) {
 	user := app.contextGetUser(r)
 	var input struct {
