@@ -1,7 +1,9 @@
 <script lang="ts">
-	import type { Work, UpdateWorkRequest } from '$lib/api.model';
-	import { deleteWork, getWorks, updateWork } from '$lib/works.api';
+	import { getBookByISBN, getTVShowByIMDb, getMovieByIMDb } from '$lib/addmedia.api';
+	import type { Work, UpdateWorkRequest, Book, Movie, TvShow, ShareWorkRequest } from '$lib/api.model';
+	import { deleteWork, getWorks, updateWork, shareWork } from '$lib/works.api';
 	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	let works: Work[] = [];
 	let originalWorks: Work[] = []; // To store the original order of works
@@ -95,13 +97,17 @@
 		}
 	}
 
+	
+	let currentWork!: Work;
+
 	let checkingDashboard = true;
 	let sharingMedia = false;
 	let editingMedia = false;
 
-	function shareMedia() {
+	function shareMedia(work: Work) {
 		checkingDashboard = false;
 		sharingMedia = true;
+		currentWork=work
 	}
 
 	let friendEmail = '';
@@ -109,10 +115,14 @@
 	function shareWithFriend() {
 		console.log('Sharing with:', friendEmail);
 
-		//TODO: implement the proper function, so it's not just placeholder
+		let sharedWork: ShareWorkRequest = {
+			media_entry: currentWork.id,
+			share_with: friendEmail
+		};
+
+		shareWork(sharedWork)
 	}
 
-	let currentWork!: Work;
 	let mediaArtSource = '/placeholderForEditMediaCoverArt.png';
 	let description = '';
 	let categories!: String[];
@@ -122,26 +132,114 @@
 	let newProgress = -1;
 	let newVideoTitle = '';
 
+	let book = writable(undefined as Book| null | undefined);
+	let movie = writable(undefined as Movie| null | undefined);
+	let tvShow = writable(undefined as TvShow| null | undefined);
+
 	function editMedia(work: Work) {
 		currentWork = work;
 		checkingDashboard = false;
 		editingMedia = true;
-		//TODO: get the proper description for the media
-		description =
-			'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
-		//TODO: get the proper categories for the media
-		let newCategories = ['crimi', 'fantasy', 'horror'];
-		categories = newCategories;
 
 		if (work.type == 'book') {
-			//TODO: get the author properly
-			author = 'XY';
+			if(currentWork.third_party_id!=""){
+				getBookByISBN(currentWork.third_party_id).then(response => {
+					const currentBook = response.body.book; // Get the book object directly
+					book.set(response.body.book); // Use .set to update the store
+					if (currentBook) { // Check if currentBook is not null
+					author = currentBook.author; // Access author directly
+					description = currentBook.description; // Access description
+					mediaArtSource = currentBook.thumbnail; // Access thumbnail
+					categories = currentBook.categories; // Access categories
+
+				} else {
+					// Handle the case where currentBook is null
+					console.error("Book data is not available");
+				}    
+				});   
+			}
+			else{
+				const mockbook : Book = {
+						id: "",
+						isbn: "",
+						title: "",
+						author: "",
+						description: "",
+						page_count: 0,
+						thumbnail: "",
+						categories: [],
+						published_date: "",
+						publisher: "",
+						language: ""
+					}
+					book.set(mockbook);
+			}
 		}
 
-		if (work.type != 'YouTubeVideo') {
-			//TODO: get the poster/coverart properly
-			mediaArtSource = '/placeholderForEditMediaCoverArt.png';
-		} else {
+		if (work.type == 'tvShow') {
+			if(currentWork.third_party_id!=""){
+				getTVShowByIMDb(currentWork.third_party_id).then(response => {
+					const currentTVShow = response.body.tvshow; // Get the book object directly
+					tvShow.set(response.body.tvshow); // Use .set to update the store
+					if (currentTVShow) { // Check if currentBook is not null
+					description = currentTVShow.overview; // Access description
+					mediaArtSource = currentTVShow.thumbnail; // Access thumbnail
+					categories = currentTVShow.genres; // Access categories
+
+				} else {
+					// Handle the case where currentBook is null
+					console.error("TwShow data is not available");
+				}    
+				});   
+			}
+			else{
+				const mockTVShow : TvShow = {
+						id: 0,
+						title: "",
+						first_air_date: "",
+						overview: "",
+						popularity: 0,
+						thumbnail: "",
+						genres: [],
+						number_of_seasons: 0,
+						number_of_episodes: 0
+					}
+					tvShow.set(mockTVShow);
+			}
+		}
+
+		if (work.type == 'movie') {
+			if (currentWork.third_party_id!=""){
+				getMovieByIMDb(currentWork.third_party_id).then(response => {
+					const currentMovie = response.body.movie; // Get the book object directly
+					movie.set(response.body.movie); // Use .set to update the store
+					if (currentMovie) { // Check if currentBook is not null
+					description = currentMovie.overview; // Access description
+					mediaArtSource = currentMovie.thumbnail; // Access thumbnail
+					categories = currentMovie.genres; // Access categories
+
+				} else {
+					// Handle the case where currentBook is null
+					console.error("Book data is not available");
+				}    
+				});   
+			}
+			else{
+				const mockMovie : Movie = {
+						id: 0,
+						title: "",
+						release_date: "",
+						overview: "",
+						popularity: 0,
+						thumbnail: "",
+						genres: [],
+						runtime: 0
+					}
+					movie.set(mockMovie);
+			}
+		}
+
+		if (work.type == 'YouTubeVideo') {
 			YTURL = work.third_party_id;
 
 			//Converts the shared URL to the embed URL~
@@ -182,7 +280,6 @@
 			console.log('New title for video: ' + newDetails.title);
 		}
 
-		//TODO: uncomment this
 		updateWork(currentWork.id, newDetails);
 
 		//reset these values so it can be checked wether the user filled the fields or not
@@ -243,6 +340,9 @@
 				originalWorks = works;
 			}
 		});
+
+		description="";
+		author="";
 	}
 </script>
 
@@ -317,7 +417,7 @@
 						{/if}
 					</div>
 					<div class="flex items-center justify-center space-x-5 p-2">
-						<button class="share-button" on:click={shareMedia}>
+						<button class="share-button" on:click={() => shareMedia(work)}>
 							<img src="/share.png" alt="Share" class="h-5 w-5" />
 						</button>
 						<button class="edit-button" on:click={() => editMedia(work)}>
@@ -407,21 +507,23 @@
 				</div>
 				<div></div>
 			</div>
-			{#if currentWork.type !== 'YouTubeVideo'}
+			{#if $book !== undefined || $movie !== undefined || $tvShow !== undefined}
 				<div class="flex items-start p-4">
-					<div class="ml-10 mr-4 flex flex-col">
-						<img src={mediaArtSource} alt="Return to dashboard" class="w-full rounded-md" />
-						{#if currentWork.type === 'book'}
-							<div class="text-xxs Ubuntu-font pt-1 text-center">
-								{currentWork.third_party_id}
-							</div>
+					<div class="ml-10 mr-4 flex flex-col min-w-32">
+						{#if currentWork.third_party_id!==""}
+							<img src={mediaArtSource} alt="Cover art" class="rounded-md h-auto" />
+							{#if currentWork.type === 'book'}
+								<div class="text-xxs Ubuntu-font pt-1 text-center">
+									{currentWork.third_party_id}
+								</div>
+							{/if}
+							<div class="text-xxs Ubuntu-font p-1 text-center">Categories:</div>
+							{#each categories as category}
+								<div class="text-xxs Ubuntu-font pb-1 text-center">
+									{category}
+								</div>
+							{/each}
 						{/if}
-						<div class="text-xxs Ubuntu-font p-1 text-center">Categories:</div>
-						{#each categories as category}
-							<div class="text-xxs Ubuntu-font pb-1 text-center">
-								{category}
-							</div>
-						{/each}
 					</div>
 					<div class="ml-4 mr-8">
 						<div class="Ubuntu-font text-center text-sm font-bold">
