@@ -99,6 +99,8 @@ func main() {
 	}
 	defer db.Close()
 
+	db.SetMaxOpenConns(1)
+
 	logger.Info("database connection pool established")
 
 	tmdbClient, err := tmdb.Init(cfg.api_keys.tmdb)
