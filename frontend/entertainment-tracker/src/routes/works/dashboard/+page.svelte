@@ -404,8 +404,8 @@
 </div>
 {/if}
 {#if editingMedia}
-<div class="relative z-0 flex flex-grow items-center justify-center px-80 py-3">
-	<div class="h-full w-full rounded-lg bg-white">
+<div class="relative z-0 flex flex-grow items-center justify-center py-3">
+	<div class="h-full w-full rounded-lg bg-white max-w-screen-sm">
 		<div class="flex flex-col">
 			<div class="flex items-start justify-between p-2">
 				<button class="flex items-center justify-center border-0 pl-6 pt-4" on:click={returnToDashboard}>
