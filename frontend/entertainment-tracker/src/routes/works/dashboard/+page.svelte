@@ -157,7 +157,7 @@
 <div class="relative z-0 flex h-full flex-grow items-center justify-center py-3">
 	<div class="flex h-full w-full flex-col overflow-auto rounded-lg bg-white max-w-screen-md">
 		<div class="sticky top-0 z-10 grid w-full grid-cols-4">
-			<div class="flex items-start justify-center border-0 p-2">
+			<div class="flex items-start justify-center border-0 p-2 bg-white">
 				<button
 					class="Ubuntu-font flex items-center space-x-2 text-lg font-bold text-black"
 					on:click={sortByTitle}
@@ -246,16 +246,16 @@
 		<div class="Ubuntu-font mb-4">Are you sure you'd like to delete this media entry?</div>
 		<div class="flex justify-center">
 			<button
-				class="Ubuntu-font mr-4 rounded bg-red-500 px-4 py-2 text-white"
-				on:click={mediaDeleted}
-			>
-				Delete
-			</button>
-			<button
-				class="Ubuntu-font rounded bg-slate-500 px-4 py-2 text-white"
+				class="Ubuntu-font text-sm mr-4 rounded bg-background px-4 py-2 text-white"
 				on:click={cancelDeletingMedia}
 			>
 				Cancel
+			</button>
+			<button
+				class="Ubuntu-font text-sm rounded bg-delete px-4 py-2 text-white"
+				on:click={mediaDeleted}
+			>
+				Delete
 			</button>
 		</div>
 	</div>
