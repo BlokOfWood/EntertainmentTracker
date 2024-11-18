@@ -40,6 +40,21 @@
 				} else {
 					// Handle the case where currentBook is null
 					console.error("Book data is not available");
+
+					const mockbook : Book = {
+						id: "",
+						isbn: "",
+						title: "",
+						author: "",
+						description: "",
+						page_count: 0,
+						thumbnail: "",
+						categories: [],
+						published_date: "",
+						publisher: "",
+						language: ""
+					}
+					book.set(mockbook);
 				}    
 				});   
 			}
@@ -74,6 +89,19 @@
 				} else {
 					// Handle the case where currentBook is null
 					console.error("TwShow data is not available");
+
+					const mockTVShow : TvShow = {
+						id: 0,
+						title: "",
+						first_air_date: "",
+						overview: "",
+						popularity: 0,
+						thumbnail: "",
+						genres: [],
+						number_of_seasons: 0,
+						number_of_episodes: 0
+					}
+					tvShow.set(mockTVShow);
 				}    
 				});   
 			}
@@ -106,6 +134,18 @@
 				} else {
 					// Handle the case where currentBook is null
 					console.error("Book data is not available");
+
+					const mockMovie : Movie = {
+						id: 0,
+						title: "",
+						release_date: "",
+						overview: "",
+						popularity: 0,
+						thumbnail: "",
+						genres: [],
+						runtime: 0
+					}
+					movie.set(mockMovie);
 				}    
 				});   
 			}
