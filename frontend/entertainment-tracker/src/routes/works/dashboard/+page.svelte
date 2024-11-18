@@ -210,9 +210,16 @@
 			popup.classList.add('hidden');
 		}
 
-		//TODO: uncomment this
-		//deleteWork(idOfDeletedWork);
-		console.log('Media deleted');
+		deleteWork(idOfDeletedWork).then(() => {
+			getWorks().then((response) => {
+				if (response.ok) {
+					console.log('Works fetched successfully');
+					works = response.body.mediaEntries;
+
+					originalWorks = works;
+				}
+			});
+		});
 		returnToDashboard();
 	}
 
