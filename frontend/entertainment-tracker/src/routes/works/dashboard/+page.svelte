@@ -10,10 +10,10 @@
 		getWorks().then((response) => {
 			if (response.ok) {
 				console.log('Works fetched successfully');
-				works = response.body.mediaEntries; //<-itt szerinted mit hagyok ki? Az is lehet, hogy full rossz ez a sor.
+				works = response.body.mediaEntries;
 				works.forEach((work) => {
 					console.log(work);
-				}); //ez a foreach hibát dob a consol-ra, mintha üres lenne a works.
+				});
 
 				originalWorks = works;
 			}
@@ -247,9 +247,9 @@
 </script>
 
 {#if checkingDashboard}
-	<div class="relative z-0 flex h-full flex-grow items-center justify-center px-40 py-3">
-		<div class="flex h-full w-full flex-col overflow-auto rounded-lg bg-white">
-			<div class="sticky top-0 z-10 grid w-full grid-cols-4 bg-white">
+	<div class="relative z-0 flex h-full flex-grow items-center justify-center py-3">
+		<div class="flex h-full w-full flex-col overflow-auto rounded-lg bg-white max-w-screen-md">
+			<div class="sticky top-0 z-10 grid w-full grid-cols-4">
 				<div class="flex items-start justify-center border-0 p-2">
 					<button
 						class="Ubuntu-font flex items-center space-x-2 text-lg font-bold text-black"
@@ -356,8 +356,8 @@
 	</div>
 {/if}
 {#if sharingMedia}
-	<div class="relative z-0 flex flex-grow items-center justify-center px-80 py-3">
-		<div class="h-full w-full rounded-lg bg-white">
+	<div class="relative z-0 flex h-full flex-grow items-center justify-center py-3">
+		<div class="h-full w-full overflow-auto rounded-lg bg-white max-w-screen-sm">
 			<div class="flex flex-col">
 				<div class="flex items-start justify-between p-2">
 					<button
@@ -394,8 +394,8 @@
 	</div>
 {/if}
 {#if editingMedia}
-	<div class="relative z-0 flex flex-grow items-center justify-center py-3">
-		<div class="h-full w-full max-w-screen-sm rounded-lg bg-white">
+	<div class="relative z-0 flex flex-grow h-full items-center justify-center py-3">
+		<div class="h-full w-full max-w-screen-sm rounded-lg bg-white overflow-auto">
 			<div class="flex flex-col">
 				<div class="flex items-start justify-between p-2">
 					<button
