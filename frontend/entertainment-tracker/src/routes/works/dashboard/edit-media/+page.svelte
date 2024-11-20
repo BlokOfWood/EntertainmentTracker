@@ -180,12 +180,6 @@
 		newProgress = Number(value);
 	}
 
-	function setNewTitle(event: Event) {
-		const target = event.target as HTMLInputElement;
-		const value = target.value;
-		newVideoTitle = value;
-	}
-
 	function mediaEdited() {
 		let newDetails: UpdateWorkRequest = {
 			title: currentWork.title,
@@ -200,16 +194,10 @@
 			console.log('New progress: ' + newDetails.current_progress);
 		}
 
-		if (currentWork.type == 'YouTubeVideo' && newVideoTitle != '') {
-			newDetails.title = newVideoTitle;
-			console.log('New title for video: ' + newDetails.title);
-		}
-
 		updateWork(currentWork.id, newDetails);
 
 		//reset these values so it can be checked wether the user filled the fields or not
 		newProgress = -1;
-		newVideoTitle = '';
 
 		returnToDashboard();
 	}	
@@ -303,16 +291,7 @@
                 <div class="flex items-center justify-center">
                     <iframe title="video" class="aspect-[18/10] w-full" src={YTURL}> </iframe>
                 </div>
-                <div class="Ubuntu-font pt-6 text-xs">Set Display name</div>
-                <div class="flex pt-1">
-                    <input
-                        type="displayTitle"
-                        placeholder="Name"
-                        on:input={setNewTitle}
-                        class="mr-1 w-64 rounded-md border p-1.5 text-sm"
-                    />
-                </div>
-                <div class="Ubuntu-font pb-1 pt-2 text-xs">Progress</div>
+                <div class="Ubuntu-font pb-2 pt-6 text-sm font-bold">Progress</div>
                 <div class="flex">
                     <input
                         type="progress"
