@@ -24,7 +24,6 @@
             console.log('not shared works fetched successfully');
             currentNotSharedWorks = responseNotShared.body.mediaEntries;
             currentNotSharedWorks.forEach((currentNotSharedWork) => {
-                console.log(currentNotSharedWork);
 				const workPlus : WorkPlus = {
 					work: currentNotSharedWork,
 					shared: false,
@@ -33,11 +32,6 @@
 				works = [...works, workPlus];
             });
             originalWorks = works;
-
-			console.log("not shared works:");
-			works.forEach((work)=>{
-				console.log(work);
-			})
         }
 
 		let currentSharedWorks: SharedWork[] = [];
@@ -45,12 +39,9 @@
 		const responseShared = await getSharedWorks();
         if (responseShared.ok) {
             console.log('shared works fetched successfully');
-			console.log(responseShared.body.sharedEntries);
             currentSharedWorks = responseShared.body.sharedEntries;
             if (currentSharedWorks != null){
-				console.log('hii');
 				currentSharedWorks.forEach((currentSharedWork) => {
-                console.log(currentSharedWork);
 				const workPlus : WorkPlus = {
 					work: currentSharedWork.media_entry,
 					shared: true,
@@ -58,23 +49,10 @@
 				}
 				works = [...works, workPlus];
 
-				console.log("not works:");
-				works.forEach((work)=>{
-					console.log(work);
-				})
 				});
 				originalWorks = works;
 			}
         }
-
-		works.forEach((work)=>{
-			console.log(work.work.title);
-		})
-
-		console.log('final works:')
-		works.forEach((work)=>{
-				console.log(work);
-		})
     }
 
 	onMount(async () => {
@@ -333,15 +311,30 @@
 					{/if}
 				</div>
 				<div class="flex items-center justify-center space-x-5 p-2">
-					<button class="share-button" on:click={() => shareMedia(work.work)}>
-						<img src="/share.png" alt="Share" class="h-5 w-5" />
-					</button>
-					<button class="edit-button" on:click={() => editMedia(work.work)}>
-						<img src="/edit.png" alt="Edit" class="h-5 w-5" />
-					</button>
-					<button class="delete-button" on:click={() => deleteMedia(work.work.id)}>
-						<img src="/trash.png" alt="Delete" class="h-5 w-5" />
-					</button>
+					{#if work.shared}
+						<div class="share-button opacity-20">
+							<img src="/share.png" alt="Share" class="h-5 w-5" />
+						</div>
+						<div class="edit-button opacity-20">
+							<img src="/edit.png" alt="Edit" class="h-5 w-5" />
+						</div>
+						<div class="delete-button opacity-20">
+							<img src="/trash.png" alt="Delete" class="h-5 w-5" />
+						</div>
+					{/if}
+					{#if !work.shared}
+						<button class="share-button" on:click={() => shareMedia(work.work)}>
+							<img src="/share.png" alt="Share" class="h-5 w-5" />
+						</button>
+						<button class="edit-button" on:click={() => editMedia(work.work)}>
+							<img src="/edit.png" alt="Edit" class="h-5 w-5" />
+						</button>
+						<button class="delete-button" on:click={() => deleteMedia(work.work.id)}>
+							<img src="/trash.png" alt="Delete" class="h-5 w-5" />
+						</button>
+					{/if}
+					
+					
 				</div>
 			{/each}
 
