@@ -140,4 +140,14 @@ export type Book = {
 	language: string;
 }
 
+export type YoutubeVideoReponse = {
+	video_id: string;
+	video_url: string;
+	title: string;
+	channel: string;
+	thumbnail: string;
+	duration: number;
+	published: string;
+};
+
 export type AuthToken = LoginResponse['authentication_token'];

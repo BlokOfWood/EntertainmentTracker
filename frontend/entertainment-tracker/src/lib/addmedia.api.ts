@@ -6,7 +6,8 @@ import type {
 	Movie,
 	MovieSearchResponse,
 	TvSearchResponse,
-	TvShow
+	TvShow,
+	YoutubeVideoReponse
 } from './api.model';
 
 export async function searchMoviesByTitle(
@@ -49,4 +50,8 @@ export async function getBookByISBN(isbn: string): ApiResponse<{ book: Book }> {
 
 export async function getBookByGoogleId(id: string): ApiResponse<{ book: Book }> {
 	return api.get(`/books/${id}`);
+}
+
+export async function getYoutubeVideo(id: string): ApiResponse<{video: YoutubeVideoReponse}>{
+	return api.get(`/youtube?id=${id}`);
 }
