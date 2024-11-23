@@ -373,6 +373,7 @@ type movieSearchResponse struct {
 	Title       string  `json:"title"`
 	ReleaseDate string  `json:"release_date"`
 	Popularity  float32 `json:"popularity"`
+	VoteAverage float32 `json:"vote_average"`
 	Thumbnail   string  `json:"thumbnail"`
 }
 
@@ -396,6 +397,7 @@ func (app *application) searchMoviesByTitleHandler(w http.ResponseWriter, r *htt
 			Title:       movie.Title,
 			ReleaseDate: movie.ReleaseDate,
 			Popularity:  movie.Popularity,
+			VoteAverage: movie.VoteAverage,
 			Thumbnail:   tmdb.GetImageURL(movie.PosterPath, "w92"),
 		})
 	}
@@ -503,6 +505,7 @@ type tvShowSearchResponse struct {
 	Title        string  `json:"title"`
 	FirstAirDate string  `json:"first_air_date"`
 	Popularity   float32 `json:"popularity"`
+	VoteAverage  float32 `json:"vote_average"`
 	Thumbnail    string  `json:"thumbnail"`
 }
 
@@ -526,6 +529,7 @@ func (app *application) searchTVShowsByTitleHandler(w http.ResponseWriter, r *ht
 			Title:        tvShow.Name,
 			FirstAirDate: tvShow.FirstAirDate,
 			Popularity:   tvShow.Popularity,
+			VoteAverage:  tvShow.VoteAverage,
 			Thumbnail:    tmdb.GetImageURL(tvShow.PosterPath, "w92"),
 		})
 	}
