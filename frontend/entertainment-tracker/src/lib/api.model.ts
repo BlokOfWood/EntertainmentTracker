@@ -1,3 +1,5 @@
+export type WorkType = 'movie' | 'book' | 'show' | 'youtube';
+
 export type ApiOptions = Partial<{
 	skipAuth: boolean;
 	responseFormat: 'json' | 'none';
@@ -29,7 +31,7 @@ export type LoginResponse = {
 
 export type UpdateWorkRequest = {
 	title: string;
-	type: string;
+	type: WorkType;
 	status: string;
 	current_progress: number;
 	target_progress: number;
@@ -38,7 +40,7 @@ export type UpdateWorkRequest = {
 export type CreateWorkRequest = {
 	third_party_id: string;
 	title: string;
-	type: string;
+	type: WorkType;
 	status: string;
 	current_progress: number;
 	target_progress: number;
@@ -68,7 +70,7 @@ export type Work = {
 	third_party_id: string;
 	title: string;
 	status: string;
-	type: string;
+	type: WorkType;
 	current_progress: number;
 	target_progress: number;
 	version: number;
@@ -115,7 +117,6 @@ export type TvShow = {
 	number_of_episodes: number;
 };
 
-
 export type BookSearchResponse = {
 	id: string;
 	isbn: string;
@@ -138,6 +139,5 @@ export type Book = {
 	publisher: string;
 	language: string;
 }
-
 
 export type AuthToken = LoginResponse['authentication_token'];
