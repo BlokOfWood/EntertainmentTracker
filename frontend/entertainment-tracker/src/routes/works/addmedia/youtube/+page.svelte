@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { getTVShowByIMDbId, getYoutubeVideo, searchTVShowsByTitle } from '$lib/addmedia.api';
-	import type { TvSearchResponse } from '$lib/api.model';
+	import { getYoutubeVideo } from '$lib/addmedia.api';
 	import { createWork } from '$lib/works.api';
 	import { onMount } from 'svelte';
-	import { writable } from 'svelte/store';
-
+	
 	let query = '';
 
 	let disabled = false;
@@ -26,7 +24,14 @@
 				disabled = false;
 				return;
 			}
-			const videoId = url.searchParams.get('v');
+
+			let videoId;
+		    if(url.hostname === 'youtu.be' || url.hostname === 'www.youtu.be') {
+				videoId = url.pathname.substring(1);
+			} else {
+				videoId = url.searchParams.get('v');
+			}
+
 			if (videoId === null) {
 				error = 'Invalid YouTube link.';
 				disabled = false;
