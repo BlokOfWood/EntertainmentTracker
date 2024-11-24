@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { updateWork } from '$lib/works.api';
     import type { Book, Movie, TvShow, Work, UpdateWorkRequest } from '$lib/api.model';
-    import { getBookByISBN, getTVShowByIMDb, getMovieByIMDb } from '$lib/addmedia.api';
+    import { getBookByISBN, getTVShowByIMDb, getTVShowByIMDbId, getMovieByIMDb, getMovie } from '$lib/addmedia.api';
     import { writable } from 'svelte/store';
     import { goto } from '$app/navigation';
 
@@ -78,7 +78,7 @@
 
 		if (currentWork.type == 'show') {
 			if(currentWork.third_party_id!=""){
-				getTVShowByIMDb(currentWork.third_party_id).then(response => {
+				getTVShowByIMDbId(Number(currentWork.third_party_id)).then(response => {
 					const currentTVShow = response.body.tvshow; // Get the book object directly
 					tvShow.set(response.body.tvshow); // Use .set to update the store
 					if (currentTVShow) { // Check if currentBook is not null
@@ -123,7 +123,7 @@
 
 		if (currentWork.type == 'movie') {
 			if (currentWork.third_party_id!=""){
-				getMovieByIMDb(currentWork.third_party_id).then(response => {
+				getMovie(Number(currentWork.third_party_id)).then(response => {
 					const currentMovie = response.body.movie; // Get the book object directly
 					movie.set(response.body.movie); // Use .set to update the store
 					if (currentMovie) { // Check if currentBook is not null
