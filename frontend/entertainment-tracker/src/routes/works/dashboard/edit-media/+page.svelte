@@ -165,12 +165,7 @@
 		}
 
 		if (currentWork.type == 'youtube') {
-			YTURL = currentWork.third_party_id;
-
-			//Converts the shared URL to the embed URL~
-			let videoId = YTURL.split('https://youtu.be/')[1].split('?')[0];
-
-			YTURL = 'https://www.youtube.com/embed/' + videoId + '?si=dourAMMy3-5pBbJr';
+			YTURL = `https://www.youtube.com/embed/${currentWork.third_party_id}?si=dourAMMy3-5pBbJr`;
 		}
     });
 
@@ -289,7 +284,7 @@
         {#if currentWork && currentWork.type === 'youtube'}
             <div class="ml-24 mr-24 mt-6 flex flex-col">
                 <div class="flex items-center justify-center">
-                    <iframe title="video" class="aspect-[18/10] w-full" src={YTURL}> </iframe>
+                    <iframe title="video" class="aspect-[18/10] w-full" src="{YTURL}"> </iframe>
                 </div>
                 <div class="Ubuntu-font pb-2 pt-6 text-sm font-bold">Progress</div>
                 <div class="flex">
