@@ -62,6 +62,11 @@
 			/>
 		</div>
 
-		<button class="bg-background rounded-md px-4 py-2 text-sm text-white">Login</button>
+		<button class="bg-background rounded-md px-4 py-2 mb-8 text-sm text-white">Login</button>
+
+		<div class="flex justify-between text-lg">
+			<div>Don't have an account?</div>
+			<a class="font-bold underline" href="/user/register">Register</a>
+		</div>
 	</form>
 </div>
