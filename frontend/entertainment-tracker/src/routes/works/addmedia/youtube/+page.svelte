@@ -20,7 +20,7 @@
 
 		try {
 			const url = new URL(query);
-			if (url.hostname !== 'www.youtube.com' && url.hostname !== 'youtube.com') {
+			if (url.hostname !== 'www.youtube.com' && url.hostname !== 'youtube.com' && url.hostname !== 'm.youtube.com' && url.hostname !== 'youtu.be' && url.hostname !== 'www.youtu.be') {
 				console.log(url.hostname);
 				error = 'Not a YouTube link.';
 				disabled = false;
