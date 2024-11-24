@@ -147,6 +147,10 @@ Edit Media - YouTube: A felhasználó meg tudja változtatni a videó követett 
 
 ![Edit Media - YouTube](./assets/figma/edit_youtube.png)
 
+Delete Confirmation: A felhasználónak a törlés gomb megnyomása után válaszolnia kell a törlés megerősítés dialógusra, hogy végbe menjen egy mű törlése.
+
+![Delete Confirmation](./assets/figma/delete_confirmation.png)
+
 ## Forgatókönyvek
 - Haladását módosítja egy adott műben a felhasználó: mű melletti szerkesztés gomb -> módosítás ablak -> átírja a haladást -> mentés
 - Új mű hozzáadása: új mű gomb -> új mű ablak -> kitölti az űrlapot -> mentés gomb
