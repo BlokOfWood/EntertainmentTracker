@@ -67,18 +67,3 @@ felhasználókezelés:
 
 dashboard:
 - header igazítás kód egyszerűsítés céljából
-
-## 2024.11.17. - 38 perc
-
-### Code review:
-
-#### frontend észrevételek/teendők:
-- dashboard scroll overflow - meeting alatt megoldva
-- scroll-olásnál csak a művek kerüljenek görgetésre, a fejléc maradjon (gyermekelembe rakni a műveket)
-- mű szerkesztése után visszanavigálni a dashboard-ra és újra fetch-elni
-- delete media pop-up - képernyőterv alapján alakítani
-
-- YouTube video hozzáadásánál URL megadása csak
-- YouTube videónál display name helyett, progress-t lehessen módosítani
-
-- megosztott művek dashboard-on jelölve jelenjenek meg (képernyőterv + implementálás)
