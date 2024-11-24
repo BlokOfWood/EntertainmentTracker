@@ -19,9 +19,9 @@ type Models struct {
 
 func NewModels(db *sql.DB) Models {
 	return Models{
-		Users:         UserModel{DB: db},
-		Tokens:        TokenModel{DB: db},
-		MediaEntries:  MediaEntryModel{DB: db},
-		SharedEntries: SharedEntryModel{DB: db},
+		Users:         &UserModelDB{DB: db},
+		Tokens:        &TokenModelDB{DB: db},
+		MediaEntries:  &MediaEntryModelDB{DB: db},
+		SharedEntries: &SharedEntryModelDB{DB: db},
 	}
 }

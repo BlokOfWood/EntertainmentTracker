@@ -44,11 +44,17 @@ func ValidateTokenPlaintext(v *validator.Validator, tokenPlaintext string) {
 	v.Check(len(tokenPlaintext) == 26, "token", "must be 26 bytes long")
 }
 
-type TokenModel struct {
+type TokenModel interface {
+	New(userID int64, ttl time.Duration) (*Token, error)
+	Insert(token *Token) error
+	DeleteAllForUser(userID int64) error
+}
+
+type TokenModelDB struct {
 	DB *sql.DB
 }
 
-func (m TokenModel) New(userID int64, ttl time.Duration) (*Token, error) {
+func (m *TokenModelDB) New(userID int64, ttl time.Duration) (*Token, error) {
 	token, err := generateToken(userID, ttl)
 	if err != nil {
 		return nil, err
@@ -58,9 +64,9 @@ func (m TokenModel) New(userID int64, ttl time.Duration) (*Token, error) {
 	return token, err
 }
 
-func (m TokenModel) Insert(token *Token) error {
+func (m *TokenModelDB) Insert(token *Token) error {
 	query := `
-        INSERT INTO tokens (hash, user_id, expiry) 
+        INSERT INTO tokens (hash, user_id, expiry)
         VALUES ($1, $2, $3)`
 
 	args := []any{token.Hash, token.UserID, token.Expiry}
@@ -72,9 +78,9 @@ func (m TokenModel) Insert(token *Token) error {
 	return err
 }
 
-func (m TokenModel) DeleteAllForUser(userID int64) error {
+func (m *TokenModelDB) DeleteAllForUser(userID int64) error {
 	query := `
-        DELETE FROM tokens 
+        DELETE FROM tokens
         WHERE user_id = $1`
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)

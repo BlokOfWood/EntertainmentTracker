@@ -14,7 +14,16 @@ type SharedEntry struct {
 	CreatedAt  string `json:"created_at"`
 }
 
-type SharedEntryModel struct {
+type SharedEntryModel interface {
+	Insert(entryID, sharedBy, sharedWith int64) error
+	Get(id int64) (*SharedEntry, error)
+	GetBySharedWithID(sharedWith int64) ([]*SharedEntry, error)
+	GetAll() ([]*SharedEntry, error)
+	Update(sharedEntry *SharedEntry) error
+	Delete(id int64) error
+}
+
+type SharedEntryModelDB struct {
 	DB *sql.DB
 }
 
@@ -22,13 +31,13 @@ func ValidateIds(v *validator.Validator, sharedBy, sharedWith int64) {
 	v.Check(sharedBy != sharedWith, "shared_with", "cannot share with yourself")
 }
 
-func (m SharedEntryModel) Insert(entryID, sharedBy, sharedWith int64) error {
+func (m *SharedEntryModelDB) Insert(entryID, sharedBy, sharedWith int64) error {
 	stmt := `INSERT INTO shared_entries (entry_id, shared_by, shared_with) VALUES (?, ?, ?)`
 	_, err := m.DB.Exec(stmt, entryID, sharedBy, sharedWith)
 	return err
 }
 
-func (m SharedEntryModel) Get(id int64) (*SharedEntry, error) {
+func (m *SharedEntryModelDB) Get(id int64) (*SharedEntry, error) {
 	stmt := `SELECT id, entry_id, shared_by, shared_with, created_at
 		FROM shared_entries WHERE id = ?`
 	sharedEntry := &SharedEntry{}
@@ -39,7 +48,7 @@ func (m SharedEntryModel) Get(id int64) (*SharedEntry, error) {
 	return sharedEntry, nil
 }
 
-func (m SharedEntryModel) GetBySharedWithID(sharedWith int64) ([]*SharedEntry, error) {
+func (m *SharedEntryModelDB) GetBySharedWithID(sharedWith int64) ([]*SharedEntry, error) {
 	stmt := `SELECT id, entry_id, shared_by, shared_with, created_at
 		FROM shared_entries WHERE shared_with = ?`
 	rows, err := m.DB.Query(stmt, sharedWith)
@@ -62,7 +71,7 @@ func (m SharedEntryModel) GetBySharedWithID(sharedWith int64) ([]*SharedEntry, e
 	return sharedEntries, nil
 }
 
-func (m SharedEntryModel) GetAll() ([]*SharedEntry, error) {
+func (m *SharedEntryModelDB) GetAll() ([]*SharedEntry, error) {
 	stmt := `SELECT id, entry_id, shared_by, shared_with, created_at
 		FROM shared_entries`
 	rows, err := m.DB.Query(stmt)
@@ -85,14 +94,14 @@ func (m SharedEntryModel) GetAll() ([]*SharedEntry, error) {
 	return sharedEntries, nil
 }
 
-func (m SharedEntryModel) Update(sharedEntry *SharedEntry) error {
+func (m *SharedEntryModelDB) Update(sharedEntry *SharedEntry) error {
 	stmt := `UPDATE shared_entries SET entry_id = ?, shared_by = ?, shared_with = ?
 		WHERE id = ?`
 	_, err := m.DB.Exec(stmt, sharedEntry.EntryID, sharedEntry.SharedBy, sharedEntry.SharedWith, sharedEntry.ID)
 	return err
 }
 
-func (m SharedEntryModel) Delete(id int64) error {
+func (m *SharedEntryModelDB) Delete(id int64) error {
 	stmt := `DELETE FROM shared_entries WHERE id = ?`
 	_, err := m.DB.Exec(stmt, id)
 	return err

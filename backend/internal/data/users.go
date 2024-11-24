@@ -84,13 +84,21 @@ func ValidateUser(v *validator.Validator, user *User) {
 	}
 }
 
-type UserModel struct {
+type UserModel interface {
+	Insert(user *User) error
+	Get(id int64) (*User, error)
+	GetByEmail(email string) (*User, error)
+	Update(user *User) error
+	GetForToken(tokenPlaintext string) (*User, error)
+}
+
+type UserModelDB struct {
 	DB *sql.DB
 }
 
-func (m UserModel) Insert(user *User) error {
+func (m *UserModelDB) Insert(user *User) error {
 	query := `
-        INSERT INTO users (name, email, password_hash) 
+        INSERT INTO users (name, email, password_hash)
         VALUES ($1, $2, $3)
         RETURNING id, created_at, version`
 
@@ -112,7 +120,7 @@ func (m UserModel) Insert(user *User) error {
 	return nil
 }
 
-func (m UserModel) Get(id int64) (*User, error) {
+func (m *UserModelDB) Get(id int64) (*User, error) {
 	query := `
 		SELECT id, created_at, name, email, password_hash, version
 		FROM users
@@ -144,7 +152,7 @@ func (m UserModel) Get(id int64) (*User, error) {
 	return &user, nil
 }
 
-func (m UserModel) GetByEmail(email string) (*User, error) {
+func (m *UserModelDB) GetByEmail(email string) (*User, error) {
 	query := `
         SELECT id, created_at, name, email, password_hash, version
         FROM users
@@ -176,9 +184,9 @@ func (m UserModel) GetByEmail(email string) (*User, error) {
 	return &user, nil
 }
 
-func (m UserModel) Update(user *User) error {
+func (m *UserModelDB) Update(user *User) error {
 	query := `
-        UPDATE users 
+        UPDATE users
         SET name = $1, email = $2, password_hash = $3, version = version + 1
         WHERE id = $4 AND version = $5
         RETURNING version`
@@ -209,7 +217,7 @@ func (m UserModel) Update(user *User) error {
 	return nil
 }
 
-func (m UserModel) GetForToken(tokenPlaintext string) (*User, error) {
+func (m *UserModelDB) GetForToken(tokenPlaintext string) (*User, error) {
 	tokenHash := sha256.Sum256([]byte(tokenPlaintext))
 
 	query := `
