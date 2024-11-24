@@ -26,10 +26,10 @@
 			}
 
 			let videoId;
-		    if(url.hostname === 'youtu.be' || url.hostname === 'www.youtu.be') {
-				videoId = url.pathname.substring(1);
-			} else {
+		    if(url.searchParams.has('v')) {
 				videoId = url.searchParams.get('v');
+			} else {
+				videoId = url.pathname.substring(1);
 			}
 
 			if (videoId === null) {
