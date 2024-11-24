@@ -88,11 +88,11 @@ dashboard:
 ### Code review:
 
 #### frontend észrevételek/teendők:
-- jelenlegi progress megjelenítése
+- jelenlegi progress megjelenítése progress szerkesztésénél
 - YouTube videó beágyazása javítása - meeting alatt megoldva
 - YouTube videó hozzáadása - meeting alatt megoldva
 - törlés és szerkesztés utáni táblázatbetöltés javítása - meeting alatt megoldva
-- rendezés után a nyilak rendesen legyenek
+- rendezés után a nyilak egyértelműek legyenek
   - lefele mutat -> csökkenő (v. nem shared)
   - felfele mutat -> növekvő (v. shared)
   - mind a két nyíl -> rendezetlen 
