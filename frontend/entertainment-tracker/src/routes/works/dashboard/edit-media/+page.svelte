@@ -76,7 +76,7 @@
 			}
 		}
 
-		if (currentWork.type == 'tvShow') {
+		if (currentWork.type == 'show') {
 			if(currentWork.third_party_id!=""){
 				getTVShowByIMDb(currentWork.third_party_id).then(response => {
 					const currentTVShow = response.body.tvshow; // Get the book object directly
@@ -164,7 +164,7 @@
 			}
 		}
 
-		if (currentWork.type == 'YouTubeVideo') {
+		if (currentWork.type == 'youtube') {
 			YTURL = currentWork.third_party_id;
 
 			//Converts the shared URL to the embed URL~
@@ -252,7 +252,7 @@
                     </div>
                     <div class="Ubuntu-font pb-2 pt-6 text-sm font-bold">Progress</div>
                     <div>
-                        {#if currentWork.type === 'TVshow'}
+                        {#if currentWork.type === 'show'}
                             <input
                                 type="progress"
                                 placeholder="Episode number / {currentWork.target_progress}"
@@ -286,7 +286,7 @@
                 </div>
             </div>
         {/if}
-        {#if currentWork && currentWork.type === 'YouTubeVideo'}
+        {#if currentWork && currentWork.type === 'youtube'}
             <div class="ml-24 mr-24 mt-6 flex flex-col">
                 <div class="flex items-center justify-center">
                     <iframe title="video" class="aspect-[18/10] w-full" src={YTURL}> </iframe>

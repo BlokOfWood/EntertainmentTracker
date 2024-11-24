@@ -289,7 +289,7 @@
 							{work.work.current_progress}/{work.work.target_progress} pages
 						</div>
 					{/if}
-					{#if work.work.target_progress != work.work.current_progress && work.work.type == 'TVshow'}
+					{#if work.work.target_progress != work.work.current_progress && work.work.type == 'show'}
 						<div class="Ubuntu-font text-lg text-black">
 							{work.work.current_progress}/{work.work.target_progress} episodes
 						</div>
@@ -299,7 +299,7 @@
 							{work.work.current_progress}/{work.work.target_progress} mins
 						</div>
 					{/if}
-					{#if work.work.target_progress != work.work.current_progress && work.work.type == 'YouTubeVideo'}
+					{#if work.work.target_progress != work.work.current_progress && work.work.type == 'youtube'}
 						<div class="Ubuntu-font text-lg text-black">
 							{work.work.current_progress} mins
 						</div>
