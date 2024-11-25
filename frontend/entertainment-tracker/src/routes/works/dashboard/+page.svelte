@@ -315,6 +315,17 @@
 					{/if}
 				</div>
 				<div class="flex items-center justify-center space-x-5 p-2">
+					{#if work.shared}
+						<div class="share-button opacity-20">
+							<img src="/share.png" alt="Share" class="h-5 w-5" />
+						</div>
+						<div class="edit-button opacity-20">
+							<img src="/edit.png" alt="Edit" class="h-5 w-5" />
+						</div>
+						<div class="delete-button opacity-20">
+							<img src="/trash.png" alt="Delete" class="h-5 w-5" />
+						</div>
+					{/if}
 					{#if !work.shared}
 						<button class="share-button" on:click={() => shareMedia(work.work)}>
 							<img src="/share.png" alt="Share" class="h-5 w-5" />
