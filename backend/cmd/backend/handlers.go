@@ -705,9 +705,10 @@ func (app *application) searchBooksByISBNHandler(w http.ResponseWriter, r *http.
 		app.badRequestResponse(w, r, errors.New("missing id query parameter"))
 		return
 	}
-	query = "isbn:" + query
 
-	resp, err := app.books.Volumes.List(query).Do()
+	queryParam := "isbn:" + query
+
+	resp, err := app.books.Volumes.List(queryParam).Do()
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
