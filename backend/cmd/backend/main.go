@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"flag"
@@ -11,10 +12,14 @@ import (
 	"sync"
 
 	"github.com/BlokOfWood/EntertainmentTracker/backend/internal/data"
+	tmdb "github.com/cyruzin/golang-tmdb"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/sqlite"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/joho/godotenv"
+	"google.golang.org/api/books/v1"
+	"google.golang.org/api/option"
+	"google.golang.org/api/youtube/v3"
 	_ "modernc.org/sqlite"
 )
 
@@ -32,14 +37,21 @@ type config struct {
 	auth struct {
 		expireTime int
 	}
+	api_keys struct {
+		tmdb   string
+		google string
+	}
 }
 
 type application struct {
-	config config
-	logger *slog.Logger
-	db     *sql.DB
-	models data.Models
-	wg     sync.WaitGroup
+	config  config
+	logger  *slog.Logger
+	db      *sql.DB
+	models  data.Models
+	tmdb    *tmdb.Client
+	books   *books.Service
+	youtube *youtube.Service
+	wg      sync.WaitGroup
 }
 
 func main() {
@@ -63,6 +75,8 @@ func main() {
 	if err != nil {
 		cfg.auth.expireTime = 14
 	}
+	cfg.api_keys.tmdb = os.Getenv("TMDB_API_KEY")
+	cfg.api_keys.google = os.Getenv("GOOGLE_API_KEY")
 
 	flag.IntVar(&cfg.port, "port", cfg.port, "API server port")
 	flag.StringVar(&cfg.env, "env", cfg.env, "Environment (development|production)")
@@ -74,6 +88,8 @@ func main() {
 		return nil
 	})
 	flag.IntVar(&cfg.auth.expireTime, "auth-expire-time", cfg.auth.expireTime, "Auth token expire time in days")
+	flag.StringVar(&cfg.api_keys.tmdb, "tmdb-api-key", cfg.api_keys.tmdb, "The Movie Database API key")
+	flag.StringVar(&cfg.api_keys.google, "google-api-key", cfg.api_keys.google, "Google API key")
 	flag.Parse()
 
 	db, err := openDB(cfg)
@@ -83,13 +99,42 @@ func main() {
 	}
 	defer db.Close()
 
+	db.SetMaxOpenConns(1)
+
 	logger.Info("database connection pool established")
 
+	tmdbClient, err := tmdb.Init(cfg.api_keys.tmdb)
+	if err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
+	}
+
+	logger.Info("The Movie Database client initialized")
+
+	booksClient, err := books.NewService(context.Background(), option.WithAPIKey(cfg.api_keys.google))
+	if err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
+	}
+
+	logger.Info("Google Books client initialized")
+
+	youtubeClient, err := youtube.NewService(context.Background(), option.WithAPIKey(cfg.api_keys.google))
+	if err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
+	}
+
+	logger.Info("YouTube client initialized")
+
 	app := &application{
-		config: cfg,
-		logger: logger,
-		db:     db,
-		models: data.NewModels(db),
+		config:  cfg,
+		logger:  logger,
+		db:      db,
+		tmdb:    tmdbClient,
+		books:   booksClient,
+		youtube: youtubeClient,
+		models:  data.NewModels(db),
 	}
 
 	err = app.serve()

@@ -40,7 +40,15 @@ const (
 	StatusCompleted  Status = "completed"
 )
 
-type MediaEntryModel struct {
+type MediaEntryModel interface {
+	Insert(mediaEntry *MediaEntry) error
+	Get(id, userId int64) (*MediaEntry, error)
+	GetAll(userId int64) ([]*MediaEntry, error)
+	Update(mediaEntry *MediaEntry) error
+	Delete(id, userId int64) error
+}
+
+type MediaEntryModelDB struct {
 	DB *sql.DB
 }
 
@@ -69,7 +77,7 @@ func ValidateMediaEntry(v *validator.Validator, mediaEntry *MediaEntry) {
 	v.Check(mediaEntry.Status != StatusNotStarted || mediaEntry.CurrentProgress == 0, "current_progress", "must be 0 if status is not started")
 }
 
-func (m MediaEntryModel) Insert(mediaEntry *MediaEntry) error {
+func (m *MediaEntryModelDB) Insert(mediaEntry *MediaEntry) error {
 	query := `
 		INSERT INTO media_entries (user_id, third_party_id, title, type, status, current_progress, target_progress)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -96,7 +104,7 @@ func (m MediaEntryModel) Insert(mediaEntry *MediaEntry) error {
 	return nil
 }
 
-func (m MediaEntryModel) Get(id int64, userId int64) (*MediaEntry, error) {
+func (m *MediaEntryModelDB) Get(id int64, userId int64) (*MediaEntry, error) {
 	query := `
 		SELECT id, user_id, third_party_id, title, type, status, current_progress, target_progress, created_at, updated_at, version
 		FROM media_entries
@@ -131,7 +139,7 @@ func (m MediaEntryModel) Get(id int64, userId int64) (*MediaEntry, error) {
 	return &mediaEntry, nil
 }
 
-func (m MediaEntryModel) GetAll(userID int64) ([]*MediaEntry, error) {
+func (m *MediaEntryModelDB) GetAll(userID int64) ([]*MediaEntry, error) {
 	query := `
 		SELECT id, user_id, third_party_id, title, type, status, current_progress, target_progress, created_at, updated_at, version
 		FROM media_entries
@@ -181,7 +189,7 @@ func (m MediaEntryModel) GetAll(userID int64) ([]*MediaEntry, error) {
 	return mediaEntries, nil
 }
 
-func (m MediaEntryModel) Update(mediaEntry *MediaEntry) error {
+func (m *MediaEntryModelDB) Update(mediaEntry *MediaEntry) error {
 	query := `
 		UPDATE media_entries
 		SET title = $1, type = $2, status = $3, current_progress = $4, target_progress = $5, version = version + 1, updated_at = CURRENT_TIMESTAMP
@@ -209,7 +217,7 @@ func (m MediaEntryModel) Update(mediaEntry *MediaEntry) error {
 	return nil
 }
 
-func (m MediaEntryModel) Delete(id int64, userId int64) error {
+func (m *MediaEntryModelDB) Delete(id int64, userId int64) error {
 	query := `
 		DELETE FROM media_entries
 		WHERE id = $1 AND user_id = $2`

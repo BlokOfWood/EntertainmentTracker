@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -20,6 +21,17 @@ func (app *application) readIDParam(r *http.Request) (int64, error) {
 	id, err := strconv.ParseInt(params.ByName("id"), 10, 64)
 	if err != nil || id < 1 {
 		return 0, errors.New("invalid ID parameter")
+	}
+
+	return id, nil
+}
+
+func (app *application) readGoogleIDParam(r *http.Request) (string, error) {
+	params := httprouter.ParamsFromContext(r.Context())
+
+	id := params.ByName("id")
+	if id == "" {
+		return "", errors.New("invalid ID parameter")
 	}
 
 	return id, nil
@@ -112,4 +124,18 @@ func (app *application) background(fn func()) {
 
 		fn()
 	}()
+}
+
+func (app *application) parseDuration(duration string) (int, error) {
+	re := regexp.MustCompile(`PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?`)
+	matches := re.FindStringSubmatch(duration)
+
+	var totalSeconds int
+	if len(matches) == 4 {
+		hours, _ := strconv.Atoi(matches[1])
+		minutes, _ := strconv.Atoi(matches[2])
+		seconds, _ := strconv.Atoi(matches[3])
+		totalSeconds = hours*3600 + minutes*60 + seconds
+	}
+	return totalSeconds, nil
 }

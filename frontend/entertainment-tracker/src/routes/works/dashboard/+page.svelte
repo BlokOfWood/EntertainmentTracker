@@ -1,135 +1,231 @@
-<script lang=ts>
-	import type { Work } from '$lib/api.model';
-	import Header from '$lib/header.svelte';
-	import { getWorks } from '$lib/works.api';
-	import { onMount } from 'svelte';
+<script context="module">
+	export type WorkPlus = {
+		work: Work;
+		shared: boolean;
+		sharedBy: string;
+	};
+</script>
 
-	let works: Work[] = [];
-	let originalWorks: Work[] = []; // To store the original order of works
+<script lang="ts">
+	import type { Work, SharedWork } from '$lib/api.model';
+	import { deleteWork, getWorks, getSharedWorks } from '$lib/works.api';
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+	import { writable, type Writable } from 'svelte/store';
+
+	let works: Writable<WorkPlus[]> = writable([]);
+	let originalWorks: WorkPlus[] = []; // To store the original order of works
+
+	async function fetchWorks() {
+		works.update(() => []);
+
+		let currentNotSharedWorks: Work[] = [];
+
+		const responseNotShared = await getWorks();
+		if (responseNotShared.ok) {
+			console.log('not shared works fetched successfully');
+			currentNotSharedWorks = responseNotShared.body.mediaEntries;
+			currentNotSharedWorks.forEach((currentNotSharedWork) => {
+				const workPlus: WorkPlus = {
+					work: currentNotSharedWork,
+					shared: false,
+					sharedBy: ''
+				};
+				works.update((existing) => [...existing, workPlus]);
+			});
+			originalWorks = $works;
+		}
+
+		let currentSharedWorks: SharedWork[] = [];
+
+		const responseShared = await getSharedWorks();
+		if (responseShared.ok) {
+			console.log('shared works fetched successfully');
+			currentSharedWorks = responseShared.body.sharedEntries;
+			if (currentSharedWorks != null) {
+				currentSharedWorks.forEach((currentSharedWork) => {
+					const workPlus: WorkPlus = {
+						work: currentSharedWork.media_entry,
+						shared: true,
+						sharedBy: ''
+					};
+					works.update((existing) => [...existing, workPlus]);
+				});
+				originalWorks = $works;
+			}
+		}
+
+		console.log(originalWorks);
+	}
 
 	onMount(async () => {
-		getWorks().then((response) => {
-			if (response.ok) {
-				console.log('Works fetched successfully');
-				console.log(response.body);
-				works=response.body.mediaEntries; //<-itt szerinted mit hagyok ki? Az is lehet, hogy full rossz ez a sor.
-				works.forEach(work => { console.log(work); }); //ez a foreach hibát dob a consol-ra, mintha üres lenne a works.
-				
-				//TODO: remove example test works once adding works, deleting works and edit works are implemented.
-				const movieExample: Work = { id: 3, third_party_id: 'tp789', title: 'Movie', status: 'Pending', type: 'movie', current_progress: 10, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
-				works.push(movieExample);
-				const TVShowExample: Work = { id: 3, third_party_id: 'tp789', title: 'TVShow', status: 'Pending', type: 'TVshow', current_progress: 20, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
-				works.push(TVShowExample);
-				const YouTubeVideoExample: Work = { id: 3, third_party_id: 'tp789', title: 'YouTubeVideo', status: 'Pending', type: 'YouTubeVideo', current_progress: 80, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
-				works.push(YouTubeVideoExample);
-				const TVShowExampleSecond: Work = { id: 3, third_party_id: 'tp789', title: 'TVShowSecond', status: 'Pending', type: 'TVshow', current_progress: 15, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
-				works.push(TVShowExampleSecond);
-				const bookExample: Work = { id: 3, third_party_id: 'tp789', title: 'Book', status: 'Pending', type: 'book', current_progress: 40, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
-				works.push(bookExample);
-				const YouTubeVideoExampleSecond: Work = { id: 3, third_party_id: 'tp789', title: 'Cooking', status: 'Pending', type: 'YouTubeVideo', current_progress: 40, target_progress: 100, version: 1, created_at: Date.now(), updated_at: new Date() };
-				works.push(YouTubeVideoExampleSecond);
-
-				originalWorks=works;
-			}
-		});
+		fetchWorks();
 	});
 
 	let sortedByTitle = false;
 	let sortedByType = false;
 	let sortedByProgress = false;
+	let sortedByShared = false;
 
 	function sortByTitle() {
-		works = originalWorks;
-
-		sortedByType=false;
-		sortedByProgress=false;
+		sortedByType = false;
+		sortedByProgress = false;
+		sortedByShared = false;
 
 		if (sortedByTitle) {
 			sortedByTitle = false;
-			console.log("not sorted by title");
+			$works = originalWorks;
+			console.log('not sorted by title');
 		} else {
 			sortedByTitle = true;
 
 			// Sort and create a new reference for works
-			works = [...works].sort((a, b) => {
-				if (a.title < b.title) return -1; // a comes before b
-				if (a.title > b.title) return 1;  // a comes after b
+			$works = [...originalWorks].sort((a, b) => {
+				if (a.work.title < b.work.title) return -1; // a comes before b
+				if (a.work.title > b.work.title) return 1; // a comes after b
 				return 0; // a and b are equal
 			});
-			
-			console.log("sort by title");
+
+			console.log('sort by title');
 		}
 	}
 
 	function sortByType() {
-		works = originalWorks;
+		$works = originalWorks;
 
-		sortedByTitle=false;
-		sortedByProgress=false;
+		sortedByTitle = false;
+		sortedByProgress = false;
+		sortedByShared = false;
 
 		if (sortedByType) {
 			sortedByType = false;
-			console.log("not sorted by type");
+			console.log('not sorted by type');
 		} else {
 			sortedByType = true;
 
 			// Sort and create a new reference for works
-			works = [...works].sort((a, b) => {
-				if (a.type < b.type) return -1; // a comes before b
-				if (a.type > b.type) return 1;  // a comes after b
+			$works = [...$works].sort((a, b) => {
+				if (a.work.type < b.work.type) return -1; // a comes before b
+				if (a.work.type > b.work.type) return 1; // a comes after b
 				return 0; // a and b are equal
 			});
-			
-			console.log("sort by type");
+
+			console.log('sort by type');
 		}
 	}
 
 	function sortByProgress() {
-		works = originalWorks;
+		$works = originalWorks;
 
-		sortedByTitle=false;
-		sortedByType=false;
+		sortedByTitle = false;
+		sortedByType = false;
+		sortedByShared = false;
 
 		if (sortedByProgress) {
 			sortedByProgress = false;
-			console.log("not sorted by progress");
+			console.log('not sorted by progress');
 		} else {
 			sortedByProgress = true;
 
 			// Sort and create a new reference for works
-			works = [...works].sort((a, b) => {
-				if (a.target_progress/a.current_progress < b.target_progress/b.current_progress) return -1; // a comes before b
-				if (a.target_progress/a.current_progress > b.target_progress/b.current_progress) return 1;  // a comes after b
+			$works = [...$works].sort((a, b) => {
+				if (
+					a.work.target_progress / a.work.current_progress <
+					b.work.target_progress / b.work.current_progress
+				)
+					return -1; // a comes before b
+				if (
+					a.work.target_progress / a.work.current_progress >
+					b.work.target_progress / b.work.current_progress
+				)
+					return 1; // a comes after b
 				return 0; // a and b are equal
 			});
-			
-			console.log("sort by progress");
+
+			console.log('sort by progress');
 		}
 	}
 
-	function shareMedia() {
-		//TODO: write share media function
+	function sortByShared() {
+		$works = originalWorks;
+
+		sortedByTitle = false;
+		sortedByType = false;
+		sortedByProgress = false;
+
+		if (sortedByShared) {
+			sortedByShared = false;
+			console.log('not sorted by shared');
+		} else {
+			sortedByShared = true;
+
+			// Sort and create a new reference for works
+			$works = [...$works].sort((a, b) => {
+				if (!a.shared && b.shared) return 1; // a comes before b
+				if (a.shared && !b.shared) return -1; // a comes after b
+				return 0; // a and b are equal
+			});
+
+			console.log('sort by title');
+		}
 	}
 
-	function editMedia() {
-		//TODO: write edit media function
+	let currentWork!: Work;
+
+	function shareMedia(work: Work) {
+		goto('/works/dashboard/share-media', { state: { work } });
 	}
 
-	function deleteMedia() {
-		//TODO: write delete media function
+	function editMedia(work: Work) {
+		currentWork = work;
+		goto('/works/dashboard/edit-media', { state: { work } });
+	}
+
+	let idOfDeletedWork!: number;
+
+	function openDeleteModal(id: number) {
+		console.log('deleting media');
+		idOfDeletedWork = id;
+
+		const popup = document.getElementById('popup');
+		if (popup) {
+			popup.classList.remove('hidden');
+		}
+	}
+
+	async function deleteMedia() {
+		const popup = document.getElementById('popup');
+		if (popup) {
+			popup.classList.add('hidden');
+		}
+
+		await deleteWork(idOfDeletedWork);
+		await fetchWorks();
+	}
+
+	function cancelDeletingMedia() {
+		const popup = document.getElementById('popup');
+		if (popup) {
+			popup.classList.add('hidden');
+		}
 	}
 </script>
 
-<div class="relative z-0 flex flex-grow items-center justify-center px-40 py-3">
-	<div class="h-full w-full rounded-lg bg-white flex justify-center items-start">
-		<div class="grid  grid-cols-4 w-full">
+<div class="relative z-0 flex h-full flex-grow items-center justify-center py-3">
+	<div class="flex h-full w-full max-w-screen-lg flex-col overflow-auto rounded-lg bg-white">
+		<div class="sticky top-0 z-10 grid w-full grid-cols-5 bg-white">
 			<div class="flex items-start justify-center border-0 p-2">
 				<button
 					class="Ubuntu-font flex items-center space-x-2 text-lg font-bold text-black"
 					on:click={sortByTitle}
 				>
 					<span>Title</span>
-					<img src="/chevron-down.png" alt="Chevron-down" class="h-4 w-4" />
+					{#if sortedByTitle}
+						<img src="/chevron-down-reverse.png" alt="Chevron-down" class="h-4 w-4" />
+					{/if}
+					{#if !sortedByTitle}
+						<img src="/chevron-down.png" alt="Chevron-down" class="h-4 w-4" />
+					{/if}
 				</button>
 			</div>
 			<div class="flex items-start justify-center border-0 p-2">
@@ -138,7 +234,12 @@
 					on:click={sortByType}
 				>
 					<span>Type</span>
-					<img src="/chevrons-up-down.png" alt="Chevron-down" class="h-4 w-4" />
+					{#if sortedByType}
+						<img src="/chevrons-up-down-inverse.png" alt="Chevron-down" class="h-4 w-4" />
+					{/if}
+					{#if !sortedByType}
+						<img src="/chevrons-up-down.png" alt="Chevron-down" class="h-4 w-4" />
+					{/if}
 				</button>
 			</div>
 			<div class="flex items-start justify-center border-0 p-2">
@@ -147,50 +248,120 @@
 					on:click={sortByProgress}
 				>
 					<span>Progress</span>
-					<img src="/chevrons-up-down.png" alt="Chevron-down" class="h-4 w-4" />
+					{#if sortedByProgress}
+						<img src="/chevrons-up-down-inverse.png" alt="Chevron-down" class="h-4 w-4" />
+					{/if}
+					{#if !sortedByProgress}
+						<img src="/chevrons-up-down.png" alt="Chevron-down" class="h-4 w-4" />
+					{/if}
+				</button>
+			</div>
+			<div class="flex items-start justify-center border-0 p-2">
+				<button
+					class="Ubuntu-font flex items-center space-x-2 text-lg font-bold text-black"
+					on:click={sortByShared}
+				>
+					<span>Shared</span>
+					{#if sortedByShared}
+						<img src="/chevrons-up-down-inverse.png" alt="Chevron-down" class="h-4 w-4" />
+					{/if}
+					{#if !sortedByShared}
+						<img src="/chevrons-up-down.png" alt="Chevron-down" class="h-4 w-4" />
+					{/if}
 				</button>
 			</div>
 			<div class="flex items-start justify-center border-0 p-2"></div>
-			{#each works as work}
-				<div class="border-0 p-2 text-black text-lg Ubuntu-font flex justify-center items-center">{work.title}</div>
-				<div class="border-0 p-2 text-black text-lg Ubuntu-font flex justify-center items-center">{work.type}</div>
-				<div class="border-0 p-2 flex justify-center items-center">
-					{#if work.target_progress==work.current_progress}
-					<img src="/done.png" alt="Done" class="w-4 h-4" />
+		</div>
+		<div class="grid w-full grid-cols-5">
+			{#each $works as work}
+				<div
+					class="Ubuntu-font flex items-center justify-center border-0 p-2 text-center text-lg text-black"
+				>
+					{work.work.title}
+				</div>
+				<div
+					class="Ubuntu-font flex items-center justify-center border-0 p-2 text-center text-lg text-black"
+				>
+					{work.work.type}
+				</div>
+				<div class="flex items-center justify-center border-0 p-2">
+					{#if work.work.target_progress == work.work.current_progress}
+						<img src="/done.png" alt="Done" class="h-4 w-4" />
 					{/if}
-					{#if work.target_progress!=work.current_progress && work.type=="book"}
-					<div class=" text-black text-lg Ubuntu-font">
-						{work.current_progress}/{work.target_progress} pages
-					</div>
+					{#if work.work.target_progress != work.work.current_progress && work.work.type == 'book'}
+						<div class="Ubuntu-font text-lg text-black">
+							{work.work.current_progress}/{work.work.target_progress} pages
+						</div>
 					{/if}
-					{#if work.target_progress!=work.current_progress && work.type=="TVshow"}
-					<div class=" text-black text-lg Ubuntu-font">
-						{work.current_progress}/{work.target_progress} episodes
-					</div>
+					{#if work.work.target_progress != work.work.current_progress && work.work.type == 'show'}
+						<div class="Ubuntu-font text-lg text-black">
+							{work.work.current_progress}/{work.work.target_progress} episodes
+						</div>
 					{/if}
-					{#if work.target_progress!=work.current_progress && work.type=="movie"}
-					<div class=" text-black text-lg Ubuntu-font">
-						{work.current_progress}/{work.target_progress} mins
-					</div>
+					{#if work.work.target_progress != work.work.current_progress && work.work.type == 'movie'}
+						<div class="Ubuntu-font text-lg text-black">
+							{work.work.current_progress}/{work.work.target_progress} mins
+						</div>
 					{/if}
-					{#if work.target_progress!=work.current_progress && work.type=="YouTubeVideo"}
-					<div class=" text-black text-lg Ubuntu-font">
-						{work.current_progress} mins
-					</div>
+					{#if work.work.target_progress != work.work.current_progress && work.work.type == 'youtube'}
+						<div class="Ubuntu-font text-lg text-black">
+							{work.work.current_progress} mins
+						</div>
 					{/if}
 				</div>
-				<div class="flex justify-center items-center space-x-5 p-2">
-					<button class="share-button" on:click={shareMedia}>
-						<img src="/share.png" alt="Share" class="w-5 h-5" />
-					</button>
-					<button class="edit-button" on:click={editMedia}>
-						<img src="/edit.png" alt="Edit" class="w-5 h-5" />
-					</button>
-					<button class="delete-button" on:click={deleteMedia}>
-						<img src="/trash.png" alt="Delete" class="w-5 h-5" />
-					</button>
+				<div class="flex items-center justify-center border-0 p-2">
+					{#if work.shared}
+						<img src="/shared.png" alt="Shared" class="h-5 w-5" />
+					{/if}
+				</div>
+				<div class="flex items-center justify-center space-x-5 p-2">
+					{#if work.shared}
+						<div class="share-button opacity-20">
+							<img src="/share.png" alt="Share" class="h-5 w-5" />
+						</div>
+						<div class="edit-button opacity-20">
+							<img src="/edit.png" alt="Edit" class="h-5 w-5" />
+						</div>
+						<div class="delete-button opacity-20">
+							<img src="/trash.png" alt="Delete" class="h-5 w-5" />
+						</div>
+					{/if}
+					{#if !work.shared}
+						<button class="share-button" on:click={() => shareMedia(work.work)}>
+							<img src="/share.png" alt="Share" class="h-5 w-5" />
+						</button>
+						<button class="edit-button" on:click={() => editMedia(work.work)}>
+							<img src="/edit.png" alt="Edit" class="h-5 w-5" />
+						</button>
+						<button class="delete-button" on:click={() => openDeleteModal(work.work.id)}>
+							<img src="/trash.png" alt="Delete" class="h-5 w-5" />
+						</button>
+					{/if}
 				</div>
 			{/each}
+		</div>
+	</div>
+</div>
+<div
+	id="popup"
+	class="bg-background fixed inset-0 flex hidden items-center justify-center bg-opacity-75"
+>
+	<div class="w-1/3 rounded-lg bg-white p-6">
+		<div class="Ubuntu-font mb-4 text-center text-lg font-bold">Delete Media Entry</div>
+		<div class="Ubuntu-font mb-4">Are you sure you'd like to delete this media entry?</div>
+		<div class="flex justify-center">
+			<button
+				class="Ubuntu-font bg-background mr-4 rounded px-4 py-2 text-sm text-white"
+				on:click={cancelDeletingMedia}
+			>
+				Cancel
+			</button>
+			<button
+				class="Ubuntu-font bg-delete rounded px-4 py-2 text-sm text-white"
+				on:click={deleteMedia}
+			>
+				Delete
+			</button>
 		</div>
 	</div>
 </div>

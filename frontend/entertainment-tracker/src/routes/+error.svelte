@@ -3,11 +3,10 @@
 	import { page } from '$app/stores';
 	import { api } from '$lib/api';
 	import { onMount } from 'svelte';
-	import { get } from 'svelte/store';
 
 	onMount(async () => {
 		if ($page.status === 404) {
-			if (get(api).validToken) {
+			if (api.validToken) {
 				await goto('/works/dashboard');
 			} else {
 				await goto('/user/login');

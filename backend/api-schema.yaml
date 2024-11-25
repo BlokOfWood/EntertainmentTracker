@@ -1,0 +1,1460 @@
+openapi: 3.0.3
+info:
+  title: Entertainment Tracker API
+  description: API for tracking entertainment media, such as movies, TV shows, books and YouTube videos.
+  version: 1.0.0
+servers:
+  - url: http://localhost:6969/v1
+    description: Development server
+tags:
+  - name: Users
+    description: Operations related to users
+  - name: Media
+    description: Operations related to media entries
+  - name: Movies
+    description: Operations related to movies
+  - name: Tv Shows
+    description: Operations related to TV shows
+  - name: Books
+    description: Operations related to books
+  - name: YouTube Videos
+    description: Operations related to YouTube videos
+  - name: Share Media
+    description: Operations related to sharing media entries
+paths:
+  /healthcheck:
+    get:
+      summary: Check the health of the API
+      responses:
+        "200":
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Healthcheck"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /users/register:
+    post:
+      tags:
+        - Users
+      summary: Register a new user
+      requestBody:
+        description: User object that needs for registration
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterUser"
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "409":
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmailAlreadyExistsError"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrors"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /users/login:
+    post:
+      tags:
+        - Users
+      summary: Login a user
+      requestBody:
+        description: User object that needs for login
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginUser"
+      responses:
+        "200":
+          description: User logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthToken"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidCredentialsError"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrors"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /users/logout:
+    get:
+      tags:
+        - Users
+      summary: Logout a user
+      responses:
+        "200":
+          description: User logged out
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+  /users/me:
+    get:
+      tags:
+        - Users
+      summary: Get the current user
+      responses:
+        "200":
+          description: Current user retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    $ref: "#/components/schemas/User"
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+
+  /mediaentries:
+    get:
+      tags:
+        - Media
+      summary: Get all media entries of the current user
+      responses:
+        "200":
+          description: Media entries retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mediaEntries:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MediaEntry"
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Media
+      summary: Create a new media entry
+      requestBody:
+        description: Media entry object that needs to be added
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddMediaEntry"
+      responses:
+        "201":
+          description: Media entry created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mediaEntry:
+                    type: object
+                    $ref: "#/components/schemas/MediaEntry"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrors"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+  /mediaentries/{id}:
+    get:
+      tags:
+        - Media
+      summary: Get a media entry by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the media entry to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Media entry retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mediaEntry:
+                    type: object
+                    $ref: "#/components/schemas/MediaEntry"
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "404":
+          description: Media entry not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+    patch:
+      tags:
+        - Media
+      summary: Update a media entry by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the media entry to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Media entry object that needs to be updated. All fields are optional.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateMediaEntry"
+      responses:
+        "200":
+          description: Media entry updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mediaEntry:
+                    type: object
+                    $ref: "#/components/schemas/MediaEntry"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "404":
+          description: Media entry not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrors"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - Media
+      summary: Delete a media entry by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the media entry to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Media entry deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: media entry deleted successfully
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "404":
+          description: Media entry not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+
+  /search/movies:
+    get:
+      tags:
+        - Movies
+      summary: Search for movies by title
+      parameters:
+        - name: q
+          in: query
+          description: Search query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Movies retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  movies:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/MovieSearchResult"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingQQueryError"
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+  /find/movie:
+    get:
+      tags:
+        - Movies
+      summary: Find a movie by IMDB ID
+      parameters:
+        - name: id
+          in: query
+          description: IMDB ID of the movie to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int
+      responses:
+        "200":
+          description: Movie retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  movie:
+                    type: object
+                    $ref: "#/components/schemas/Movie"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingIdQueryError"
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "404":
+          description: Movie not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+  /movies/{id}:
+    get:
+      tags:
+        - Movies
+      summary: Get a movie by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the movie to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int
+      responses:
+        "200":
+          description: Movie retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  movie:
+                    type: object
+                    $ref: "#/components/schemas/Movie"
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "404":
+          description: Movie not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+
+  /search/tvshows:
+    get:
+      tags:
+        - Tv Shows
+      summary: Search for TV shows by title
+      parameters:
+        - name: q
+          in: query
+          description: Search query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: TV shows retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tvshows:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/TvShowSearchResult"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingQQueryError"
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+  /find/tvshow:
+    get:
+      tags:
+        - Tv Shows
+      summary: Find a TV show by IMDB ID
+      parameters:
+        - name: id
+          in: query
+          description: IMDB ID of the TV show to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int
+      responses:
+        "200":
+          description: TV show retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tvshow:
+                    type: object
+                    $ref: "#/components/schemas/TvShow"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingIdQueryError"
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "404":
+          description: TV show not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+  /tvshows/{id}:
+    get:
+      tags:
+        - Tv Shows
+      summary: Get a TV show by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the TV show to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int
+      responses:
+        "200":
+          description: TV show retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tvshow:
+                    type: object
+                    $ref: "#/components/schemas/TvShow"
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "404":
+          description: TV show not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+
+  /search/books:
+    get:
+      tags:
+        - Books
+      summary: Search for books by title
+      parameters:
+        - name: q
+          in: query
+          description: Search query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Books retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  books:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/BookSearchResult"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingQQueryError"
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+  /find/book:
+    get:
+      tags:
+        - Books
+      summary: Find a book by ISBN
+      parameters:
+        - name: id
+          in: query
+          description: ISBN of the book to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Book retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  book:
+                    type: object
+                    $ref: "#/components/schemas/Book"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingIdQueryError"
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "404":
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+  /books/{id}:
+    get:
+      tags:
+        - Books
+      summary: Get a book by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the book to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Book retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  book:
+                    type: object
+                    $ref: "#/components/schemas/Book"
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "404":
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+
+  /youtube:
+    get:
+      tags:
+        - YouTube Videos
+      summary: Get YouTube video by ID
+      parameters:
+        - name: id
+          in: query
+          description: ID of the YouTube video to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: YouTube video retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  video:
+                    type: object
+                    $ref: "#/components/schemas/YouTubeVideo"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MissingQQueryError"
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "404":
+          description: YouTube video not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+
+  /share:
+    post:
+      tags:
+        - Share Media
+      summary: Share a media entry with another user
+      requestBody:
+        description: Share media entry object that needs to be shared
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                media_entry:
+                  type: integer
+                  format: int64
+                  example: 1
+                shared_with:
+                  type: string
+                  example: john.doe@gmail.com
+      responses:
+        "201":
+          description: Media entry shared
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message::
+                    type: string
+                    example: media entry shared successfully
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "404":
+          description: Media entry not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrors"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+  /shared:
+    get:
+      tags:
+        - Share Media
+      summary: Get all media entries shared with the current user
+      responses:
+        "200":
+          description: Shared media entries retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sharedEntries:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ShareMediaEntry"
+        "401":
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationRequiredError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      security:
+        - bearerAuth: []
+components:
+  schemas:
+    Healthcheck:
+      type: object
+      properties:
+        status:
+          type: string
+          example: available
+        system_info:
+          type: object
+          properties:
+            environment:
+              type: string
+              example: development
+            cors_trusted_origins:
+              type: array
+              items:
+                type: string
+              example:
+                - http://localhost:3000
+                - http://localhost:3001
+            version:
+              type: string
+              example: 1.0.0
+    RegisterUser:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          format: email
+          example: john.doe@gmail.com
+        password:
+          type: string
+          format: password
+          example: password123
+    LoginUser:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: john.doe@gmail.com
+        password:
+          type: string
+          format: password
+          example: password123
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        created_at:
+          type: string
+          format: date-time
+          example: 2021-01-01T00:00:00Z
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          format: email
+          example: john.doe@gmail.com
+    AuthToken:
+      type: object
+      properties:
+        token:
+          type: string
+          example: VIKFBUSYCD7HPIYDXO63RRT4OQ
+        expiry:
+          type: string
+          format: date-time
+          example: 2021-01-01T00:00:00Z
+    MediaEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        user_id:
+          type: integer
+          format: int64
+          example: 1
+        third_party_id:
+          type: string
+          example: 1234567890
+        title:
+          type: string
+          example: The Shawshank Redemption
+        type:
+          type: string
+          enum:
+            - movie
+            - tv_show
+            - book
+            - youtube
+          example: book
+        status:
+          type: string
+          enum:
+            - not_started
+            - watching
+            - completed
+          example: completed
+        current_progress:
+          type: integer
+          format: int64
+          example: 100
+        target_progress:
+          type: string
+          format: int64
+          example: 100
+        created_at:
+          type: string
+          format: date-time
+          example: 2021-01-01T00:00:00Z
+        updated_at:
+          type: string
+          format: date-time
+          example: 2021-01-01T00:00:00Z
+        version:
+          type: integer
+          format: int64
+          example: 1
+    AddMediaEntry:
+      type: object
+      required:
+        - third_party_id
+        - title
+        - type
+        - status
+        - current_progress
+        - target_progress
+      properties:
+        third_party_id:
+          type: string
+          example: 1234567890
+        title:
+          type: string
+          example: The Shawshank Redemption
+        type:
+          type: string
+          enum:
+            - movie
+            - tv_show
+            - book
+            - youtube
+          example: movie
+        status:
+          type: string
+          enum:
+            - not_started
+            - watching
+            - completed
+          example: completed
+        current_progress:
+          type: integer
+          format: int64
+          example: 100
+        target_progress:
+          type: integer
+          format: int64
+          example: 100
+    UpdateMediaEntry:
+      type: object
+      properties:
+        title:
+          type: string
+          example: The Shawshank Redemption
+        type:
+          type: string
+          enum:
+            - movie
+            - tv_show
+            - book
+            - youtube
+          example: movie
+        status:
+          type: string
+          enum:
+            - not_started
+            - watching
+            - completed
+          example: completed
+        current_progress:
+          type: integer
+          format: int64
+          example: 100
+        target_progress:
+          type: integer
+          format: int64
+          example: 100
+    MovieSearchResult:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int
+          example: 808
+        title:
+          type: string
+          example: Shrek
+        release_date:
+          type: string
+          example: 2001-05-18
+        popularity:
+          type: number
+          format: float32
+          example: 156.606
+        vote_average:
+          type: number
+          format: float32
+          example: 7.9
+        thumbnail:
+          type: string
+          example: https://image.tmdb.org/t/p/w500/iB64vpL3dIObOtMZgX3RqdVdQDc.jpg
+    Movie:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int
+          example: 808
+        title:
+          type: string
+          example: Shrek
+        release_date:
+          type: string
+          example: 2001-05-18
+        overview:
+          type: string
+          example: It ain't easy bein' green -- especially if you're a likable (albeit smelly) ogre named Shrek.
+        popularity:
+          type: number
+          format: float32
+          example: 156.606
+        thumbnail:
+          type: string
+          example: https://image.tmdb.org/t/p/w500/iB64vpL3dIObOtMZgX3RqdVdQDc.jpg
+        genres:
+          type: array
+          items:
+            type: string
+          example:
+            - Animation
+            - Comedy
+            - Family
+        Runtime:
+          type: integer
+          format: int
+          example: 90
+    TvShowSearchResult:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int
+          example: 1399
+        title:
+          type: string
+          example: Game of Thrones
+        first_air_date:
+          type: string
+          example: 2011-04-17
+        popularity:
+          type: number
+          format: float32
+          example: 139.0
+        vote_average:
+          type: number
+          format: float32
+          example: 8.4
+        thumbnail:
+          type: string
+          example: https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg
+    TvShow:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int
+          example: 1399
+        title:
+          type: string
+          example: Game of Thrones
+        first_air_date:
+          type: string
+          example: 2011-04-17
+        overview:
+          type: string
+          example: Seven noble families fight for control of the mythical land of Westeros.
+        popularity:
+          type: number
+          format: float32
+          example: 139.0
+        thumbnail:
+          type: string
+          example: https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg
+        genres:
+          type: array
+          items:
+            type: string
+          example:
+            - Action & Adventure
+            - Drama
+            - Sci-Fi & Fantasy
+        number_of_seasons:
+          type: integer
+          format: int
+          example: 8
+        number_of_episodes:
+          type: integer
+          format: int
+          example: 73
+    BookSearchResult:
+      type: object
+      properties:
+        id:
+          type: string
+          example: zyUpEQAAQBAJ
+        isbn:
+          type: string
+          example: 9781781100240
+        title:
+          type: string
+          example: Crime and Punishment
+        author:
+          type: string
+          example: Fyodor Dostoevsky
+        page_count:
+          type: integer
+          example: 671
+        thumbnail:
+          type: string
+          example: http://books.google.com/books/content?id=zyUpEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
+    Book:
+      type: object
+      properties:
+        id:
+          type: string
+          example: zyUpEQAAQBAJ
+        isbn:
+          type: string
+          example: 9781781100240
+        title:
+          type: string
+          example: Crime and Punishment
+        author:
+          type: string
+          example: Fyodor Dostoevsky
+        description:
+          type: string
+          example: Crime and Punishment is a novel by the Russian author Fyodor Dostoevsky.
+        page_count:
+          type: integer
+          example: 671
+        thumbnail:
+          type: string
+          example: http://books.google.com/books/content?id=zyUpEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
+        categories:
+          type: array
+          items:
+            type: string
+          example:
+            - Fiction
+            - Classics
+        published_date:
+          type: string
+          example: 2018-04-03
+        publisher:
+          type: string
+          example: Pottermore Publishing
+        language:
+          type: string
+          example: en
+    YouTubeVideo:
+      type: object
+      properties:
+        video_id:
+          type: string
+          example: dQw4w9WgXcQ
+        video_url:
+          type: string
+          example: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+        title:
+          type: string
+          example: Rick Astley - Never Gonna Give You Up
+        channel:
+          type: string
+          example: Rick Astley
+        thumbnail:
+          type: string
+          example: https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg
+        duration:
+          type: string
+          example: 213
+        published:
+          type: string
+          example: 2009-10-25T00:00:00Z
+    ShareMediaEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        shared_by:
+          type: string
+          example: john.doe@gmail.com
+        shared_with:
+          type: string
+          example: joe.biden@gmail.com
+        media_entry:
+          type: object
+          $ref: "#/components/schemas/MediaEntry"
+        created_at:
+          type: string
+          format: date-time
+          example: 2021-01-01T00:00:00Z
+    InternalServerError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: the server encountered a problem and could not process your request
+    BadRequestError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: body contains unknown key "asd"
+    MissingQQueryError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: missing q query parameter
+    MissingIdQueryError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: missing id query parameter
+    EmailAlreadyExistsError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            email:
+              type: string
+              example: This email address already in use
+    ValidationErrors:
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            property:
+              type: string
+              example: must be provided
+    InvalidCredentialsError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Invalid email or password
+    AuthenticationRequiredError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: you must be authenticated to access this resource
+    NotFoundError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: the requested resource could not be found
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

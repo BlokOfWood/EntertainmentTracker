@@ -4,7 +4,7 @@ class Api {
 	private apiBaseAddress = 'http://localhost:5000/v1';
 	private token: AuthToken | null;
 
-	public async get<T>(endpoint: string, options?: ApiOptions): Promise<ApiResponse<T>> {
+	public async get<T>(endpoint: string, options?: ApiOptions): ApiResponse<T> {
 		const headers = new Headers();
 		if (this.token !== null && !options?.skipAuth) {
 			headers.append('Authorization', `Bearer ${this.token.token}`);
@@ -21,7 +21,7 @@ class Api {
 		endpoint: string,
 		data: object,
 		options?: ApiOptions
-	): Promise<ApiResponse<T>> {
+	): ApiResponse<T> {
 		const headers = new Headers();
 		headers.append('Content-Type', 'application/json');
 		if (this.token !== null && !options?.skipAuth) {
@@ -41,7 +41,7 @@ class Api {
 		endpoint: string,
 		data: object,
 		options?: ApiOptions
-	): Promise<ApiResponse<T>> {
+	): ApiResponse<T> {
 		const headers = new Headers();
 		headers.append('Content-Type', 'application/json');
 		if (this.token !== null && !options?.skipAuth) {
@@ -57,7 +57,7 @@ class Api {
 		return this.processResponse(response, options);
 	}
 
-	public async delete<T>(endpoint: string, options?: ApiOptions): Promise<ApiResponse<T>> {
+	public async delete<T>(endpoint: string, options?: ApiOptions):ApiResponse<T> {
 		const headers = new Headers();
 		if (this.token !== null && !options?.skipAuth) {
 			headers.append('Authorization', `Bearer ${this.token.token}`);
@@ -72,19 +72,21 @@ class Api {
 	}
 
 	public setToken(token: AuthToken | null) {
-		this.token = token;
-
 		if (token === null) {
-			console.log('removing token');
+			this.token = null;
 			localStorage.removeItem('token');
 			return;
 		}
-		localStorage.setItem('token', JSON.stringify(token));
+
+		this.token = {
+			token: token!.token,
+			expiry: new Date(token.expiry)
+		};
+
+		localStorage.setItem('token', JSON.stringify(this.token));
 	}
 
 	public get validToken(): boolean {
-        console.log(this.token);
-
 		return this.token !== null && this.token.expiry > new Date();
 	}
 
@@ -95,7 +97,6 @@ class Api {
 		const token = localStorage.getItem('token');
 		if (token !== null) {
 			try {
-				console.log(token);
 				this.token = JSON.parse(token);
 				this.token!.expiry = new Date(this.token!.expiry);
 			} catch (e) {
@@ -108,7 +109,7 @@ class Api {
 	private async processResponse<T>(
 		response: Response,
 		options: ApiOptions | undefined
-	): Promise<ApiResponse<T>> {
+	): ApiResponse<T> {
 		let responseBody = null;
 
 		switch (options?.responseFormat) {
