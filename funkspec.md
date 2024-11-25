@@ -97,7 +97,7 @@ A felhasználó a navigációs sáv Dashboard gombjára kattintva megtekintheti 
 
 ### Dashboard
 A felhasználó meg tudja tekinteni a hozzáadott műveket, ezeket tudja szerkeszteni a ceruza ikonnal, törölni a piros szemetesláda ikonnal, vagy meg tudja osztani másik felhasználóval a megosztás ikonnal.
-A felhasználó a Title, Type és Progress fejléc elemekkel tudja változtatni a tárolt művek megjelenítési sorrendjét.
+A felhasználó a Title, Type, Progress és Shared fejléc elemekkel tudja változtatni a tárolt művek megjelenítési sorrendjét.
 
 ![Dashboard](./assets/figma/dashboard.png)
 
@@ -117,11 +117,11 @@ Add Media - Books: a felhasználó cím vagy ISBN azonosítóval tud keresni a G
 
 ![Add Content - Component](./assets/figma/add_book.png)
 
-Add Media - TV Shows: a felhasználó cím vagy IMBDb azonosítóval tud keresni az TMDB adatbázisban és a találatok közül tud felvenni a követett művei közé sorozatot.
+Add Media - Movies: a felhasználó cím vagy IMBDb azonosítóval tud keresni az TMDB adatbázisban és a találatok közül tud felvenni a követett művei közé filmet.
 
 ![Add Content - Component](./assets/figma/add_tv_show.png)
 
-Add Media - Movies: a felhasználó cím vagy IMBDb azonosítóval tud keresni az TMDB adatbázisban és a találatok közül tud felvenni a követett művei közé filmet.
+Add Media - TV Shows: a felhasználó cím vagy IMBDb azonosítóval tud keresni az TMDB adatbázisban és a találatok közül tud felvenni a követett művei közé sorozatot.
 
 ![Add Content - Component](./assets/figma/add_movie.png)
 
