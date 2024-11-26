@@ -7,6 +7,7 @@
 </script>
 
 <script lang="ts">
+	import { BookMarked, Users, Share, Trash2 } from 'lucide-svelte';
 	import type { Work, SharedWork } from '$lib/api.model';
 	import { deleteWork, getWorks, getSharedWorks } from '$lib/works.api';
 	import { onMount } from 'svelte';
@@ -55,7 +56,13 @@
 			}
 		}
 
-		console.log(originalWorks);
+		$works = [...$works].sort((a, b) => {
+				if (a.work.created_at > b.work.created_at) return -1; // a comes before b
+				if (a.work.created_at < b.work.created_at) return 1; // a comes after b
+				return 0; // a and b are equal
+			});
+		
+		originalWorks=$works;
 	}
 
 	onMount(async () => {
@@ -290,51 +297,51 @@
 					{/if}
 					{#if work.work.target_progress != work.work.current_progress && work.work.type == 'book'}
 						<div class="Ubuntu-font text-lg text-black">
-							{work.work.current_progress}/{work.work.target_progress} pages
+							{work.work.current_progress}/{work.work.target_progress} pages ({Math.round(work.work.current_progress/work.work.target_progress*100)}%)
 						</div>
 					{/if}
 					{#if work.work.target_progress != work.work.current_progress && work.work.type == 'show'}
 						<div class="Ubuntu-font text-lg text-black">
-							{work.work.current_progress}/{work.work.target_progress} episodes
+							{work.work.current_progress}/{work.work.target_progress} episodes ({Math.round(work.work.current_progress/work.work.target_progress*100)}%)
 						</div>
 					{/if}
 					{#if work.work.target_progress != work.work.current_progress && work.work.type == 'movie'}
 						<div class="Ubuntu-font text-lg text-black">
-							{work.work.current_progress}/{work.work.target_progress} mins
+							{work.work.current_progress}/{work.work.target_progress} mins ({Math.round(work.work.current_progress/work.work.target_progress*100)}%)
 						</div>
 					{/if}
 					{#if work.work.target_progress != work.work.current_progress && work.work.type == 'youtube'}
 						<div class="Ubuntu-font text-lg text-black">
-							{work.work.current_progress} mins
+							{work.work.current_progress} mins ({Math.round(work.work.current_progress/work.work.target_progress*100)}%)
 						</div>
 					{/if}
 				</div>
 				<div class="flex items-center justify-center border-0 p-2">
 					{#if work.shared}
-						<img src="/shared.png" alt="Shared" class="h-5 w-5" />
+						<Users />
 					{/if}
 				</div>
 				<div class="flex items-center justify-center space-x-5 p-2">
 					{#if work.shared}
 						<div class="share-button opacity-20">
-							<img src="/share.png" alt="Share" class="h-5 w-5" />
+							<Share />
 						</div>
 						<div class="edit-button opacity-20">
-							<img src="/edit.png" alt="Edit" class="h-5 w-5" />
+							<BookMarked />
 						</div>
 						<div class="delete-button opacity-20">
-							<img src="/trash.png" alt="Delete" class="h-5 w-5" />
+							<Trash2 color=red />
 						</div>
 					{/if}
 					{#if !work.shared}
 						<button class="share-button" on:click={() => shareMedia(work.work)}>
-							<img src="/share.png" alt="Share" class="h-5 w-5" />
+							<Share />
 						</button>
 						<button class="edit-button" on:click={() => editMedia(work.work)}>
-							<img src="/edit.png" alt="Edit" class="h-5 w-5" />
+							<BookMarked />
 						</button>
 						<button class="delete-button" on:click={() => openDeleteModal(work.work.id)}>
-							<img src="/trash.png" alt="Delete" class="h-5 w-5" />
+							<Trash2 color=red />
 						</button>
 					{/if}
 				</div>
