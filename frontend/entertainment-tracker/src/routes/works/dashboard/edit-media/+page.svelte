@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { updateWork } from '$lib/works.api';
     import type { Book, Movie, TvShow, Work, UpdateWorkRequest } from '$lib/api.model';
-    import { getBookByISBN, getTVShowByIMDb, getTVShowByIMDbId, getMovieByIMDb, getMovie } from '$lib/addmedia.api';
+    import { getBookByISBN, getTVShowByIMDbId, getMovie, getBookByGoogleId } from '$lib/addmedia.api';
     import { writable } from 'svelte/store';
     import { goto } from '$app/navigation';
 
@@ -12,6 +12,7 @@
 	let description = '';
 	let categories!: String[];
 	let author = '';
+	let isbn='';
 	let YTURL = 'https://www.youtube.com/embed/dQw4w9WgXcQ?si=dourAMMy3-5pBbJr';
 
 	let newProgress = -1;
@@ -28,34 +29,50 @@
 
         if (currentWork.type == 'book') {
 			if(currentWork.third_party_id!=""){
-				getBookByISBN(currentWork.third_party_id).then(response => {
+				getBookByGoogleId(currentWork.third_party_id).then(response => {
 					const currentBook = response.body.book; // Get the book object directly
 					book.set(response.body.book); // Use .set to update the store
 					if (currentBook) { // Check if currentBook is not null
-					author = currentBook.author; // Access author directly
-					description = currentBook.description; // Access description
-					mediaArtSource = currentBook.thumbnail; // Access thumbnail
-					categories = currentBook.categories; // Access categories
+						author = currentBook.author; // Access author directly
+						description = currentBook.description; // Access description
+						mediaArtSource = currentBook.thumbnail; // Access thumbnail
+						categories = currentBook.categories; // Access categories
+						isbn=currentBook.isbn;
+						console.log("Fetched with getBookByGoogleId function.");
+					} else {
+						// Handle the case where currentBook is null
+						console.error("Book data is not available - Google Books API");
 
-				} else {
-					// Handle the case where currentBook is null
-					console.error("Book data is not available");
+						getBookByISBN(currentWork.third_party_id).then(response => {
+							const currentBook = response.body.book; // Get the book object directly
+							book.set(response.body.book); // Use .set to update the store
+							if (currentBook) { // Check if currentBook is not null
+								author = currentBook.author; // Access author directly
+								description = currentBook.description; // Access description
+								mediaArtSource = currentBook.thumbnail; // Access thumbnail
+								categories = currentBook.categories; // Access categories
+								isbn=currentBook.isbn;
+								console.log("Fetched with getBookByISBN function.");
+							} else {
+								console.error("Book data is not available - ISBN");
 
-					const mockbook : Book = {
-						id: "",
-						isbn: "",
-						title: "",
-						author: "",
-						description: "",
-						page_count: 0,
-						thumbnail: "",
-						categories: [],
-						published_date: "",
-						publisher: "",
-						language: ""
-					}
-					book.set(mockbook);
-				}    
+								const mockbook : Book = {
+									id: "",
+									isbn: "",
+									title: "",
+									author: "",
+									description: "",
+									page_count: 0,
+									thumbnail: "",
+									categories: [],
+									published_date: "",
+									publisher: "",
+									language: ""
+								}
+								book.set(mockbook);
+							}
+						});
+					}   
 				});   
 			}
 			else{
@@ -222,7 +239,7 @@
                         <img src={mediaArtSource} alt="Cover art" class="rounded-md h-auto" />
                         {#if currentWork.type === 'book'}
                             <div class="text-xxs Ubuntu-font pt-1 text-center">
-                                {currentWork.third_party_id}
+                                {isbn}
                             </div>
                         {/if}
                         <div class="text-xxs Ubuntu-font p-1 text-center">Categories:</div>

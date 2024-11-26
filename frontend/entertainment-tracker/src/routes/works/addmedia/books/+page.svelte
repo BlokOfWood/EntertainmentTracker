@@ -37,7 +37,7 @@
 			type: 'book',
 			current_progress: 0,
 			target_progress: books[idx].page_count,
-			third_party_id: books[idx].isbn,
+			third_party_id: books[idx].id,
 			status: 'watching'
 		});
 
