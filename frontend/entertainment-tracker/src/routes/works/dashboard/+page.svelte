@@ -7,7 +7,7 @@
 </script>
 
 <script lang="ts">
-	import { BookMarked, Users, Share, Trash2 } from 'lucide-svelte';
+	import { BookMarked, Users, Share, Trash2, ChevronDown, ChevronUp, ChevronsUpDown } from 'lucide-svelte';
 	import type { Work, SharedWork } from '$lib/api.model';
 	import { deleteWork, getWorks, getSharedWorks } from '$lib/works.api';
 	import { onMount } from 'svelte';
@@ -69,22 +69,22 @@
 		fetchWorks();
 	});
 
-	let sortedByTitle = false;
-	let sortedByType = false;
-	let sortedByProgress = false;
-	let sortedByShared = false;
+	let sortedByTitle = 0;
+	let sortedByType = 0;
+	let sortedByProgress = 0;
+	let sortedByShared = 0;
 
 	function sortByTitle() {
-		sortedByType = false;
-		sortedByProgress = false;
-		sortedByShared = false;
+		sortedByType = 0;
+		sortedByProgress = 0;
+		sortedByShared = 0;
 
-		if (sortedByTitle) {
-			sortedByTitle = false;
+		if (sortedByTitle==2) {
+			sortedByTitle = 0;
 			$works = originalWorks;
 			console.log('not sorted by title');
-		} else {
-			sortedByTitle = true;
+		} else if(sortedByTitle==0){
+			sortedByTitle = sortedByTitle+1;
 
 			// Sort and create a new reference for works
 			$works = [...originalWorks].sort((a, b) => {
@@ -93,22 +93,34 @@
 				return 0; // a and b are equal
 			});
 
-			console.log('sort by title');
+			console.log('sort by title (asc)');
+		}
+		else{
+			sortedByTitle = sortedByTitle+1;
+
+			// Sort and create a new reference for works
+			$works = [...originalWorks].sort((a, b) => {
+				if (a.work.title > b.work.title) return -1; // a comes before b
+				if (a.work.title < b.work.title) return 1; // a comes after b
+				return 0; // a and b are equal
+			});
+
+			console.log('sort by title (desc)');
 		}
 	}
 
 	function sortByType() {
 		$works = originalWorks;
 
-		sortedByTitle = false;
-		sortedByProgress = false;
-		sortedByShared = false;
+		sortedByTitle = 0;
+		sortedByProgress = 0;
+		sortedByShared = 0;
 
-		if (sortedByType) {
-			sortedByType = false;
+		if (sortedByType==2) {
+			sortedByType = 0;
 			console.log('not sorted by type');
-		} else {
-			sortedByType = true;
+		} else if (sortedByType==0){
+			sortedByType = 1;
 
 			// Sort and create a new reference for works
 			$works = [...$works].sort((a, b) => {
@@ -117,33 +129,61 @@
 				return 0; // a and b are equal
 			});
 
-			console.log('sort by type');
+			console.log('sort by type (asc)');
+		}
+		else{
+			sortedByType = 2;
+
+			// Sort and create a new reference for works
+			$works = [...$works].sort((a, b) => {
+				if (a.work.type > b.work.type) return -1; // a comes before b
+				if (a.work.type < b.work.type) return 1; // a comes after b
+				return 0; // a and b are equal
+			});
+
+			console.log('sort by type (desc)');
 		}
 	}
 
 	function sortByProgress() {
 		$works = originalWorks;
 
-		sortedByTitle = false;
-		sortedByType = false;
-		sortedByShared = false;
+		sortedByTitle = 0;
+		sortedByType = 0;
+		sortedByShared = 0;
 
-		if (sortedByProgress) {
-			sortedByProgress = false;
+		if (sortedByProgress==2) {
+			sortedByProgress = 0;
 			console.log('not sorted by progress');
-		} else {
-			sortedByProgress = true;
+		} else if(sortedByProgress==0) {
+			sortedByProgress = 1;
 
 			// Sort and create a new reference for works
 			$works = [...$works].sort((a, b) => {
 				if (
-					a.work.target_progress / a.work.current_progress <
-					b.work.target_progress / b.work.current_progress
+					a.work.target_progress / a.work.current_progress < b.work.target_progress / b.work.current_progress
 				)
 					return -1; // a comes before b
 				if (
-					a.work.target_progress / a.work.current_progress >
-					b.work.target_progress / b.work.current_progress
+					a.work.target_progress / a.work.current_progress > b.work.target_progress / b.work.current_progress
+				)
+					return 1; // a comes after b
+				return 0; // a and b are equal
+			});
+
+			console.log('sort by progress (asc)');
+		}
+		else{
+			sortedByProgress = 2;
+
+			// Sort and create a new reference for works
+			$works = [...$works].sort((a, b) => {
+				if (
+					a.work.target_progress / a.work.current_progress > b.work.target_progress / b.work.current_progress
+				)
+					return -1; // a comes before b
+				if (
+					a.work.target_progress / a.work.current_progress < b.work.target_progress / b.work.current_progress
 				)
 					return 1; // a comes after b
 				return 0; // a and b are equal
@@ -156,15 +196,15 @@
 	function sortByShared() {
 		$works = originalWorks;
 
-		sortedByTitle = false;
-		sortedByType = false;
-		sortedByProgress = false;
+		sortedByTitle = 0;
+		sortedByType = 0;
+		sortedByProgress = 0;
 
-		if (sortedByShared) {
-			sortedByShared = false;
+		if (sortedByShared==2) {
+			sortedByShared = 0;
 			console.log('not sorted by shared');
-		} else {
-			sortedByShared = true;
+		} else if (sortedByShared==0){
+			sortedByShared = 1;
 
 			// Sort and create a new reference for works
 			$works = [...$works].sort((a, b) => {
@@ -173,8 +213,21 @@
 				return 0; // a and b are equal
 			});
 
-			console.log('sort by title');
+			console.log('sort by title (asc)');
 		}
+		else{
+			sortedByShared = 2;
+
+			// Sort and create a new reference for works
+			$works = [...$works].sort((a, b) => {
+				if (!a.shared && b.shared) return -1; // a comes before b
+				if (a.shared && !b.shared) return 1; // a comes after b
+				return 0; // a and b are equal
+			});
+
+			console.log('sort by title (desc)');
+		}
+
 	}
 
 	let currentWork!: Work;
@@ -227,11 +280,14 @@
 					on:click={sortByTitle}
 				>
 					<span>Title</span>
-					{#if sortedByTitle}
-						<img src="/chevron-down-reverse.png" alt="Chevron-down" class="h-4 w-4" />
+					{#if sortedByTitle==0}
+						<ChevronsUpDown />
 					{/if}
-					{#if !sortedByTitle}
-						<img src="/chevron-down.png" alt="Chevron-down" class="h-4 w-4" />
+					{#if sortedByTitle==1}
+						<ChevronUp />
+					{/if}
+					{#if sortedByTitle==2}
+						<ChevronDown />
 					{/if}
 				</button>
 			</div>
@@ -241,11 +297,14 @@
 					on:click={sortByType}
 				>
 					<span>Type</span>
-					{#if sortedByType}
-						<img src="/chevrons-up-down-inverse.png" alt="Chevron-down" class="h-4 w-4" />
+					{#if sortedByType==0}
+						<ChevronsUpDown />
 					{/if}
-					{#if !sortedByType}
-						<img src="/chevrons-up-down.png" alt="Chevron-down" class="h-4 w-4" />
+					{#if sortedByType==1}
+						<ChevronUp />
+					{/if}
+					{#if sortedByType==2}
+						<ChevronDown />
 					{/if}
 				</button>
 			</div>
@@ -255,11 +314,14 @@
 					on:click={sortByProgress}
 				>
 					<span>Progress</span>
-					{#if sortedByProgress}
-						<img src="/chevrons-up-down-inverse.png" alt="Chevron-down" class="h-4 w-4" />
+					{#if sortedByProgress==0}
+						<ChevronsUpDown />
 					{/if}
-					{#if !sortedByProgress}
-						<img src="/chevrons-up-down.png" alt="Chevron-down" class="h-4 w-4" />
+					{#if sortedByProgress==1}
+						<ChevronUp />
+					{/if}
+					{#if sortedByProgress==2}
+						<ChevronDown />
 					{/if}
 				</button>
 			</div>
@@ -269,11 +331,14 @@
 					on:click={sortByShared}
 				>
 					<span>Shared</span>
-					{#if sortedByShared}
-						<img src="/chevrons-up-down-inverse.png" alt="Chevron-down" class="h-4 w-4" />
+					{#if sortedByShared==0}
+						<ChevronsUpDown />
 					{/if}
-					{#if !sortedByShared}
-						<img src="/chevrons-up-down.png" alt="Chevron-down" class="h-4 w-4" />
+					{#if sortedByShared==1}
+						<ChevronUp />
+					{/if}
+					{#if sortedByShared==2}
+						<ChevronDown />
 					{/if}
 				</button>
 			</div>
