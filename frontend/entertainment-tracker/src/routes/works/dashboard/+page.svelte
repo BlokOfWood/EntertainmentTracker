@@ -449,23 +449,27 @@
 							<CircleCheck size={20} />
 						{/if}
 						{#if work.work.target_progress != work.work.current_progress && work.work.type == 'book'}
-							<div class="Ubuntu-font text-lg text-black">
-								{work.work.current_progress}/{work.work.target_progress} pages ({Math.round(work.work.current_progress/work.work.target_progress*100)}%)
+							<div class="Ubuntu-font text-lg text-black text-center">
+								{work.work.current_progress}/{work.work.target_progress} pages
+								({Math.round(work.work.current_progress/work.work.target_progress*100)}%)
 							</div>
 						{/if}
 						{#if work.work.target_progress != work.work.current_progress && work.work.type == 'show'}
-							<div class="Ubuntu-font text-lg text-black">
-								{work.work.current_progress}/{work.work.target_progress} episodes ({Math.round(work.work.current_progress/work.work.target_progress*100)}%)
+							<div class="Ubuntu-font text-lg text-black text-center">
+								{work.work.current_progress}/{work.work.target_progress} episodes
+								({Math.round(work.work.current_progress/work.work.target_progress*100)}%)
 							</div>
 						{/if}
 						{#if work.work.target_progress != work.work.current_progress && work.work.type == 'movie'}
-							<div class="Ubuntu-font text-lg text-black">
-								{work.work.current_progress}/{work.work.target_progress} mins ({Math.round(work.work.current_progress/work.work.target_progress*100)}%)
+							<div class="Ubuntu-font text-lg text-black text-center">
+								{work.work.current_progress}/{work.work.target_progress} mins
+								({Math.round(work.work.current_progress/work.work.target_progress*100)}%)
 							</div>
 						{/if}
 						{#if work.work.target_progress != work.work.current_progress && work.work.type == 'youtube'}
-							<div class="Ubuntu-font text-lg text-black">
-								{work.work.current_progress} mins ({Math.round(work.work.current_progress/work.work.target_progress*100)}%)
+							<div class="Ubuntu-font text-lg text-black text-center">
+								{work.work.current_progress} mins
+								({Math.round(work.work.current_progress/work.work.target_progress*100)}%)
 							</div>
 						{/if}
 					</div>
