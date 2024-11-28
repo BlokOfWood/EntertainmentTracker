@@ -125,7 +125,7 @@ Add Media - TV Shows: a felhasználó cím vagy IMBDb azonosítóval tud keresni
 
 ![Add Content - Component](./assets/figma/add_movie.png)
 
-Add Media - YouTube: a felhasználó URL-el és megjelenítési név megadásával tud hozzáadni YouTube videót a követett műveihez.
+Add Media - YouTube: a felhasználó URL megadásával tud hozzáadni YouTube videót a követett műveihez.
 
 ![Add Content - Component](./assets/figma/add_youtube.png)
 
@@ -143,7 +143,7 @@ Edit Media - Movies: A felhasználó frissíteni tudja hanyadik percnél tart a 
 
 ![Edit Media - Movies](./assets/figma/edit_movie.png)
 
-Edit Media - YouTube: A felhasználó meg tudja változtatni a videó követett művei közötti megjelenítési nevét.
+Edit Media - YouTube: A felhasználó frissíteni tudja hanyadik másodpercnél tart a videóban.
 
 ![Edit Media - YouTube](./assets/figma/edit_youtube.png)
 
