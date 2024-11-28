@@ -64,7 +64,7 @@ func (app *application) createUserHandler(w http.ResponseWriter, r *http.Request
 		switch {
 		case errors.Is(err, data.ErrDuplicateEmail):
 			v.AddError("email", "This email address already in use")
-			app.emailAlreadyExistsResponse(w, r, v.Errors)
+			app.alreadyExistsResponse(w, r, v.Errors)
 		default:
 			app.serverErrorResponse(w, r, err)
 		}
@@ -891,7 +891,12 @@ func (app *application) shareMediaEntryHandler(w http.ResponseWriter, r *http.Re
 
 	err = app.models.SharedEntries.Insert(mediaEntry.ID, user.ID, sharedWith.ID)
 	if err != nil {
-		app.serverErrorResponse(w, r, err)
+		switch {
+		case err.Error() == "constraint failed: UNIQUE constraint failed: shared_entries.entry_id, shared_entries.shared_by, shared_entries.shared_with (2067)":
+			app.alreadyExistsResponse(w, r, map[string]string{"shared_with": "media entry already shared with this user"})
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
 		return
 	}
 
