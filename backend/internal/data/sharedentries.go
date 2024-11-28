@@ -20,7 +20,7 @@ type SharedEntryModel interface {
 	GetBySharedWithID(sharedWith int64) ([]*SharedEntry, error)
 	GetAll() ([]*SharedEntry, error)
 	Update(sharedEntry *SharedEntry) error
-	Delete(id int64) error
+	Delete(id, userID int64) error
 }
 
 type SharedEntryModelDB struct {
@@ -101,8 +101,8 @@ func (m *SharedEntryModelDB) Update(sharedEntry *SharedEntry) error {
 	return err
 }
 
-func (m *SharedEntryModelDB) Delete(id int64) error {
-	stmt := `DELETE FROM shared_entries WHERE id = ?`
-	_, err := m.DB.Exec(stmt, id)
+func (m *SharedEntryModelDB) Delete(id, userID int64) error {
+	stmt := `DELETE FROM shared_entries WHERE id = ? and shared_with = ?`
+	_, err := m.DB.Exec(stmt, id, userID)
 	return err
 }
