@@ -663,12 +663,12 @@
 						{/if}
 						{#if work_type==="show"}
 							<div class="mt-2 p-3 Ubuntu-font text-sm">
-								mins
+								episodes
 							</div>
 						{/if}
 						{#if work_type==="movie"}
 							<div class="mt-2 p-3 Ubuntu-font text-sm">
-								episodes
+								mins
 							</div>
 						{/if}
 					</div>
@@ -692,7 +692,7 @@
 							<input
 							type="text"
 							bind:value={work_progressValueYT}
-							class="mt-2 p-2 border border-gray-300 rounded text-center"
+							class="mt-2 p-2 border border-gray-300 rounded text-center w-1/3"
 							placeholder="hh:mm:ss"
 							/>
 						{/if}
@@ -700,7 +700,7 @@
 							<input
 							type="text"
 							bind:value={work_progressValueYT}
-							class="mt-2 p-2 border border-gray-300 rounded text-center"
+							class="mt-2 p-2 border border-gray-300 rounded text-center w-1/3"
 							placeholder="mm:ss"
 							/>
 						{/if}
