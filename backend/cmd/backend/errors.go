@@ -49,7 +49,7 @@ func (app *application) failedValidationResponse(w http.ResponseWriter, r *http.
 	app.errorResponse(w, r, http.StatusUnprocessableEntity, errors)
 }
 
-func (app *application) emailAlreadyExistsResponse(w http.ResponseWriter, r *http.Request, errors map[string]string) {
+func (app *application) alreadyExistsResponse(w http.ResponseWriter, r *http.Request, errors map[string]string) {
 	app.errorResponse(w, r, http.StatusConflict, errors)
 }
 
