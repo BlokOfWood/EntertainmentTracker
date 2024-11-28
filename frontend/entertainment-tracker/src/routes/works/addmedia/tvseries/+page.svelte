@@ -61,13 +61,13 @@
 	</form>
 
 	<div
-		class="grid grid-cols-[auto_1fr_1fr_1fr_auto] items-center gap-y-4 overflow-auto text-center text-sm"
+		class="grid grid-cols-[auto_1fr_1fr_1fr_auto] items-center gap-y-4 gap-x-2 overflow-auto text-center text-sm"
 	>
 		{#if $displayedSeries !== undefined}
 			<div>Thumbnail</div>
 			<div>Title</div>
 			<div>First air date</div>
-			<div>Number of Episodes</div>
+			<div>Score</div>
 			<div></div>
 			{#if $displayedSeries === null}
 				<div class="col-span-5">No series found</div>
@@ -78,8 +78,7 @@
 					</div>
 					<div>{series.title}</div>
 					<div>{series.first_air_date}</div>
-					<!-- TODO: nincs number of episodes-->
-					<div>1</div>
+					<div>{series.vote_average}</div>
 					<div class="text-center">
 						<button
 							class="h-fit w-fit text-center disabled:opacity-35"
