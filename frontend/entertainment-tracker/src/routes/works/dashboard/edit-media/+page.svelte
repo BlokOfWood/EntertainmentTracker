@@ -206,6 +206,8 @@
 			console.log('New progress: ' + newDetails.current_progress);
 		}
 
+		console.log(newDetails);
+
 		updateWork(currentWork.id, newDetails);
 
 		//reset these values so it can be checked wether the user filled the fields or not
@@ -262,39 +264,6 @@
                     <div class="text-xxs Ubuntu-font pt-3 text-start" style="line-height: 2.5;">
                         {description}
                     </div>
-                    <div class="Ubuntu-font pb-2 pt-6 text-sm font-bold">Progress</div>
-                    <div>
-                        {#if currentWork.type === 'show'}
-                            <input
-                                type="progress"
-                                placeholder="Episode number / {currentWork.target_progress}"
-                                on:input={setNewProgress}
-                                class="mr-1 rounded-md border p-1.5 text-sm"
-                            />
-                        {/if}
-                        {#if currentWork.type === 'book'}
-                            <input
-                                type="progress"
-                                placeholder="Page number / {currentWork.target_progress}"
-                                on:input={setNewProgress}
-                                class="mr-1 rounded-md border p-1.5 text-sm"
-                            />
-                        {/if}
-                        {#if currentWork.type === 'movie'}
-                            <input
-                                type="progress"
-                                placeholder="Minutes / {currentWork.target_progress}"
-                                on:input={setNewProgress}
-                                class="mr-1 rounded-md border p-1.5 text-sm"
-                            />
-                        {/if}
-                        <button
-                            class="bg-background rounded-md px-6 py-1.5 text-sm text-white"
-                            on:click={mediaEdited}
-                        >
-                            Save
-                        </button>
-                    </div>
                 </div>
             </div>
         {/if}
@@ -302,21 +271,6 @@
             <div class="ml-24 mr-24 mt-6 flex flex-col">
                 <div class="flex items-center justify-center">
                     <iframe title="video" class="aspect-[18/10] w-full" src="{YTURL}"> </iframe>
-                </div>
-                <div class="Ubuntu-font pb-2 pt-6 text-sm font-bold">Progress</div>
-                <div class="flex">
-                    <input
-                        type="progress"
-                        placeholder="Minutes"
-                        on:input={setNewProgress}
-                        class="mr-1 rounded-md border p-1.5 text-sm"
-                    />
-                    <button
-                        class="bg-background rounded-md px-6 py-1.5 text-sm text-white"
-                        on:click={mediaEdited}
-                    >
-                        Save
-                    </button>
                 </div>
             </div>
         {/if}

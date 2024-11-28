@@ -9,8 +9,8 @@
 
 <script lang="ts">
 	import { BookMarked, Users, Share, Trash2, ChevronDown, ChevronUp, ChevronsUpDown, CircleCheck } from 'lucide-svelte';
-	import type { Work, SharedWork} from '$lib/api.model';
-	import { deleteWork, getWorks, getSharedWorks } from '$lib/works.api';
+	import type { Work, SharedWork, UpdateWorkRequest, WorkType} from '$lib/api.model';
+	import { deleteWork, getWorks, getSharedWorks, updateWork } from '$lib/works.api';
 	import { getBookByISBN, getTVShowByIMDbId, getMovie, getBookByGoogleId } from '$lib/addmedia.api';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
@@ -91,16 +91,12 @@
 					const currentBook = response.body.book; 
 					if (currentBook) { 
 						source = currentBook.thumbnail;
-						console.log("Book Source:", source);
-						console.log("Fetched with getBookByGoogleId function.");
 					} else {
 						console.error("Book data is not available - Google Books API");
 						const isbnResponse = await getBookByISBN(work.third_party_id);
 						const isbnBook = isbnResponse.body.book; 
 						if (isbnBook) { 
 							source = isbnBook.thumbnail;
-							console.log("Source:", source);
-							console.log("Fetched with getBookByISBN function.");
 						} else {
 							console.error("Book data is not available - ISBN");
 						}
@@ -116,7 +112,6 @@
 					const currentMovie = response.body.movie; 
 					if (currentMovie) { 
 						source = currentMovie.thumbnail;
-						console.log("Movie Source:", source);
 					} else {
 						console.error("Movie data is not available");
 					}    
@@ -131,7 +126,6 @@
 					const currentShow = response.body.tvshow; 
 					if (currentShow) { 
 						source = currentShow.thumbnail;
-						console.log("Show Source:", source);
 					} else {
 						console.error("Show data is not available");
 					}    
@@ -141,7 +135,6 @@
 			}
 		} else if (work.type === 'youtube') {
 			source = `https://www.youtube.com/embed/${work.third_party_id}?si=dourAMMy3-5pBbJr`;
-			console.log("YT Source:", source);
 		}
 
 		return source;
@@ -309,14 +302,98 @@
 	}
 
 	let currentWork!: Work;
+	function checkMedia(work: Work) {
+		currentWork = work;
+		goto('/works/dashboard/edit-media', { state: { work } });
+	}
 
 	function shareMedia(work: Work) {
 		goto('/works/dashboard/share-media', { state: { work } });
 	}
 
-	function editMedia(work: Work) {
-		currentWork = work;
-		goto('/works/dashboard/edit-media', { state: { work } });
+	let work_progressValue=0;
+	let work_target_progress=0;
+	let work_type="";
+	let work_title="";
+	let work_progressValueYT="";
+
+	function editMediaModal(work: Work) {
+		work_progressValue=work.current_progress;
+		work_target_progress=work.target_progress;
+		work_type=work.type;
+		work_title=work.title;
+
+		if(work.type=="youtube"){
+			const hours = Math.floor(work.current_progress / 3600);
+			const minutes = Math.floor((work.current_progress % 3600) / 60);
+			const secs = work.current_progress % 60;
+
+			if(work.target_progress>3600){
+				work_progressValueYT=`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+			}
+			else{
+				work_progressValueYT=`${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+			}
+		}
+
+		currentWork=work;
+
+		const popup = document.getElementById('edit-popup');
+		if (popup) {
+			popup.classList.remove('hidden');
+		}
+	}
+
+	async function editMedia(){
+		const popup = document.getElementById('edit-popup');
+		if (popup) {
+			popup.classList.add('hidden');
+		}
+
+		if(currentWork.type=="youtube"){
+			work_progressValue=convertYTProgressToSeconds(work_progressValueYT);
+		}
+
+		if (Number(work_progressValue)!=currentWork.current_progress){
+			let newDetails: UpdateWorkRequest = {
+			title: currentWork.title,
+			type: currentWork.type,
+			status: currentWork.status,
+			current_progress: Number(work_progressValue),
+			target_progress: currentWork.target_progress
+			};
+
+			console.log('New progress: ' + newDetails.current_progress);
+			updateWork(currentWork.id, newDetails);
+
+			await fetchWorks();
+		}
+	}
+
+	function convertYTProgressToSeconds(YTprogress : string){
+		const parts = YTprogress.split(':');
+		let seconds = 0;
+
+		if (parts.length === 3) {
+			seconds += parseInt(parts[0]) * 3600; // hours to seconds
+			seconds += parseInt(parts[1]) * 60;   // minutes to seconds
+			seconds += parseInt(parts[2]);        // seconds
+		}
+		if (parts.length == 2) {
+			console.log("has 2 parts")
+			seconds += parseInt(parts[0]) * 60;   // minutes to seconds
+			seconds += parseInt(parts[1]);        // seconds
+		}
+
+		console.log(seconds);
+		return seconds;
+	}
+
+	function cancelEditMedia(){
+		const popup = document.getElementById('edit-popup');
+		if (popup) {
+			popup.classList.add('hidden');
+		}
 	}
 
 	let idOfDeletedWork!: number;
@@ -325,14 +402,14 @@
 		console.log('deleting media');
 		idOfDeletedWork = id;
 
-		const popup = document.getElementById('popup');
+		const popup = document.getElementById('delete-popup');
 		if (popup) {
 			popup.classList.remove('hidden');
 		}
 	}
 
 	async function deleteMedia() {
-		const popup = document.getElementById('popup');
+		const popup = document.getElementById('delete-popup');
 		if (popup) {
 			popup.classList.add('hidden');
 		}
@@ -342,7 +419,7 @@
 	}
 
 	function cancelDeletingMedia() {
-		const popup = document.getElementById('popup');
+		const popup = document.getElementById('delte-popup');
 		if (popup) {
 			popup.classList.add('hidden');
 		}
@@ -434,11 +511,11 @@
 							<iframe title="video" class="aspect-[18/10] max-w-[60%]" src="{work.thumbnail}"> </iframe>
 						{/if}
 					</div>
-					<div
-						class="Ubuntu-font flex items-center justify-center border-0 p-2 text-center text-lg text-black"
-					>
+					<button
+						class="Ubuntu-font flex items-center justify-center border-0 p-2 text-center text-lg text-black hover:underline"
+						on:click={() => checkMedia(work.work)}>
 						{work.work.title}
-					</div>
+					</button>
 					<div
 						class="Ubuntu-font flex items-center justify-center border-0 p-2 text-center text-lg text-black"
 					>
@@ -468,7 +545,7 @@
 						{/if}
 						{#if work.work.target_progress != work.work.current_progress && work.work.type == 'youtube'}
 							<div class="Ubuntu-font text-lg text-black text-center">
-								{work.work.current_progress} mins
+								{Math.floor(work.work.current_progress/60)} mins
 								({Math.round(work.work.current_progress/work.work.target_progress*100)}%)
 							</div>
 						{/if}
@@ -494,7 +571,7 @@
 							<button class="share-button" on:click={() => shareMedia(work.work)}>
 								<Share size={20}/>
 							</button>
-							<button class="edit-button" on:click={() => editMedia(work.work)}>
+							<button class="edit-button" on:click={() => editMediaModal(work.work)}>
 								<BookMarked size={20}/>
 							</button>
 							<button class="delete-button" on:click={() => openDeleteModal(work.work.id)}>
@@ -508,7 +585,7 @@
 	</div>
 </div>
 <div
-	id="popup"
+	id="delete-popup"
 	class="bg-background fixed inset-0 flex hidden items-center justify-center bg-opacity-75"
 >
 	<div class="w-1/3 rounded-lg bg-white p-6">
@@ -530,3 +607,129 @@
 		</div>
 	</div>
 </div>
+<div
+	id="edit-popup"
+	class="bg-background fixed inset-0 flex hidden items-center justify-center bg-opacity-75"
+>
+	<div class="w-2/5 rounded-lg bg-white p-6">
+		<div class="Ubuntu-font mb-4 text-center text-lg font-bold">Edit {work_title} status</div>
+		<div class="flex flex-col items-center">
+			<!-- Progress Bar -->
+			{#if work_type!=="youtube"}
+				<div class="relative w-[70%] h-2 bg-gray-300 rounded-lg">
+					<div
+					class="h-full bg-background rounded-lg"
+					style="width: {(work_progressValue/work_target_progress)*100}%; position: relative;"
+					>
+					<!-- Orb at the end of the green part -->
+					<div
+						class="absolute top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white border-2 border-black rounded-full"
+						style="left: calc(100% - 0.5rem);"
+					></div>
+					</div>
+				</div>
+			{/if}
+			{#if work_type==="youtube"}
+				<div class="relative w-[70%] h-2 bg-gray-300 rounded-lg">
+					<div
+					class="h-full bg-background rounded-lg"
+					style="width: {
+						(convertYTProgressToSeconds(work_progressValueYT)/work_target_progress)*100
+					}%; position: relative;"
+					>
+					<!-- Orb at the end of the green part -->
+					<div
+						class="absolute top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white border-2 border-black rounded-full"
+						style="left: calc(100% - 0.5rem);"
+					></div>
+					</div>
+				</div>
+			{/if}
+			<div class="w-[80%] flex p-2  justify-center">
+				<!-- Input Field -->
+				{#if work_type!=="youtube"}
+					<div class="flex items-center justify-start w-full">
+						<input
+						type="number"
+						min=0
+						max={work_target_progress}
+						bind:value={work_progressValue}
+						class="mt-2 p-2 border border-gray-300 rounded text-center"
+						/>
+						{#if work_type==="book"}
+							<div class="mt-2 p-3 Ubuntu-font text-sm">
+								pages
+							</div>
+						{/if}
+						{#if work_type==="show"}
+							<div class="mt-2 p-3 Ubuntu-font text-sm">
+								mins
+							</div>
+						{/if}
+						{#if work_type==="movie"}
+							<div class="mt-2 p-3 Ubuntu-font text-sm">
+								episodes
+							</div>
+						{/if}
+					</div>
+					<div class="flex items-center justify-end Ubuntu-font text-sm mt-2 w-full">
+						<span class="px-1">{work_target_progress}</span>
+						{#if work_type==="book"}
+							<span>pages</span>
+						{/if}
+						{#if work_type==="show"}
+							<span>episodes</span>
+						{/if}
+						{#if work_type==="movie"}
+							<span>mins</span>
+						{/if}
+						
+					</div>
+				{/if}
+				{#if work_type==="youtube"}
+					<div class="flex items-center justify-start w-full">
+						{#if work_target_progress>3600}
+							<input
+							type="text"
+							bind:value={work_progressValueYT}
+							class="mt-2 p-2 border border-gray-300 rounded text-center"
+							placeholder="hh:mm:ss"
+							/>
+						{/if}
+						{#if work_target_progress<3600}
+							<input
+							type="text"
+							bind:value={work_progressValueYT}
+							class="mt-2 p-2 border border-gray-300 rounded text-center"
+							placeholder="mm:ss"
+							/>
+						{/if}
+						<div class="flex items-center justify-end Ubuntu-font text-sm mt-2 w-full">
+							{#if work_target_progress>3600}
+								<span class="px-1">{Math.floor(work_target_progress / 60 / 60)}:{Math.floor(work_target_progress / 60 % 60)}:{work_target_progress % 60 % 60}</span>
+							{/if}
+							{#if work_target_progress<3600}
+								<span class="px-1">{Math.floor(work_target_progress / 60)}:{work_target_progress % 60 % 60}</span>
+							{/if}
+						</div>
+					</div>
+				{/if}
+			</div>
+		  </div>
+		<div class="flex justify-center p-6">
+			<button
+				class="Ubuntu-font bg-cancel mr-4 rounded px-4 py-2 text-sm text-white"
+				on:click={cancelEditMedia}
+			>
+				Cancel
+			</button>
+			<button
+				class="Ubuntu-font bg-background rounded px-4 py-2 text-sm text-white"
+				on:click={editMedia}
+			>
+				Save
+			</button>
+		</div>
+	</div>
+</div>
+

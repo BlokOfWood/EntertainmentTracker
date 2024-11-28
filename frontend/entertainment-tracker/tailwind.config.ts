@@ -8,7 +8,8 @@ export default {
 			colors:{
 				header: '#1E293B',
 				background: '#0F172A',
-				delete: '#E82222'
+				delete: '#E82222',
+				cancel: '#929292'
 			},
 			fontSize: {
 				'xxs': '0.5rem'
