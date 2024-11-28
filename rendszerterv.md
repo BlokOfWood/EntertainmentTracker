@@ -135,7 +135,6 @@ Menü-hierarchiák:
   - film keresése cím, IMDb ID alapján
   - találatok közüli könyv hozzáadása
 - Add Media - YouTube:
-  - megjelenítési név megadása
   - YouTube URL megadása
 - Edit Media - Books:
   - oldalszám frissítése
@@ -147,7 +146,7 @@ Menü-hierarchiák:
   - percszám frissítése
   - változások mentése
 - Edit Media - YouTube:
-  - megjelenítési név frissítése
+  - másodpercszám frissítése
   - változások mentése
 - Share With Friend:
   - barát e-mailcímének megadása
