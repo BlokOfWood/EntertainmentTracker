@@ -129,6 +129,21 @@ Add Media - YouTube: a felhasználó URL megadásával tud hozzáadni YouTube vi
 
 ![Add Content - Component](./assets/figma/add_youtube.png)
 
+### View Media
+A felhasználó a dashbordon rá tud menni az egyes művekre és bővebb információt kap az adott műről.
+
+#### View Media - Books
+![View Media - Books](./assets/figma/view_book.png)
+
+#### View Media - TV Shows
+![View Media - TV Shows](./assets/figma/view_tv.png)
+
+#### View Media - Movies
+![View Media - Movies](./assets/figma/view_movie.png)
+
+#### View Media - YouTube
+![View Media - YouTube](./assets/figma/view_youtube.png)
+
 ### Edit Media
 
 Edit Media - Books: A felhasználó frissíteni tudja hanyadik oldalon tart a könyvben.
