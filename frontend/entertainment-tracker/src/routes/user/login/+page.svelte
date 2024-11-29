@@ -5,6 +5,7 @@
 
 	let email = '';
 	let password = '';
+	let currentError: 'Invalid login!' | null = null;
 
 	async function login() {
 		const requestBody = {
@@ -14,12 +15,10 @@
 
 		const response = await sendLoginRequest(requestBody);
 		if (response.ok) {
-			console.log('Login successful');
 			api.setToken(response.body.authentication_token);
 			await goto('/works/dashboard');
 		} else {
-			console.log('Login failed');
-			alert('Invalid email or password');
+			currentError = 'Invalid login!';
 		}
 	}
 </script>
@@ -51,7 +50,7 @@
 			/>
 		</div>
 
-		<div class="mb-8 mt-4">
+		<div class="my-4">
 			<label class="block text-left" for="password">Password</label>
 			<input
 				bind:value={password}
@@ -62,7 +61,11 @@
 			/>
 		</div>
 
-		<button class="bg-background rounded-md px-4 py-2 mb-8 text-sm text-white">Login</button>
+		{#if currentError !== null}
+			<div class="text-delete mb-4 text-left">Invalid login!</div>
+		{/if}
+
+		<button class="bg-background mb-8 rounded-md px-4 py-2 text-sm text-white">Login</button>
 
 		<div class="flex justify-between text-lg">
 			<div>Don't have an account?</div>
