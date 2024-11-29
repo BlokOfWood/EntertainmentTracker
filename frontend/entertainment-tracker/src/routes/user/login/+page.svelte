@@ -62,7 +62,7 @@
 		</div>
 
 		{#if currentError !== null}
-			<div class="text-delete mb-4 text-left">Invalid login!</div>
+			<div class="text-delete mb-4 text-left">{currentError}</div>
 		{/if}
 
 		<button class="bg-background mb-8 rounded-md px-4 py-2 text-sm text-white">Login</button>

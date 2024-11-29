@@ -6,6 +6,8 @@
 	let username = '';
 	let password = '';
 
+	let currentError: string | null = null;
+
 	function register() {
 		const requestBody = {
 			email,
@@ -15,12 +17,14 @@
 
 		sendRegisterRequest(requestBody).then((response) => {
 			if (response.ok) {
-				console.log('Registration successful');
 				login({ email, password });
 				goto('/works/dashboard');
 			} else {
-				console.log('Registration failed');
-				alert('Registration failed');
+				if (response.statusCode === 409) {
+					currentError = 'User with given email address or username already exists!';
+				} else {
+					currentError = 'Invalid registration!';
+				}
 			}
 		});
 	}
@@ -64,7 +68,7 @@
 			/>
 		</div>
 
-		<div class="mb-8 mt-4">
+		<div class="my-4">
 			<label class="block text-left" for="password">Password</label>
 			<input
 				bind:value={password}
@@ -75,9 +79,13 @@
 			/>
 		</div>
 
+		{#if currentError !== null}
+			<div class="text-delete mb-4 text-left">{currentError}</div>
+		{/if}
+
 		<button class="bg-background rounded-md px-4 py-2 text-sm text-white">Register</button>
 
-		<div class="flex justify-between text-lg mt-8">
+		<div class="mt-8 flex justify-between text-lg">
 			<div>Already have an account</div>
 			<a class="font-bold underline" href="/user/login">Log In</a>
 		</div>
