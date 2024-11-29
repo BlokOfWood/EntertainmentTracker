@@ -9,12 +9,14 @@
 
 <script lang="ts">
 	import { BookMarked, Users, Share, Trash2, ChevronDown, ChevronUp, ChevronsUpDown, CircleCheck } from 'lucide-svelte';
-	import type { Work, SharedWork, UpdateWorkRequest, WorkType} from '$lib/api.model';
-	import { deleteWork, getWorks, getSharedWorks, updateWork } from '$lib/works.api';
+	import type { Work, SharedWork, UpdateWorkRequest, ShareWorkRequest} from '$lib/api.model';
+	import { deleteWork, getWorks, getSharedWorks, updateWork, shareWork } from '$lib/works.api';
 	import { getBookByISBN, getTVShowByIMDbId, getMovie, getBookByGoogleId } from '$lib/addmedia.api';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { writable, type Writable } from 'svelte/store';
+
+	//-------------LOADING IN WORKS AND DISPLAYING THEM-------------------
 
 	let works: Writable<WorkPlus[]> = writable([]);
 	let originalWorks: WorkPlus[] = []; // To store the original order of works
@@ -80,7 +82,6 @@
 		fetchWorks();
 	});
 
-	
 	async function getMediaArtSource(work: Work) {
 		let source = "";
 
@@ -139,6 +140,8 @@
 
 		return source;
 	}
+
+	//-------------------SORTING WORKS--------------------------
 
 	let sortedByTitle = 0;
 	let sortedByType = 0;
@@ -301,15 +304,57 @@
 
 	}
 
+	//-------CHECKING, SHARING, EDITING, DELETING WORKS -------------------
+
 	let currentWork!: Work;
+
+	//-----------CHECKING WORKS-------------------------------
+
 	function checkMedia(work: Work) {
 		currentWork = work;
 		goto('/works/dashboard/edit-media', { state: { work } });
 	}
 
-	function shareMedia(work: Work) {
-		goto('/works/dashboard/share-media', { state: { work } });
+	//---------SHARING WORKS-------------------------------
+
+	function openShareMediaModal(work: Work){
+		//goto('/works/dashboard/share-media', { state: { work } });
+
+		currentWork = work;
+
+		const popup = document.getElementById('share-popup');
+		if (popup) {
+			popup.classList.remove('hidden');
+		}
 	}
+
+	let friendEmail="";
+
+	function shareMedia() {
+		
+		console.log('Sharing with:', friendEmail);
+
+		let sharedWork: ShareWorkRequest = {
+			media_entry: currentWork.id,
+			share_with: friendEmail
+		};
+
+		shareWork(sharedWork);
+
+		const popup = document.getElementById('share-popup');
+		if (popup) {
+			popup.classList.add('hidden');
+		}
+	}
+
+	function cancelShareMedia(){
+		const popup = document.getElementById('share-popup');
+		if (popup) {
+			popup.classList.add('hidden');
+		}
+	}
+
+	//-------------EDITING WORKS---------------------------------
 
 	let work_progressValue=0;
 	let work_target_progress=0;
@@ -324,16 +369,7 @@
 		work_title=work.title;
 
 		if(work.type=="youtube"){
-			const hours = Math.floor(work.current_progress / 3600);
-			const minutes = Math.floor((work.current_progress % 3600) / 60);
-			const secs = work.current_progress % 60;
-
-			if(work.target_progress>3600){
-				work_progressValueYT=`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-			}
-			else{
-				work_progressValueYT=`${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-			}
+			convertProgressToYTProgress(work.current_progress);
 		}
 
 		currentWork=work;
@@ -342,6 +378,19 @@
 		if (popup) {
 			popup.classList.remove('hidden');
 		}
+	}
+
+	function convertProgressToYTProgress(progress : number){
+		const hours = Math.floor(progress / 3600);
+			const minutes = Math.floor((progress % 3600) / 60);
+			const secs = progress % 60;
+
+			if(progress>3600){
+				work_progressValueYT=`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+			}
+			else{
+				work_progressValueYT=`${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+			}
 	}
 
 	async function editMedia(){
@@ -396,6 +445,8 @@
 		}
 	}
 
+	//----------------------DELETE MEDIA-------------------------------------
+
 	let idOfDeletedWork!: number;
 
 	function openDeleteModal(id: number) {
@@ -425,6 +476,8 @@
 		}
 	}
 </script>
+
+<!--DASHBOARD-->
 
 <div class="relative z-0 flex h-full flex-grow items-center justify-center py-3">
 	<div class="flex h-full w-full max-w-screen-lg flex-col overflow-auto rounded-lg bg-white">
@@ -568,7 +621,7 @@
 							</div>
 						{/if}
 						{#if !work.shared}
-							<button class="share-button" on:click={() => shareMedia(work.work)}>
+							<button class="share-button" on:click={() => openShareMediaModal(work.work)}>
 								<Share size={20}/>
 							</button>
 							<button class="edit-button" on:click={() => editMediaModal(work.work)}>
@@ -584,6 +637,9 @@
 		</div>
 	</div>
 </div>
+
+<!--DELETE MODAL-->
+
 <div
 	id="delete-popup"
 	class="bg-background fixed inset-0 flex hidden items-center justify-center bg-opacity-75"
@@ -607,6 +663,9 @@
 		</div>
 	</div>
 </div>
+
+<!--EDIT MODAL-->
+
 <div
 	id="edit-popup"
 	class="bg-background fixed inset-0 flex hidden items-center justify-center bg-opacity-75"
@@ -616,34 +675,25 @@
 		<div class="flex flex-col items-center">
 			<!-- Progress Bar -->
 			{#if work_type!=="youtube"}
-				<div class="relative w-[70%] h-2 bg-gray-300 rounded-lg">
-					<div
-					class="h-full bg-background rounded-lg"
-					style="width: {(work_progressValue/work_target_progress)*100}%; position: relative;"
-					>
-					<!-- Orb at the end of the green part -->
-					<div
-						class="absolute top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white border-2 border-black rounded-full"
-						style="left: calc(100% - 0.5rem);"
-					></div>
-					</div>
-				</div>
+			<input
+				id="progress-slider"
+				type="range"
+				min="0"
+				max="{work_target_progress}"
+				bind:value={work_progressValue}
+				class="w-[70%] h-2 rounded-lg"
+			/>
 			{/if}
 			{#if work_type==="youtube"}
-				<div class="relative w-[70%] h-2 bg-gray-300 rounded-lg">
-					<div
-					class="h-full bg-background rounded-lg"
-					style="width: {
-						(convertYTProgressToSeconds(work_progressValueYT)/work_target_progress)*100
-					}%; position: relative;"
-					>
-					<!-- Orb at the end of the green part -->
-					<div
-						class="absolute top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white border-2 border-black rounded-full"
-						style="left: calc(100% - 0.5rem);"
-					></div>
-					</div>
-				</div>
+				<input
+					id="progress-slider"
+					type="range"
+					min="0"
+					max="{work_target_progress}"
+					bind:value={work_progressValue}
+					class="w-[70%] h-2 rounded-lg"
+					on:input={() => convertProgressToYTProgress(work_progressValue)}
+				/>
 			{/if}
 			<div class="w-[80%] flex p-2  justify-center">
 				<!-- Input Field -->
@@ -733,3 +783,36 @@
 	</div>
 </div>
 
+<!--SHARE MODAL-->
+
+<div
+	id="share-popup"
+	class="bg-background fixed inset-0 flex hidden items-center justify-center bg-opacity-75"
+>
+	<div class="w-2/5 rounded-lg bg-white p-6 flex-col flex items-center justify-center">
+		<div class="Ubuntu-font mb-4 text-center text-xl font-bold">Share your progress with a Friend</div>
+		<div class="inline-flex flex-col items-start w-[60%]">
+			<div class="Ubuntu-font p-1 text-sm">Your friend's email:</div>
+			<input
+				type="email"
+				placeholder="Email"
+				bind:value={friendEmail}
+				class="mr-1 rounded-md border p-1.5 w-full"
+			/>
+		</div>
+		<div class="flex justify-center p-6">
+			<button
+				class="Ubuntu-font bg-cancel mr-4 rounded px-4 py-2 text-sm text-white"
+				on:click={cancelShareMedia}
+			>
+				Cancel
+			</button>
+			<button
+				class="Ubuntu-font bg-background rounded px-4 py-2 text-sm text-white"
+				on:click={shareMedia}
+			>
+				Share
+			</button>
+		</div>
+	</div>
+</div>
