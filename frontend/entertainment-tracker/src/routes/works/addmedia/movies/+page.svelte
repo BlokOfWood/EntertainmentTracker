@@ -67,7 +67,7 @@
 			<div>Thumbnail</div>
 			<div>Title</div>
 			<div>Release Date</div>
-			<div>Length</div>
+			<div>Score</div>
 			<div></div>
 			{#if $displayedSeries === null}
 				<div class="col-span-5">No series found</div>
@@ -78,8 +78,7 @@
 					</div>
 					<div>{series.title}</div>
 					<div>{series.release_date}</div>
-					<!-- TODO: nincs runtime -->
-					<div>1</div>
+					<div>{series.vote_average}</div>
 					<div class="text-center">
 						<button
 							class="h-fit w-fit text-center disabled:opacity-35"

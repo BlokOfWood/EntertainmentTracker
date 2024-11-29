@@ -2,12 +2,12 @@
 	import { logout as logoutRequest } from '$lib/user.api';
 	import { goto } from '$app/navigation';
 	import api from './api';
-    import { page } from '$app/stores';
+	import { page } from '$app/stores';
 
-    $: currentUrlValue = $page.url.pathname;
+	$: currentUrlValue = $page.url.pathname;
 
-    const isDashboardPage = () => currentUrlValue.includes('dashboard');
-    const isAddMediaPage = () => currentUrlValue.includes('addmedia');
+	const isDashboardPage = () => currentUrlValue.includes('dashboard');
+	const isAddMediaPage = () => currentUrlValue.includes('addmedia');
 
 	let showLogout = false;
 
@@ -16,7 +16,7 @@
 	}
 
 	function hideLogout(event: MouseEvent) {
-		if(typeof window === 'undefined') return;
+		if (typeof window === 'undefined') return;
 
 		const profileButton = document.querySelector('.profile-picture-button')!;
 		if (!profileButton.contains(event.target as Node)) {
@@ -35,15 +35,17 @@
 			await goto('/user/login');
 		});
 	}
-
 </script>
+
 <svelte:document on:click={hideLogout} />
 <div class="w-100 bg-header relative flex items-center justify-between pl-3 pr-3 shadow-md">
 	<div class="flex items-center">
-		<div class="w-fit pl-2 pr-1 text-right text-white">
-			<img src="/mediamindlogo.png" alt="MediaMind Logo" class="h-6 w-6" />
-		</div>
-		<div class="Ubuntu-font w-fit pr-8 text-left text-2xl text-white">MediaMind</div>
+		<a class="flex items-center" href="/works/dashboard">
+			<div class="w-fit pl-2 pr-1 text-right text-white">
+				<img src="/mediamindlogo.png" alt="MediaMind Logo" class="h-6 w-6" />
+			</div>
+			<div class="Ubuntu-font w-fit pr-8 text-left text-2xl text-white">MediaMind</div>
+		</a>
 		<a
 			href="/works/dashboard"
 			class="text-l w-fit p-2 text-white {isDashboardPage() ? 'font-bold' : ''} Ubuntu-font"

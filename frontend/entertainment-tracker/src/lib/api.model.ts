@@ -83,6 +83,7 @@ export type MovieSearchResponse = {
 	title: string;
 	release_date: string;
 	popularity: number;
+	vote_average: number;
 	thumbnail: string;
 };
 
@@ -102,6 +103,7 @@ export type TvSearchResponse = {
 	title: string;
 	first_air_date: string;
 	popularity: number;
+	vote_average: number;
 	thumbnail: string;
 };
 
