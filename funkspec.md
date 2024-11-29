@@ -104,7 +104,7 @@ A felhasználó a Title, Type, Progress és Shared fejléc elemekkel tudja vált
 ### Share with Friend
 E-mail cím megadásával meg oszthatja a felhasználó egy másik felhasználóval a haladását egy médiában.
 
-![Share with Friend](./assets/figma/share_with_friend.png)
+![Share with Friend](./assets/figma/share_modal.png)
 
 ### Add Media
 A felhasználó az Add Media oldalon tudja kiválasztani milyen médiatípust szeretne hozzáadni - könyvet, sorozatot, filmet, YouTube videót.
