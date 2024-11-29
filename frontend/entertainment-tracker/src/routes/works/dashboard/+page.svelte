@@ -329,25 +329,50 @@
 	}
 
 	let friendEmail="";
+	let shareMessage: Writable<string>=writable("");
 
-	function shareMedia() {
-		
-		console.log('Sharing with:', friendEmail);
+	async function shareMedia() {
 
 		let sharedWork: ShareWorkRequest = {
 			media_entry: currentWork.id,
 			share_with: friendEmail
 		};
 
-		shareWork(sharedWork);
+		try {
+			const response = await shareWork(sharedWork); // Assuming this returns an object with statusCode and ok
 
-		const popup = document.getElementById('share-popup');
-		if (popup) {
-			popup.classList.add('hidden');
+			// Check if the response is OK
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.statusCode}`); // Use statusCode instead of status
+			}
+
+			// If the function succeeds, you can handle success here
+			const popup = document.getElementById('share-popup');
+			if (popup) {
+				popup.classList.add('hidden');
+			}
+		} catch (error) {
+			console.error('Error occurred while sharing work:', error);
+
+			// Check the error message for specific status codes
+			if (error instanceof Error) {
+			// Check the error message for specific status codes
+			if (error.message.includes('404')) {
+				$shareMessage = "User  doesn't exist."; // Set message for 404 error
+			} else if (error.message.includes('409')) {
+				$shareMessage = "Already shared this media with this user."; // Set message for 409 error
+			} else {
+				$shareMessage = "Wrong email address."; // Fallback message for other errors
+			}
+			} else {
+				// Handle the case where error is not an instance of Error
+				$shareMessage = "Wrong email address.";
+			}
 		}
 	}
 
 	function cancelShareMedia(){
+		$shareMessage="";
 		const popup = document.getElementById('share-popup');
 		if (popup) {
 			popup.classList.add('hidden');
@@ -393,12 +418,9 @@
 			}
 	}
 
-	async function editMedia(){
-		const popup = document.getElementById('edit-popup');
-		if (popup) {
-			popup.classList.add('hidden');
-		}
+	let editMessage: Writable<string>=writable("");
 
+	async function editMedia(){
 		if(currentWork.type=="youtube"){
 			work_progressValue=convertYTProgressToSeconds(work_progressValueYT);
 		}
@@ -413,9 +435,28 @@
 			};
 
 			console.log('New progress: ' + newDetails.current_progress);
-			updateWork(currentWork.id, newDetails);
+			
 
-			await fetchWorks();
+			try {
+				const response = await updateWork(currentWork.id, newDetails); // Assuming this returns an object with statusCode and ok
+
+				// Check if the response is OK
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.statusCode}`); // Use statusCode instead of status
+				}
+
+				// If the function succeeds, you can handle success here
+				const popup = document.getElementById('edit-popup');
+				if (popup) {
+					popup.classList.add('hidden');
+				}
+				await fetchWorks();
+			} catch (error) {
+				console.error('Error occurred while sharing work:', error);
+
+				$editMessage = "Invalid progress.";
+				work_progressValue=currentWork.current_progress;
+			}
 		}
 	}
 
@@ -443,6 +484,8 @@
 		if (popup) {
 			popup.classList.add('hidden');
 		}
+
+		$editMessage="";
 	}
 
 	//----------------------DELETE MEDIA-------------------------------------
@@ -766,7 +809,8 @@
 				{/if}
 			</div>
 		  </div>
-		<div class="flex justify-center p-6">
+		  <div id='edit-message' class="Ubuntu-font pt-1 pb-2 text-sm text-delete w-full text-center">{$editMessage}</div>
+		  <div class="flex justify-center">
 			<button
 				class="Ubuntu-font bg-cancel mr-4 rounded px-4 py-2 text-sm text-white"
 				on:click={cancelEditMedia}
@@ -800,7 +844,8 @@
 				class="mr-1 rounded-md border p-1.5 w-full"
 			/>
 		</div>
-		<div class="flex justify-center p-6">
+		<div id='share-message' class="Ubuntu-font p-2 text-sm text-delete">{$shareMessage}</div>
+		<div class="flex justify-center">
 			<button
 				class="Ubuntu-font bg-cancel mr-4 rounded px-4 py-2 text-sm text-white"
 				on:click={cancelShareMedia}
