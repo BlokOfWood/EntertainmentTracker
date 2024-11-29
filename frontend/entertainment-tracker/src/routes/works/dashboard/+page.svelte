@@ -653,15 +653,9 @@
 					</div>
 					<div class="flex items-center justify-center space-x-5 p-2">
 						{#if work.shared}
-							<div class="share-button opacity-20">
-								<Share size={20}/>
-							</div>
-							<div class="edit-button opacity-20">
-								<BookMarked size={20}/>
-							</div>
-							<div class="delete-button opacity-20">
+							<button class="delete-button opacity-20" on:click={() => openDeleteModal(work.work.id)}>
 								<Trash2 color=red size={20}/>
-							</div>
+							</button>
 						{/if}
 						{#if !work.shared}
 							<button class="share-button" on:click={() => openShareMediaModal(work.work)}>
