@@ -38,11 +38,11 @@
 </div>
 
 <div
-	class="bg-background Ubuntu-font absolute inset-0 flex items-center justify-center font-[Inter]"
+	class="bg-background Ubuntu-font absolute inset-0 p-2 flex items-center justify-center font-[Inter] overflow-auto"
 >
 	<form
 		on:submit={register}
-		class="Inter-font w-full max-w-[400px] rounded-2xl bg-white p-6 text-center"
+		class="Inter-font w-full max-w-[400px] z-20 rounded-2xl bg-white p-6 text-center overflow-auto min-h-0 max-h-full"
 	>
 		<h1 class="mb-8 text-left text-3xl">Register</h1>
 
