@@ -712,25 +712,55 @@
 		<div class="flex flex-col items-center">
 			<!-- Progress Bar -->
 			{#if work_type!=="youtube"}
-			<input
-				id="progress-slider"
-				type="range"
-				min="0"
-				max="{work_target_progress}"
-				bind:value={work_progressValue}
-				class="w-[70%] h-2 rounded-lg"
-			/>
+			<div class="flex flex-col items-center w-[70%]">
+				<div class="relative w-full">
+					<div class="h-2 bg-slider rounded-lg">
+						<div class="h-full bg-background rounded-lg"
+							style="width: {(work_progressValue/work_target_progress)*100}%; position: relative;">
+						<!-- Orb at the end of the green part -->
+						<div
+							class="absolute top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white border-2 border-black rounded-full"
+							style="left: calc(100% - 0.5rem);"
+						></div>
+						</div>
+					</div>
+					<input
+						id="progress-slider"
+						type="range"
+						min="0"
+						max={work_target_progress}
+						bind:value={work_progressValue}
+						class="absolute top-0 left-0 w-full h-2 bg-transparent cursor-pointer"
+						style="pointer-events: all; opacity: 0; z-index: 1;"
+					/>
+				</div>
+			</div>
 			{/if}
 			{#if work_type==="youtube"}
-				<input
-					id="progress-slider"
-					type="range"
-					min="0"
-					max="{work_target_progress}"
-					bind:value={work_progressValue}
-					class="w-[70%] h-2 rounded-lg"
-					on:input={() => convertProgressToYTProgress(work_progressValue)}
-				/>
+			<div class="flex flex-col items-center w-[70%]">
+				<div class="relative w-full">
+					<div class="h-2 bg-slider rounded-lg">
+						<div class="h-full bg-background rounded-lg"
+							style="width: {(work_progressValue/work_target_progress)*100}%; position: relative;">
+						<!-- Orb at the end of the green part -->
+						<div
+							class="absolute top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white border-2 border-black rounded-full"
+							style="left: calc(100% - 0.5rem);"
+						></div>
+						</div>
+					</div>
+					<input
+						id="progress-slider"
+						type="range"
+						min="0"
+						max={work_target_progress}
+						bind:value={work_progressValue}
+						class="absolute top-0 left-0 w-full h-2 bg-transparent cursor-pointer"
+						style="pointer-events: all; opacity: 0; z-index: 1;"
+						on:input={() => convertProgressToYTProgress(work_progressValue)}
+					/>
+				</div>
+			</div>
 			{/if}
 			<div class="w-[80%] flex p-2  justify-center">
 				<!-- Input Field -->

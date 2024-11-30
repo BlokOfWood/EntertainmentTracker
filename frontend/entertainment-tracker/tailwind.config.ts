@@ -9,7 +9,8 @@ export default {
 				header: '#1E293B',
 				background: '#0F172A',
 				delete: '#E82222',
-				cancel: '#929292'
+				cancel: '#929292',
+				slider: '#F4F4F5'
 			},
 			fontSize: {
 				'xxs': '0.5rem'
