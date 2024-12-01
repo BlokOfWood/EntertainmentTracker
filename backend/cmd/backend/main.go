@@ -169,3 +169,29 @@ func openDB(cfg config) (*sql.DB, error) {
 
 	return db, nil
 }
+
+func openTestDB() (*sql.DB, error) {
+	db, err := sql.Open("sqlite", ":memory:")
+	if err != nil {
+		return nil, err
+	}
+	driver, err := sqlite.WithInstance(db, &sqlite.Config{})
+	if err != nil {
+		return nil, err
+	}
+	m, err := migrate.NewWithDatabaseInstance("file://../../migrations", "sqlite", driver)
+	if err != nil {
+		return nil, err
+	}
+	err = m.Up()
+	if err != nil && !errors.Is(err, migrate.ErrNoChange) {
+		return nil, err
+	}
+
+	err = db.Ping()
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
+}
