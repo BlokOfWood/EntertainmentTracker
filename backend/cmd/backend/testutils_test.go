@@ -129,6 +129,51 @@ func (ts *testServer) postWithAuth(t *testing.T, urlPath string, body io.Reader,
 	return rs.StatusCode, rs.Header, string(bodyBytes)
 }
 
+func (ts *testServer) patchWithAuth(t *testing.T, urlPath string, body io.Reader, token string) (int, http.Header, string) {
+	req, err := http.NewRequest("PATCH", ts.URL+urlPath, body)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	rs, err := ts.Client().Do(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	defer rs.Body.Close()
+	bodyBytes, err := io.ReadAll(rs.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+	bodyBytes = bytes.TrimSpace(bodyBytes)
+
+	return rs.StatusCode, rs.Header, string(bodyBytes)
+}
+
+func (ts *testServer) deleteWithAuth(t *testing.T, urlPath string, token string) (int, http.Header, string) {
+	req, err := http.NewRequest("DELETE", ts.URL+urlPath, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	rs, err := ts.Client().Do(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	defer rs.Body.Close()
+	bodyBytes, err := io.ReadAll(rs.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+	bodyBytes = bytes.TrimSpace(bodyBytes)
+
+	return rs.StatusCode, rs.Header, string(bodyBytes)
+}
+
 func (ts *testServer) makeUser(t *testing.T, user *data.User, password string) (int, http.Header, string) {
 	if user == nil {
 		user = &data.User{
