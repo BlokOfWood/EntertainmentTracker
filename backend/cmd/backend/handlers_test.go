@@ -3,7 +3,9 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strconv"
 	"testing"
 	"time"
 
@@ -345,5 +347,410 @@ func TestInvalidateAuthenticationTokenHandler_DBError(t *testing.T) {
 	app.db.Close()
 
 	code, _, _ = ts.getWithAuth(t, "/v1/users/logout", token)
+	assert.Equal(t, http.StatusInternalServerError, code)
+}
+
+func TestCreateMediaEntryHandler(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	code, _, _ := ts.makeUser(t, nil, "")
+	assert.Equal(t, http.StatusCreated, code)
+
+	token := ts.getToken(t, "", "")
+
+	input := map[string]interface{}{
+		"third_party_id":   "808",
+		"title":            "Shrek",
+		"type":             "movie",
+		"status":           "watching",
+		"current_progress": 12,
+		"target_progress":  100,
+	}
+	inputJSON, err := json.Marshal(input)
+	assert.NoError(t, err)
+
+	code, _, bodyString := ts.postWithAuth(t, "/v1/mediaentries", bytes.NewReader(inputJSON), token)
+	assert.Equal(t, http.StatusCreated, code)
+
+	var body map[string]interface{}
+	err = json.Unmarshal([]byte(bodyString), &body)
+	assert.NoError(t, err)
+	entry, ok := body["mediaEntry"].(map[string]interface{})
+	assert.True(t, ok)
+
+	assert.Equal(t, "Shrek", entry["title"])
+	assert.Equal(t, "movie", entry["type"])
+	assert.Equal(t, "watching", entry["status"])
+	assert.Equal(t, float64(12), entry["current_progress"])
+	assert.Equal(t, float64(100), entry["target_progress"])
+	assert.NotEmpty(t, entry["created_at"])
+}
+
+func TestCreateMediaEntryHandler_InvalidJSON(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	code, _, _ := ts.makeUser(t, nil, "")
+	assert.Equal(t, http.StatusCreated, code)
+
+	token := ts.getToken(t, "", "")
+
+	code, _, _ = ts.postWithAuth(t, "/v1/mediaentries", bytes.NewReader([]byte("invalid json")), token)
+	assert.Equal(t, http.StatusBadRequest, code)
+}
+
+func TestCreateMediaEntryHandler_ValidationError(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	code, _, _ := ts.makeUser(t, nil, "")
+	assert.Equal(t, http.StatusCreated, code)
+
+	token := ts.getToken(t, "", "")
+
+	input := map[string]interface{}{
+		"third_party_id":   "808",
+		"title":            "",
+		"type":             "movie",
+		"status":           "watching",
+		"current_progress": 12,
+		"target_progress":  100,
+	}
+	inputJSON, err := json.Marshal(input)
+	assert.NoError(t, err)
+
+	code, _, _ = ts.postWithAuth(t, "/v1/mediaentries", bytes.NewReader(inputJSON), token)
+	assert.Equal(t, http.StatusUnprocessableEntity, code)
+}
+
+func TestCreateMediaEntryHandler_Unauthenticated(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	code, _, _ := ts.post(t, "/v1/mediaentries", bytes.NewReader([]byte("{}")))
+	assert.Equal(t, http.StatusUnauthorized, code)
+}
+
+func TestCreateMediaEntryHandler_DBError(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	code, _, _ := ts.makeUser(t, nil, "")
+	assert.Equal(t, http.StatusCreated, code)
+
+	token := ts.getToken(t, "", "")
+
+	app.db.Close()
+
+	code, _, _ = ts.postWithAuth(t, "/v1/mediaentries", bytes.NewReader([]byte("{}")), token)
+	assert.Equal(t, http.StatusInternalServerError, code)
+}
+
+func TestListMediaEntriesHandler(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	code, _, _ := ts.makeUser(t, nil, "")
+	assert.Equal(t, http.StatusCreated, code)
+
+	token := ts.getToken(t, "", "")
+
+	code, _, _ = ts.postWithAuth(t, "/v1/mediaentries", bytes.NewReader([]byte(`{"third_party_id": "808", "title": "Shrek", "type": "movie", "status": "watching", "current_progress": 12, "target_progress": 100}`)), token)
+	assert.Equal(t, http.StatusCreated, code)
+
+	code, _, bodyString := ts.getWithAuth(t, "/v1/mediaentries", token)
+	assert.Equal(t, http.StatusOK, code)
+
+	var body map[string]interface{}
+	err := json.Unmarshal([]byte(bodyString), &body)
+	assert.NoError(t, err)
+	entries, ok := body["mediaEntries"].([]interface{})
+	assert.True(t, ok)
+	assert.Len(t, entries, 1)
+	entry, ok := entries[0].(map[string]interface{})
+	assert.True(t, ok)
+	assert.Equal(t, "Shrek", entry["title"])
+	assert.Equal(t, "movie", entry["type"])
+	assert.Equal(t, "watching", entry["status"])
+	assert.Equal(t, float64(12), entry["current_progress"])
+	assert.Equal(t, float64(100), entry["target_progress"])
+	assert.NotEmpty(t, entry["created_at"])
+}
+
+func TestListMediaEntriesHandler_Unauthenticated(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	code, _, _ := ts.get(t, "/v1/mediaentries")
+	assert.Equal(t, http.StatusUnauthorized, code)
+}
+
+func TestListMediaEntriesHandler_DBError(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	code, _, _ := ts.makeUser(t, nil, "")
+	assert.Equal(t, http.StatusCreated, code)
+
+	token := ts.getToken(t, "", "")
+
+	app.db.Close()
+
+	code, _, _ = ts.getWithAuth(t, "/v1/mediaentries", token)
+	assert.Equal(t, http.StatusInternalServerError, code)
+}
+
+func TestShowMediaEntryHandler(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	code, _, _ := ts.makeUser(t, nil, "")
+	assert.Equal(t, http.StatusCreated, code)
+
+	token := ts.getToken(t, "", "")
+
+	code, _, bodyString := ts.postWithAuth(t, "/v1/mediaentries", bytes.NewReader([]byte(`{"third_party_id": "808", "title": "Shrek", "type": "movie", "status": "watching", "current_progress": 12, "target_progress": 100}`)), token)
+	assert.Equal(t, http.StatusCreated, code)
+
+	var body map[string]interface{}
+	err := json.Unmarshal([]byte(bodyString), &body)
+	assert.NoError(t, err)
+	entry, ok := body["mediaEntry"].(map[string]interface{})
+	assert.True(t, ok)
+	id := strconv.FormatInt(int64(entry["id"].(float64)), 10)
+	path := fmt.Sprintf("/v1/mediaentries/%s", id)
+
+	code, _, bodyString = ts.getWithAuth(t, path, token)
+	assert.Equal(t, http.StatusOK, code)
+
+	err = json.Unmarshal([]byte(bodyString), &body)
+	assert.NoError(t, err)
+	entry, ok = body["mediaEntry"].(map[string]interface{})
+	assert.True(t, ok)
+	assert.Equal(t, "Shrek", entry["title"])
+	assert.Equal(t, "movie", entry["type"])
+	assert.Equal(t, "watching", entry["status"])
+	assert.Equal(t, float64(12), entry["current_progress"])
+	assert.Equal(t, float64(100), entry["target_progress"])
+	assert.NotEmpty(t, entry["created_at"])
+}
+
+func TestShowMediaEntryHandler_Unauthenticated(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	code, _, _ := ts.get(t, "/v1/mediaentries/1")
+	assert.Equal(t, http.StatusUnauthorized, code)
+}
+
+func TestShowMediaEntryHandler_DBError(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	code, _, _ := ts.makeUser(t, nil, "")
+	assert.Equal(t, http.StatusCreated, code)
+
+	token := ts.getToken(t, "", "")
+
+	app.db.Close()
+
+	code, _, _ = ts.getWithAuth(t, "/v1/mediaentries/1", token)
+	assert.Equal(t, http.StatusInternalServerError, code)
+}
+
+func TestUpdateMediaEntryHandler(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	code, _, _ := ts.makeUser(t, nil, "")
+	assert.Equal(t, http.StatusCreated, code)
+
+	token := ts.getToken(t, "", "")
+
+	code, _, bodyString := ts.postWithAuth(t, "/v1/mediaentries", bytes.NewReader([]byte(`{"third_party_id": "808", "title": "Shrek", "type": "movie", "status": "watching", "current_progress": 12, "target_progress": 100}`)), token)
+	assert.Equal(t, http.StatusCreated, code)
+
+	var body map[string]interface{}
+	err := json.Unmarshal([]byte(bodyString), &body)
+	assert.NoError(t, err)
+	entry, ok := body["mediaEntry"].(map[string]interface{})
+	assert.True(t, ok)
+	id := strconv.FormatInt(int64(entry["id"].(float64)), 10)
+	path := fmt.Sprintf("/v1/mediaentries/%s", id)
+
+	input := map[string]interface{}{
+		"status":           "completed",
+		"current_progress": 100,
+	}
+	inputJSON, err := json.Marshal(input)
+	assert.NoError(t, err)
+
+	code, _, bodyString = ts.patchWithAuth(t, path, bytes.NewReader(inputJSON), token)
+	assert.Equal(t, http.StatusOK, code)
+
+	err = json.Unmarshal([]byte(bodyString), &body)
+	assert.NoError(t, err)
+	entry, ok = body["mediaEntry"].(map[string]interface{})
+	assert.True(t, ok)
+	assert.Equal(t, "Shrek", entry["title"])
+	assert.Equal(t, "movie", entry["type"])
+	assert.Equal(t, "completed", entry["status"])
+	assert.Equal(t, float64(100), entry["current_progress"])
+	assert.Equal(t, float64(100), entry["target_progress"])
+	assert.NotEmpty(t, entry["created_at"])
+}
+
+func TestUpdateMediaEntryHandler_InvalidJSON(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	code, _, _ := ts.makeUser(t, nil, "")
+	assert.Equal(t, http.StatusCreated, code)
+
+	token := ts.getToken(t, "", "")
+
+	code, _, _ = ts.postWithAuth(t, "/v1/mediaentries", bytes.NewReader([]byte(`{"third_party_id": "808", "title": "Shrek", "type": "movie", "status": "watching", "current_progress": 12, "target_progress": 100}`)), token)
+	assert.Equal(t, http.StatusCreated, code)
+
+	code, _, _ = ts.patchWithAuth(t, "/v1/mediaentries/1", bytes.NewReader([]byte("invalid json")), token)
+	assert.Equal(t, http.StatusBadRequest, code)
+}
+
+func TestUpdateMediaEntryHandler_ValidationError(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	code, _, _ := ts.makeUser(t, nil, "")
+	assert.Equal(t, http.StatusCreated, code)
+
+	token := ts.getToken(t, "", "")
+
+	code, _, _ = ts.postWithAuth(t, "/v1/mediaentries", bytes.NewReader([]byte(`{"third_party_id": "808", "title": "Shrek", "type": "movie", "status": "watching", "current_progress": 12, "target_progress": 100}`)), token)
+	assert.Equal(t, http.StatusCreated, code)
+
+	input := map[string]interface{}{
+		"status":           "invalid",
+		"current_progress": 100,
+	}
+	inputJSON, err := json.Marshal(input)
+	assert.NoError(t, err)
+
+	code, _, _ = ts.patchWithAuth(t, "/v1/mediaentries/1", bytes.NewReader(inputJSON), token)
+	assert.Equal(t, http.StatusUnprocessableEntity, code)
+}
+
+func TestUpdateMediaEntryHandler_Unauthenticated(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	token := "invalidtoken"
+
+	code, _, _ := ts.patchWithAuth(t, "/v1/mediaentries/1", bytes.NewReader([]byte("{}")), token)
+	assert.Equal(t, http.StatusUnauthorized, code)
+}
+
+func TestUpdateMediaEntryHandler_DBError(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	code, _, _ := ts.makeUser(t, nil, "")
+	assert.Equal(t, http.StatusCreated, code)
+
+	token := ts.getToken(t, "", "")
+
+	app.db.Close()
+
+	code, _, _ = ts.patchWithAuth(t, "/v1/mediaentries/1", bytes.NewReader([]byte("{}")), token)
+	assert.Equal(t, http.StatusInternalServerError, code)
+}
+
+func TestDeleteMediaEntryHandler(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	code, _, _ := ts.makeUser(t, nil, "")
+	assert.Equal(t, http.StatusCreated, code)
+
+	token := ts.getToken(t, "", "")
+
+	code, _, bodyString := ts.postWithAuth(t, "/v1/mediaentries", bytes.NewReader([]byte(`{"third_party_id": "808", "title": "Shrek", "type": "movie", "status": "watching", "current_progress": 12, "target_progress": 100}`)), token)
+	assert.Equal(t, http.StatusCreated, code)
+
+	var body map[string]interface{}
+	err := json.Unmarshal([]byte(bodyString), &body)
+	assert.NoError(t, err)
+	entry, ok := body["mediaEntry"].(map[string]interface{})
+	assert.True(t, ok)
+	id := strconv.FormatInt(int64(entry["id"].(float64)), 10)
+	path := fmt.Sprintf("/v1/mediaentries/%s", id)
+
+	code, _, _ = ts.deleteWithAuth(t, path, token)
+	assert.Equal(t, http.StatusOK, code)
+
+	code, _, _ = ts.getWithAuth(t, path, token)
+	assert.Equal(t, http.StatusNotFound, code)
+}
+
+func TestDeleteMediaEntryHandler_Unauthenticated(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	token := "invalid"
+
+	code, _, _ := ts.deleteWithAuth(t, "/v1/mediaentries/1", token)
+	assert.Equal(t, http.StatusUnauthorized, code)
+}
+
+func TestDeleteMediaEntryHandler_DBError(t *testing.T) {
+	app := newTestApplication(t)
+
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	code, _, _ := ts.makeUser(t, nil, "")
+	assert.Equal(t, http.StatusCreated, code)
+
+	token := ts.getToken(t, "", "")
+
+	app.db.Close()
+
+	code, _, _ = ts.deleteWithAuth(t, "/v1/mediaentries/1", token)
 	assert.Equal(t, http.StatusInternalServerError, code)
 }
