@@ -10,7 +10,7 @@
 <script lang="ts">
 	import { BookMarked, Users, Share, Trash2, ChevronDown, ChevronUp, ChevronsUpDown, CircleCheck } from 'lucide-svelte';
 	import type { Work, SharedWork, UpdateWorkRequest, ShareWorkRequest} from '$lib/api.model';
-	import { deleteWork, getWorks, getSharedWorks, updateWork, shareWork } from '$lib/works.api';
+	import { deleteWork, deleteSharedWork, getWorks, getSharedWorks, updateWork, shareWork } from '$lib/works.api';
 	import { getBookByISBN, getTVShowByIMDbId, getMovie, getBookByGoogleId } from '$lib/addmedia.api';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
@@ -491,10 +491,12 @@
 	//----------------------DELETE MEDIA-------------------------------------
 
 	let idOfDeletedWork!: number;
+	let isWorkAboutToBeDeletedShared!: boolean;
 
-	function openDeleteModal(id: number) {
+	function openDeleteModal(id: number, isShared: boolean) {
 		console.log('deleting media');
 		idOfDeletedWork = id;
+		isWorkAboutToBeDeletedShared=isShared;
 
 		const popup = document.getElementById('delete-popup');
 		if (popup) {
@@ -508,12 +510,20 @@
 			popup.classList.add('hidden');
 		}
 
-		await deleteWork(idOfDeletedWork);
+		if(isWorkAboutToBeDeletedShared){
+			await deleteSharedWork(idOfDeletedWork);
+			console.log("Media unshared with me.")
+		}
+		else{
+			await deleteWork(idOfDeletedWork);
+			console.log("Deleted media.")
+		}
+		
 		await fetchWorks();
 	}
 
 	function cancelDeletingMedia() {
-		const popup = document.getElementById('delte-popup');
+		const popup = document.getElementById('delete-popup');
 		if (popup) {
 			popup.classList.add('hidden');
 		}
@@ -653,7 +663,7 @@
 					</div>
 					<div class="flex items-center justify-center space-x-5 p-2">
 						{#if work.shared}
-							<button class="delete-button opacity-20" on:click={() => openDeleteModal(work.work.id)}>
+							<button class="delete-button" on:click={() => openDeleteModal(work.work.id, work.shared)}>
 								<Trash2 color=red size={20}/>
 							</button>
 						{/if}
@@ -664,7 +674,7 @@
 							<button class="edit-button" on:click={() => editMediaModal(work.work)}>
 								<BookMarked size={20}/>
 							</button>
-							<button class="delete-button" on:click={() => openDeleteModal(work.work.id)}>
+							<button class="delete-button" on:click={() => openDeleteModal(work.work.id, work.shared)}>
 								<Trash2 color=red size={20}/>
 							</button>
 						{/if}
