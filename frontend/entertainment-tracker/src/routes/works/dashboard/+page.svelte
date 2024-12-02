@@ -1,12 +1,3 @@
-<script context="module">
-	export type WorkPlus = {
-		work: Work;
-		shared: boolean;
-		sharedBy: string;
-		thumbnail: string;
-	};
-</script>
-
 <script lang="ts">
 	import { BookMarked, Users, Share, Trash2, ChevronDown, ChevronUp, ChevronsUpDown, CircleCheck } from 'lucide-svelte';
 	import type { Work, SharedWork, UpdateWorkRequest, ShareWorkRequest} from '$lib/api.model';
@@ -15,130 +6,23 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { writable, type Writable } from 'svelte/store';
+	import type { WorkPlus } from './dashboard'
+	import {fetchWorks, sortByTitle, sortByType, sortByProgress, sortByShared} from './dashboard'
 
 	//-------------LOADING IN WORKS AND DISPLAYING THEM-------------------
 
 	let works: Writable<WorkPlus[]> = writable([]);
 	let originalWorks: WorkPlus[] = []; // To store the original order of works
 
-	async function fetchWorks() {
-		works.update(() => []);
-
-		let currentNotSharedWorks: Work[] = [];
-
-		const responseNotShared = await getWorks();
-		if (responseNotShared.ok) {
-			console.log('not shared works fetched successfully');
-			currentNotSharedWorks = responseNotShared.body.mediaEntries;
-
-			// Use a for...of loop to handle async await
-			for (const currentNotSharedWork of currentNotSharedWorks) {
-				let source = await getMediaArtSource(currentNotSharedWork);
-				
-				const workPlus: WorkPlus = {
-					work: currentNotSharedWork,
-					shared: false,
-					sharedBy: '',
-					thumbnail: source
-				};
-				works.update((existing) => [...existing, workPlus]);
-			}
-			originalWorks = $works;
-		}
-
-		let currentSharedWorks: SharedWork[] = [];
-
-		const responseShared = await getSharedWorks();
-		if (responseShared.ok) {
-			console.log('shared works fetched successfully');
-			currentSharedWorks = responseShared.body.sharedEntries;
-			if (currentSharedWorks != null) {
-				// Use a for...of loop here as well
-				for (const currentSharedWork of currentSharedWorks) {
-					let source = await getMediaArtSource(currentSharedWork.media_entry);
-				
-					const workPlus: WorkPlus = {
-						work: currentSharedWork.media_entry,
-						shared: true,
-						sharedBy: '',
-						thumbnail: source
-					};
-					works.update((existing) => [...existing, workPlus]);
-				}
-				originalWorks = $works;
-			}
-		}
-
-		$works = [...$works].sort((a, b) => {
-			if (a.work.created_at > b.work.created_at) return -1; // a comes before b
-			if (a.work.created_at < b.work.created_at) return 1; // a comes after b
-			return 0; // a and b are equal
-		});
-		
-		originalWorks = $works;
-	}
-
 	onMount(async () => {
-		fetchWorks();
+    	await handleFetchWorks();
 	});
 
-	async function getMediaArtSource(work: Work) {
-		let source = "";
-
-		if (work.type === 'book') {
-			if (work.third_party_id !== "") {
-				try {
-					const response = await getBookByGoogleId(work.third_party_id);
-					const currentBook = response.body.book; 
-					if (currentBook) { 
-						source = currentBook.thumbnail;
-					} else {
-						console.error("Book data is not available - Google Books API");
-						const isbnResponse = await getBookByISBN(work.third_party_id);
-						const isbnBook = isbnResponse.body.book; 
-						if (isbnBook) { 
-							source = isbnBook.thumbnail;
-						} else {
-							console.error("Book data is not available - ISBN");
-						}
-					}
-				} catch (error) {
-					console.error("Error fetching book data:", error);
-				}
-			}
-		} else if (work.type === 'movie') {
-			if (work.third_party_id !== "") {
-				try {
-					const response = await getMovie(Number(work.third_party_id));
-					const currentMovie = response.body.movie; 
-					if (currentMovie) { 
-						source = currentMovie.thumbnail;
-					} else {
-						console.error("Movie data is not available");
-					}    
-				} catch (error) {
-					console.error("Error fetching movie data:", error);
-				}
-			}
-		} else if (work.type === 'show') {
-			if (work.third_party_id !== "") {
-				try {
-					const response = await getTVShowByIMDbId(Number(work.third_party_id));
-					const currentShow = response.body.tvshow; 
-					if (currentShow) { 
-						source = currentShow.thumbnail;
-					} else {
-						console.error("Show data is not available");
-					}    
-				} catch (error) {
-					console.error("Error fetching show data:", error);
-				}
-			}
-		} else if (work.type === 'youtube') {
-			source = `https://www.youtube.com/embed/${work.third_party_id}?si=dourAMMy3-5pBbJr`;
-		}
-
-		return source;
+	async function handleFetchWorks(){
+		// Await the fetchWorks to get the data
+		const fetchedWorks = await fetchWorks();
+		works.set(fetchedWorks); // Set the fetched works to the writable store
+		originalWorks = [...fetchedWorks]; // Store a copy of the original works
 	}
 
 	//-------------------SORTING WORKS--------------------------
@@ -148,160 +32,49 @@
 	let sortedByProgress = 0;
 	let sortedByShared = 0;
 
-	function sortByTitle() {
+	function handleSortByTitle(){
+		const { sortedByTitle: newSortedByTitle, sortedWorks } = sortByTitle(sortedByTitle, originalWorks);
+
+        // Update the writable stores
+        sortedByTitle = newSortedByTitle; // Update the local variable
+        works.set(sortedWorks);
+
 		sortedByType = 0;
-		sortedByProgress = 0;
-		sortedByShared = 0;
-
-		if (sortedByTitle==2) {
-			sortedByTitle = 0;
-			$works = originalWorks;
-			console.log('not sorted by title');
-		} else if(sortedByTitle==0){
-			sortedByTitle = sortedByTitle+1;
-
-			// Sort and create a new reference for works
-			$works = [...originalWorks].sort((a, b) => {
-				if (a.work.title < b.work.title) return -1; // a comes before b
-				if (a.work.title > b.work.title) return 1; // a comes after b
-				return 0; // a and b are equal
-			});
-
-			console.log('sort by title (asc)');
-		}
-		else{
-			sortedByTitle = sortedByTitle+1;
-
-			// Sort and create a new reference for works
-			$works = [...originalWorks].sort((a, b) => {
-				if (a.work.title > b.work.title) return -1; // a comes before b
-				if (a.work.title < b.work.title) return 1; // a comes after b
-				return 0; // a and b are equal
-			});
-
-			console.log('sort by title (desc)');
-		}
+    	sortedByProgress = 0;
+    	sortedByShared = 0;
 	}
 
-	function sortByType() {
-		$works = originalWorks;
+	function handleSortByType(){
+		const { sortedByType: newSortedByType, sortedWorks } = sortByType(sortedByType, originalWorks);
+
+		sortedByType = newSortedByType; // Update the local variable
+        works.set(sortedWorks);
 
 		sortedByTitle = 0;
 		sortedByProgress = 0;
 		sortedByShared = 0;
-
-		if (sortedByType==2) {
-			sortedByType = 0;
-			console.log('not sorted by type');
-		} else if (sortedByType==0){
-			sortedByType = 1;
-
-			// Sort and create a new reference for works
-			$works = [...$works].sort((a, b) => {
-				if (a.work.type < b.work.type) return -1; // a comes before b
-				if (a.work.type > b.work.type) return 1; // a comes after b
-				return 0; // a and b are equal
-			});
-
-			console.log('sort by type (asc)');
-		}
-		else{
-			sortedByType = 2;
-
-			// Sort and create a new reference for works
-			$works = [...$works].sort((a, b) => {
-				if (a.work.type > b.work.type) return -1; // a comes before b
-				if (a.work.type < b.work.type) return 1; // a comes after b
-				return 0; // a and b are equal
-			});
-
-			console.log('sort by type (desc)');
-		}
 	}
 
-	function sortByProgress() {
-		$works = originalWorks;
+	function handleSortByProgress(){
+		const { sortedByProgress: newSortedByProgress, sortedWorks } = sortByProgress(sortedByProgress, originalWorks);
+
+		sortedByProgress = newSortedByProgress; // Update the local variable
+        works.set(sortedWorks);
 
 		sortedByTitle = 0;
 		sortedByType = 0;
 		sortedByShared = 0;
-
-		if (sortedByProgress==2) {
-			sortedByProgress = 0;
-			console.log('not sorted by progress');
-		} else if(sortedByProgress==0) {
-			sortedByProgress = 1;
-
-			// Sort and create a new reference for works
-			$works = [...$works].sort((a, b) => {
-				if (
-					a.work.target_progress / a.work.current_progress < b.work.target_progress / b.work.current_progress
-				)
-					return -1; // a comes before b
-				if (
-					a.work.target_progress / a.work.current_progress > b.work.target_progress / b.work.current_progress
-				)
-					return 1; // a comes after b
-				return 0; // a and b are equal
-			});
-
-			console.log('sort by progress (asc)');
-		}
-		else{
-			sortedByProgress = 2;
-
-			// Sort and create a new reference for works
-			$works = [...$works].sort((a, b) => {
-				if (
-					a.work.target_progress / a.work.current_progress > b.work.target_progress / b.work.current_progress
-				)
-					return -1; // a comes before b
-				if (
-					a.work.target_progress / a.work.current_progress < b.work.target_progress / b.work.current_progress
-				)
-					return 1; // a comes after b
-				return 0; // a and b are equal
-			});
-
-			console.log('sort by progress');
-		}
 	}
 
-	function sortByShared() {
-		$works = originalWorks;
+	function handleSortByShared(){
+		const { sortedByShared: newSortedByShared, sortedWorks } = sortByShared(sortedByShared, originalWorks);
+
+		sortedByShared = newSortedByShared; // Update the local variable
+        works.set(sortedWorks);
 
 		sortedByTitle = 0;
 		sortedByType = 0;
 		sortedByProgress = 0;
-
-		if (sortedByShared==2) {
-			sortedByShared = 0;
-			console.log('not sorted by shared');
-		} else if (sortedByShared==0){
-			sortedByShared = 1;
-
-			// Sort and create a new reference for works
-			$works = [...$works].sort((a, b) => {
-				if (!a.shared && b.shared) return 1; // a comes before b
-				if (a.shared && !b.shared) return -1; // a comes after b
-				return 0; // a and b are equal
-			});
-
-			console.log('sort by title (asc)');
-		}
-		else{
-			sortedByShared = 2;
-
-			// Sort and create a new reference for works
-			$works = [...$works].sort((a, b) => {
-				if (!a.shared && b.shared) return -1; // a comes before b
-				if (a.shared && !b.shared) return 1; // a comes after b
-				return 0; // a and b are equal
-			});
-
-			console.log('sort by title (desc)');
-		}
-
 	}
 
 	//-------CHECKING, SHARING, EDITING, DELETING WORKS -------------------
@@ -436,7 +209,6 @@
 
 			console.log('New progress: ' + newDetails.current_progress);
 			
-
 			try {
 				const response = await updateWork(currentWork.id, newDetails); // Assuming this returns an object with statusCode and ok
 
@@ -450,7 +222,7 @@
 				if (popup) {
 					popup.classList.add('hidden');
 				}
-				await fetchWorks();
+				await handleFetchWorks();
 			} catch (error) {
 				console.error('Error occurred while sharing work:', error);
 
@@ -519,7 +291,7 @@
 			console.log("Deleted media.")
 		}
 		
-		await fetchWorks();
+		await handleFetchWorks();
 	}
 
 	function cancelDeletingMedia() {
@@ -539,7 +311,7 @@
 			<div class="flex items-start justify-center border-0 p-2">
 				<button
 					class="Ubuntu-font flex items-center space-x-2 text-lg font-bold text-black"
-					on:click={sortByTitle}
+					on:click={handleSortByTitle}
 				>
 					<span>Title</span>
 					{#if sortedByTitle==0}
@@ -556,7 +328,7 @@
 			<div class="flex items-start justify-center border-0 p-2">
 				<button
 					class="Ubuntu-font flex items-center space-x-2 text-lg font-bold text-black"
-					on:click={sortByType}
+					on:click={handleSortByType}
 				>
 					<span>Type</span>
 					{#if sortedByType==0}
@@ -573,7 +345,7 @@
 			<div class="flex items-start justify-center border-0 p-2">
 				<button
 					class="Ubuntu-font flex items-center space-x-2 text-lg font-bold text-black"
-					on:click={sortByProgress}
+					on:click={handleSortByProgress}
 				>
 					<span>Progress</span>
 					{#if sortedByProgress==0}
@@ -590,7 +362,7 @@
 			<div class="flex items-start justify-center border-0 p-2">
 				<button
 					class="Ubuntu-font flex items-center space-x-2 text-lg font-bold text-black"
-					on:click={sortByShared}
+					on:click={handleSortByShared}
 				>
 					<span>Shared</span>
 					{#if sortedByShared==0}
