@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { logout as logoutRequest } from '$lib/user.api';
+	import { logout as logoutRequest, getCurrentUser } from '$lib/user.api';
 	import { goto } from '$app/navigation';
 	import api from './api';
 	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	$: currentUrlValue = $page.url.pathname;
 
@@ -10,6 +12,21 @@
 	const isAddMediaPage = () => currentUrlValue.includes('addmedia');
 
 	let showLogout = false;
+
+	let username = writable('User');
+
+	$: console.trace($username);
+
+	onMount(() => {
+		getCurrentUser().then((response) => {
+			if (response.ok) {
+				console.log(response);
+				$username = response.body.user.name;
+			} else {
+				console.log('Failed to get current user');
+			}
+		});
+	});
 
 	function toggleLogout() {
 		showLogout = !showLogout;
@@ -62,7 +79,16 @@
 		on:click|stopPropagation={toggleLogout}
 		aria-expanded={showLogout}
 	>
-		<img src="/profilepicture.png" alt="Profile" class="h-10 w-10 rounded-full" />
+		<div class="flex items-center gap-4">
+			<div>{$username}</div>
+			<div class="leading-10 h-10 w-10 align-middle content-center rounded-full bg-gray-600 text-lg">
+				{$username
+					.split(' ')
+					.map((part) => (part.length > 0 ? part[0] : ''))
+					.slice(0, 2)
+					.join('')}
+			</div>
+		</div>
 	</button>
 	{#if showLogout}
 		<button

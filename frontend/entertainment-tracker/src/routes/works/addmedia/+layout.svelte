@@ -13,8 +13,8 @@
 </script>
 
 <div class="mx-auto w-full h-full max-w-screen-md py-3">
-	<div class="rounded bg-white p-6 h-full">
-		<div class="mb-6 flex justify-center gap-6 text-xl">
+	<div class="rounded bg-white p-6 h-full grid grid-rows-[auto_1fr] gap-6">
+		<div class="flex justify-center gap-6 text-xl">
 			<a
 				href="/works/addmedia/books"
 				class="Ubuntu-font active:font-bold
@@ -42,7 +42,7 @@
 			>
 		</div>
 
-		<div class="Inter-font">
+		<div class="Inter-font overflow-auto h-full">
 			{@render children()}
 		</div>
 	</div>
