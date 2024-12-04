@@ -97,4 +97,15 @@ dashboard:
   - felfele mutat -> növekvő (v. shared)
   - mind a két nyíl -> rendezetlen 
 - felhasználóval megosztott és felhasználó által felvett művek beolvasása után dátum szerinti sorrendbe rendezni (legutóbb hozzáadott legelőre)
-- százalék megjelenítése progress-nél 
+- százalék megjelenítése progress-nél
+
+## 2024.12.02. - 22 perc
+
+### további teendők:
+- tesztelés elvégzése
+  - end to end
+  - unit test
+  - integration
+- shared media törlésének implementálása frontend-en (az által, akivel meg lett osztva)
+- felhasználónév kiírása, profilképgenerálás
+- dokumentációk átnézése
