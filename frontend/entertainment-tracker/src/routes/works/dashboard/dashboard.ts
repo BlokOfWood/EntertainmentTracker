@@ -219,7 +219,7 @@ export function sortByProgress(sortedByProgress : number, originalWorks : WorkPl
             return 0; // a and b are equal
         });
 
-        console.log('sort by progress (asc)');
+        console.log('sort by progress (desc)');
     }
     else{
         sortedByProgress = 2;
@@ -237,7 +237,7 @@ export function sortByProgress(sortedByProgress : number, originalWorks : WorkPl
             return 0; // a and b are equal
         });
 
-        console.log('sort by progress');
+        console.log('sort by progress (asc)');
     }
 
     return { sortedByProgress, sortedWorks };
