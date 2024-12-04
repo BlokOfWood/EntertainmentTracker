@@ -77,14 +77,13 @@ export async function getMediaArtSource(work: Work) {
                 const currentBook = response.body.book; 
                 if (currentBook) { 
                     source = currentBook.thumbnail;
+                    console.log("Thumbnail aquired.");
                 } else {
-                    console.error("Book data is not available - Google Books API");
+                    console.error("Book data is not available.");
                     const isbnResponse = await getBookByISBN(work.third_party_id);
                     const isbnBook = isbnResponse.body.book; 
                     if (isbnBook) { 
                         source = isbnBook.thumbnail;
-                    } else {
-                        console.error("Book data is not available - ISBN");
                     }
                 }
             } catch (error) {
@@ -98,6 +97,7 @@ export async function getMediaArtSource(work: Work) {
                 const currentMovie = response.body.movie; 
                 if (currentMovie) { 
                     source = currentMovie.thumbnail;
+                    console.log("Thumbnail aquired.");
                 } else {
                     console.error("Movie data is not available");
                 }    
@@ -112,6 +112,7 @@ export async function getMediaArtSource(work: Work) {
                 const currentShow = response.body.tvshow; 
                 if (currentShow) { 
                     source = currentShow.thumbnail;
+                    console.log("Thumbnail aquired.");
                 } else {
                     console.error("Show data is not available");
                 }    
@@ -121,6 +122,7 @@ export async function getMediaArtSource(work: Work) {
         }
     } else if (work.type === 'youtube') {
         source = `https://www.youtube.com/embed/${work.third_party_id}?si=dourAMMy3-5pBbJr`;
+        console.log("Thumbnail aquired.");
     }
 
     return source;
