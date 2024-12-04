@@ -81,12 +81,14 @@
 	>
 		<div class="flex items-center gap-4">
 			<div>{$username}</div>
-			<div class="leading-10 h-10 w-10 align-middle content-center rounded-full bg-gray-600 text-lg">
-				{$username
-					.split(' ')
-					.map((part) => (part.length > 0 ? part[0] : ''))
-					.slice(0, 2)
-					.join('')}
+			<div class="leading-10 h-10 w-10 align-middle content-center rounded-full bg-gray-600">
+				<div class="mb-0.5 text-lg uppercase">
+					{$username
+						.split(' ')
+						.map((part) => (part.length > 0 ? part[0] : ''))
+						.slice(0, 2)
+						.join('')}
+				</div>
 			</div>
 		</div>
 	</button>
