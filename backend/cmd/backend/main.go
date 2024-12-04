@@ -149,6 +149,10 @@ func openDB(cfg config) (*sql.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	_, err = db.Exec("PRAGMA foreign_keys = ON")
+	if err != nil {
+		return nil, err
+	}
 	driver, err := sqlite.WithInstance(db, &sqlite.Config{})
 	if err != nil {
 		return nil, err

@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS shared_entries (
     shared_with INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (entry_id) REFERENCES entries(id) ON DELETE CASCADE,
+    FOREIGN KEY (entry_id) REFERENCES media_entries(id) ON DELETE CASCADE,
     FOREIGN KEY (shared_by) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (shared_with) REFERENCES users(id) ON DELETE CASCADE
 );
