@@ -1,11 +1,7 @@
-
-import { BookMarked, Users, Share, Trash2, ChevronDown, ChevronUp, ChevronsUpDown, CircleCheck } from 'lucide-svelte';
-import type { Work, SharedWork, UpdateWorkRequest, ShareWorkRequest} from '$lib/api.model';
-import { deleteWork, deleteSharedWork, getWorks, getSharedWorks, updateWork, shareWork } from '$lib/works.api';
+import type { Work, SharedWork} from '$lib/api.model';
+import { getWorks, getSharedWorks } from '$lib/works.api';
 import { getBookByISBN, getTVShowByIMDbId, getMovie, getBookByGoogleId } from '$lib/addmedia.api';
-import { onMount } from 'svelte';
-import { goto } from '$app/navigation';
-import { writable, type Writable } from 'svelte/store';
+
 
 export type WorkPlus = {
     work: Work;
@@ -14,10 +10,8 @@ export type WorkPlus = {
     thumbnail: string;
 };
 
-let works: WorkPlus[] = []; // Now just an array of WorkPlus
-
 export async function fetchWorks() {
-    works = []; // Clear the works array
+    let works: WorkPlus[] = []; // Now just an array of WorkPlus
 
     let currentNotSharedWorks: Work[] = [];
 
@@ -73,7 +67,7 @@ export async function fetchWorks() {
     return works;
 }
 
-async function getMediaArtSource(work: Work) {
+export async function getMediaArtSource(work: Work) {
     let source = "";
 
     if (work.type === 'book') {
