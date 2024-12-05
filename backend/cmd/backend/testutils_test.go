@@ -47,7 +47,7 @@ type testServer struct {
 	*httptest.Server
 }
 
-func newTestServer(t *testing.T, h http.Handler) *testServer {
+func newTestServer(_ *testing.T, h http.Handler) *testServer {
 	ts := httptest.NewTLSServer(h)
 	return &testServer{ts}
 }

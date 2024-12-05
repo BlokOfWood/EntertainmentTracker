@@ -7,13 +7,10 @@ import (
 	"net/http"
 	"strconv"
 	"testing"
-	"time"
 
 	"github.com/BlokOfWood/EntertainmentTracker/backend/internal/data"
 	"github.com/stretchr/testify/assert"
 )
-
-var mockTime = time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC)
 
 func TestHealthcheckHandler(t *testing.T) {
 	app := newTestApplication(t)
@@ -265,6 +262,7 @@ func TestGetUserHandler(t *testing.T) {
 	token := ts.getToken(t, "", "")
 
 	code, _, bodyString := ts.getWithAuth(t, "/v1/users/me", token)
+	assert.Equal(t, http.StatusOK, code)
 
 	var body map[string]interface{}
 	err := json.Unmarshal([]byte(bodyString), &body)
