@@ -766,7 +766,7 @@ func (app *application) getBookHandler(w http.ResponseWriter, r *http.Request) {
 
 	var book bookResponse
 	isbn := ""
-	if resp.VolumeInfo.IndustryIdentifiers[0] != nil {
+	if len(resp.VolumeInfo.IndustryIdentifiers) > 0 {
 		isbn = resp.VolumeInfo.IndustryIdentifiers[0].Identifier
 	}
 	thumbnail := ""
