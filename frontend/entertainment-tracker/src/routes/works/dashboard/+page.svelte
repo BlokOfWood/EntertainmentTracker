@@ -142,6 +142,8 @@
 				$shareMessage = "Wrong email address.";
 			}
 		}
+
+		friendEmail="";
 	}
 
 	function cancelShareMedia(){
