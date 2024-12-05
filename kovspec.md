@@ -1,36 +1,36 @@
 # Entertainment Tracker
 
 ## Szabadriport
-Egy olyan rendszer, amiben követni lehet a könyvekkel, Netflix és egyéb sorozatokkal, filmekkel, YouTube videókkal való haladást. Külön megjelenítés jó lenne médiatípusonként, a rendszer az adott művekhez automatikusan begyűjti az adatokat külső forrásból. A tárolt művek közül lehessen törölni.
+Egy olyan rendszer, amiben követni lehet a könyvekkel, Netflix és egyéb sorozatokkal, filmekkel, YouTube videókkal való haladást. Külön megjelenítés jó lenne médiatípusonként, a rendszer az adott művekhez automatikusan begyűjti az adatokat külső forrásból. A tárolt művek közül lehessen törölni, lehessen őket rendezni a dashboard-on.
 Különböző eszközökön való bejelentkezés után ugyanazt lássa a felhasználó.
 Az adatok táblázatosan kerüljenek megjelenítésre.
 
 ## Irányítottriport
 
 - **Külső forrsából begyűjtött adatokként pontosan mire gondol a megrendelő?**
-- Megjelenési dátum, stáblista/író, összefoglaló.
+- Kategóriák, összefoglaló, könyveknél író.
 <br>
 
 - **Homescreen-t szeretne-e a felhasználó?**
-- Nem, lehessen választani.
+- Nem, a dashboard-ra vigyen bejelentkezés után, onnan lehessen tovább navigálni.
 <br>
 
 - **Külön megjelenítés médiatípusonként pontosan mit jelent?**
-- A haladáskövetés médiatípusonként specifikusan legyen, sorozatoknál a haladást jelző csík epizódoknak megfelelő számú rublikákra legyen bontva.
+- A haladáskövetés médiatípusonként specifikusan legyen, könyveknél oldalszám, filmeknél perc, sorozatoknál epizódszám, YouTube videonál óra : perc : másodperc formátum.
 <br>
 
 - **Legyen-e beágyazva a YouTube videó?**
-- Nem, csak kattintással vigyen át a videóhoz.
+- Igen.
 <br>
 
 - **Szerkeszthet-e több felhasználó egy műhöz tárolt haladást?**
-- Igen.
+- Nem, csak én tudjam szerkeszteni, amit én vettem fel, más csak láthassa, ha megosztom.
 - **Legyen külön nézet a "megosztott bejegyzések", "saját bejegyzések"-nek?**
-- Ne, csak lehessen szűrni.
+- Ne, csak lehessen rendezni.
 <br>
 
-- **Pontosan mire lehessen szűrni?**
-- Név, hossz és saját vagy megosztott bejegyzés
+- **Pontosan mi alapján lehessen rendezni?**
+- Név, típus, haladás és saját vagy megosztott bejegyzés.
 
 ## Áttekíntés
 Mindannyian sok filmet, könyvet vagy sorozatot elkezdünk aztán félbehagyunk, elfelejtve hogy meddig jutottunk. Ez az applikáció ezt a problémát segítené azzal, hogy lehetővé teszi a megkezdett szórakoztató tartalmak feljegyzését és a haladás megjelölését.
@@ -66,7 +66,7 @@ Az alkalmazásban tárolt vagy felhasznált harmadik féltől származó adatokr
 |:----|:-|:--|:--|:-------|
 |Felület|K1|Mű táblázat|1.0|A felület, amelyen az összes követett mű kijelzésre kerül.|
 |Felület|K2|Mű hozzáadás/módosítás ablak|1.0|A felület, amelyen új követett művet lehet felvenni vagy módosítani egy meglévőt.|
-|Felület|K3|Művek szűrése|1.0|Lehessen szűrni a műveket a név és állapot alapján.|
+|Felület|K3|Művek rendezése|1.0|Lehessen rendezni a műveket a név, típus, haladás és megosztás alapján.|
 |Felület|K4|Mű előrehaladás kezelése|1.0|A különböző típusú művekkel az előrehaladást típusnak megfelelően lehet követni. Például: Könyvnél lap szám/max lapszám, filmnél idő/max idő|
 |Felület|K5|Mű törlése megerősítése|1.0|A törlés megerősítésére szolgáló felugró ablak.|
 |Modifikáció|K6|Mű felvétele|1.0|A felhasználó fel tudjon venni egy új művet.|
