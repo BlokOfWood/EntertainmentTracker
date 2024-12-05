@@ -39,7 +39,7 @@ Mindannyian sok filmet, könyvet vagy sorozatot elkezdünk aztán félbehagyunk,
 Jelenleg a szórakoztató médiák számontartása különböző appokon és webhelyeken keresztül tehető meg, amik nem kifejezetten abból a célból jöttek létre, hogy a személyes média fogyasztásunkat tartsuk számon. Ezért olyan módszerekhez kell folyamodni, amik nem kézenfekvőek például egy Excel tábla.
 
 ## Vágyálom rendszer
-A projekt célja egy olyan rendszer kialakítása, ami a különböző médiák fogyasztását egy felületen kezeli. A művek egy táblázatban kerülnek megjelenítésre, mely különböző tulajdonságok alapján szűréssel kereshető. Ezen a felületen tárolásra kerülhet az adott műbeli haladás, ilyen állapotokkal például, hogy: még nem kezdte el a felhasználó, de szeretné megnézni vagy már nem szeretné folytatni. A rendszer a felhasználó eszközei között szinkronizálva tárolja a hozzáadott bejegyzéseket.
+A projekt célja egy olyan rendszer kialakítása, ami a különböző médiák fogyasztását egy felületen kezeli. A művek egy táblázatban kerülnek megjelenítésre, melyet különböző tulajdonságok alapján rendezni lehet. Ezen a felületen tárolásra kerülhet az adott műbeli haladás. A rendszer a felhasználó eszközei között szinkronizálva tárolja a hozzáadott bejegyzéseket.
 
 ## Funkcionális követelmények
 - Művek megjelenítése
@@ -48,7 +48,7 @@ A projekt célja egy olyan rendszer kialakítása, ami a különböző médiák 
 - Művek módosítása
 - Művek szűrése
 - Művek törlése
-- Metaadat letöltése a művekhez
+- Metaadat betöltése a művekhez
 - Felhasználók kezelése
 - Bejegyzések megosztása más felhasználókkal
 
@@ -75,6 +75,6 @@ Az alkalmazásban tárolt vagy felhasznált harmadik féltől származó adatokr
 |Perziesztencia|K9|Művek perzisztenciája|1.0|Művek tárolása a rendszer indítások között.|
 |Felhasználó kezelés|K10|Felhasználó regisztráció|1.0|Egy regisztrálatlan felhasználó fel tudja magát venni a rendszerbe.|
 |Felhasználó kezelés|K11|Felhasználó bejelentkezés|1.0|Egy regisztrált felhasználó be tud jelentkezni a rendszerbe.|
-|Felület|K12|Metaadat letöltése|1.0|A felhasználó láthat külső forrásból információkat anélkül, hogy meg kell adnia.|
+|Felület|K12|Metaadat betöltése|1.0|A felhasználó láthat külső forrásból információkat anélkül, hogy meg kell adnia.|
 |Felhasználó kezelés|K13|Bejegyzés megosztása másik felhasználóval|1.0|Egy felhasználó meg tud osztani egy saját bejegyzést egy másik felhasználóval.|
 |Felhasználó kezelés|K14|A felhasználó kijelentkeztetése a rendszerből|1.0|Egy bejelentkezett felhasználó kijelentkezik a rendszerből.|
