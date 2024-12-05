@@ -21,9 +21,9 @@ Regisztráció/belépés:
 
 ![Új mű hozzáadása, mű szerkesztése, mű törlése, mű megosztása use case ábra](./assets/usecase_umls/media_actions_uml.jpg)
 
-Művek megtekintése, művek szűrése, kijelentkezés:
+Művek megtekintése, művek rendezése, kijelentkezés:
 
-![Művek megtekintése, művek szűrése, kijelentkezés use case ábra](./assets/usecase_umls/check-media_filter-media_log-out_uml.jpg)
+![Művek megtekintése, művek rendezése, kijelentkezés use case ábra](./assets/usecase_umls/check-media_filter-media_log-out_uml.jpg)
 
 ### Regisztáció
 - leírás: a felhasználó felveszi magát mint új még nem szereplő elem a rendszerben
@@ -58,8 +58,8 @@ Művek megtekintése, művek szűrése, kijelentkezés:
 - leírás: a felhasználó megtekinti a rendszerben tárolt műveket
 - előfeltételek: a felhasználó bejelentkezve van
 - egyéb: az összes tárolt mű megtekinthető
-### Művek szűrése
-- leírás: a felhasználó a tárolt művek között szűr, a rendszer csak a szűrésnek megfelelő műveket jeleníti meg
+### Művek rendezése
+- leírás: a felhasználó a tárolt műveket rendezi növekvő/csökkenő/eredeti sorrendbe, a rendszer a rendezésnek megfelelően jeleníti meg a műveket
 - előfeltételek: a felhasználó bejelentkezve van
 ### Mű megosztása
 - leírás: a felhasználó a tárolt műveket más felhasználókkal meg tudja osztani
@@ -75,7 +75,7 @@ Művek megtekintése, művek szűrése, kijelentkezés:
 |Meglévő mű szerkesztése|K2, K4, K7, K9|
 |Meglévő mű törlése|K5, K8, K9|
 |Művek megtekíntése|K1,K12|
-|Művek szűrése|K3|
+|Művek rendezése|K3|
 |Mű megosztása|K13|
 
 ## Képernyő tervek
@@ -96,7 +96,7 @@ A felhasználó a navigációs sáv Dashboard gombjára kattintva megtekintheti 
 ![Navbar Component](./assets/figma/navbar.png)
 
 ### Dashboard
-A felhasználó meg tudja tekinteni a hozzáadott műveket, ezeket tudja szerkeszteni a ceruza ikonnal, törölni a piros szemetesláda ikonnal, vagy meg tudja osztani másik felhasználóval a megosztás ikonnal.
+A felhasználó meg tudja tekinteni a hozzáadott műveket, ezeket tudja szerkeszteni a könyvjelző ikonnal, törölni a piros szemetesláda ikonnal, vagy meg tudja osztani másik felhasználóval a megosztás ikonnal. A felhasználó a vele megosztott művet tudja törölni (a megosztást visszavonni) a piros szemetesláda ikonnal, olyan műnél, ami vele megosztásra került (ezt jelzi a kis emberke ikon a 'Shared' oszlopban).
 A felhasználó a Title, Type, Progress és Shared fejléc elemekkel tudja változtatni a tárolt művek megjelenítési sorrendjét.
 
 ![Dashboard](./assets/figma/dashboard.png)
@@ -156,7 +156,7 @@ Delete Confirmation: A felhasználónak a törlés gomb megnyomása után válas
 - Új mű hozzáadása: új mű gomb -> új mű ablak -> kitölti az űrlapot -> mentés gomb
 - Mű szerkesztése: adott művön szerkesztés gomb -> mű szerkesztés ablak -> átírja amit szeretne -> mentés gomb
 - Mű törlése: mű törlése gomb -> törlés megerősítés felugró ablak -> megerősítés gomb
-- Művek szűrése: adott kategória szűrő mező -> szűrési minta beírása
+- Művek rendezése: megfelelő fejlécmező kattintás -> művek rendezési sorrendjének változása
 - Regsiztáció: email cím megadása -> felhasználó név megadása -> jelszó megadása -> regisztráció gomb megnyomása
 - Bejelentkezés: felhasználó név megadása -> jelszó megadása -> bejelentkezés gomb megnyomása
 - Kijelentkezés: jobb felül profil gomb -> kijelentkezés gomb
