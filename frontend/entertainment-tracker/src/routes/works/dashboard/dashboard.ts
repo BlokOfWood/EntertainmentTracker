@@ -77,7 +77,6 @@ export async function getMediaArtSource(work: Work) {
                 const currentBook = response.body.book; 
                 if (currentBook) { 
                     source = currentBook.thumbnail;
-                    console.log("Thumbnail aquired.");
                 } else {
                     console.error("Book data is not available.");
                     const isbnResponse = await getBookByISBN(work.third_party_id);
