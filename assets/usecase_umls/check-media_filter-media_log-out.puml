@@ -3,7 +3,7 @@ left to right direction
 package SystemBoundary {
   usecase "Kijelentkezés" as LogOut
   usecase "Művek megtekintése" as Dashboard
-  usecase "Művek szűrése" as FilterLogs
+  usecase "Művek rendezése" as FilterLogs
   LogOut <. Dashboard : <<extend>>
   Dashboard .> FilterLogs : <<extend>>
   FilterLogs .> Dashboard : <<include>>
