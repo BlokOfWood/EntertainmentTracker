@@ -2,6 +2,34 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Login Page', () => {
 	test.beforeEach(async ({ page }) => {
+		await page.route('**/users/login', route => {
+			const request = route.request();
+			const postData = JSON.parse(request.postData() || '{}');
+
+			if (postData.email === 'invalid@example.com') {
+				route.fulfill({
+					status: 401,
+					body: JSON.stringify({ message: 'Invalid login!' })
+				});
+			} else if (postData.email === 'test1@test.com' && postData.password === 'testtest') {
+				const response = {
+					authentication_token: {
+						token: 'mocked-jwt-token',
+						expiry: new Date(Date.now() + 3600 * 1000) // 1 hour expiry
+					}
+				};
+				route.fulfill({
+					status: 200,
+					body: JSON.stringify(response)
+				});
+			} else {
+				route.fulfill({
+					status: 401,
+					body: JSON.stringify({ message: 'Invalid login!' })
+				});
+			}
+		});
+
 		await page.goto('/user/login');
 	});
 
