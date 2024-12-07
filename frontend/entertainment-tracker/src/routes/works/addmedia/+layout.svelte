@@ -13,7 +13,7 @@
 </script>
 
 <div class="mx-auto w-full h-full max-w-screen-md py-3">
-	<div class="rounded bg-white p-6 h-full grid grid-rows-[auto_1fr] gap-6">
+	<div class="rounded bg-white py-4 h-full grid grid-rows-[auto_1fr] gap-6">
 		<div class="flex justify-center gap-6 text-xl">
 			<a
 				href="/works/addmedia/books"
@@ -42,7 +42,7 @@
 			>
 		</div>
 
-		<div class="Inter-font overflow-auto h-full">
+		<div class="Inter-font overflow-auto h-full px-6">
 			{@render children()}
 		</div>
 	</div>

@@ -15,8 +15,6 @@
 
 	let username = writable('User');
 
-	$: console.trace($username);
-
 	onMount(() => {
 		getCurrentUser().then((response) => {
 			if (response.ok) {
