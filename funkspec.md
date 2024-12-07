@@ -83,12 +83,12 @@ Művek megtekintése, művek rendezése, kijelentkezés:
 ### Register Page
 Felhasználó új fiókot tud létrehozni, e-mail cím, felhasználónév és jelszó megadásával, majd a 'Register' gombra kattintva létrejön a felhasználói fiók.
 
-![Register Page](./assets/figma/register_page.png)
+![Register Page](./assets/figma/register-page.png)
 
 ### Login Page
 Már regisztrált felhasználó be tud jelentkezni e-mail címmel és jelszóval.
 
-![Login Page](./assets/figma/login_page.png)
+![Login Page](./assets/figma/login-page.png)
 
 ### Navbar Component
 A felhasználó a navigációs sáv Dashboard gombjára kattintva megtekintheti a Dashboard-ot, Add Media gombbal új művet tud hozzáadni, valamint profilképére mozdítva a kurzort és a Logout-ra kattintva pedig ki tud lépni fiókjából.
@@ -104,52 +104,67 @@ A felhasználó a Title, Type, Progress és Shared fejléc elemekkel tudja vált
 ### Share with Friend
 E-mail cím megadásával meg oszthatja a felhasználó egy másik felhasználóval a haladását egy médiában.
 
-![Share with Friend](./assets/figma/share_with_friend.png)
+![Share with Friend](./assets/figma/share-modal.png)
 
 ### Add Media
 A felhasználó az Add Media oldalon tudja kiválasztani milyen médiatípust szeretne hozzáadni - könyvet, sorozatot, filmet, YouTube videót.
 
-![Add Media](./assets/figma/add_media.png)
+![Add Media](./assets/figma/add-media.png)
 
 #### Add Content - Component
 
 Add Media - Books: a felhasználó cím vagy ISBN azonosítóval tud keresni a Google Books adatbázisban és a találatok közül tud felvenni a követett művei közé könyvet.
 
-![Add Content - Component](./assets/figma/add_book.png)
+![Add Content - Component](./assets/figma/add-book.png)
 
 Add Media - Movies: a felhasználó cím vagy IMBDb azonosítóval tud keresni az TMDB adatbázisban és a találatok közül tud felvenni a követett művei közé filmet.
 
-![Add Content - Component](./assets/figma/add_tv_show.png)
+![Add Content - Component](./assets/figma/add-tv.png)
 
 Add Media - TV Shows: a felhasználó cím vagy IMBDb azonosítóval tud keresni az TMDB adatbázisban és a találatok közül tud felvenni a követett művei közé sorozatot.
 
-![Add Content - Component](./assets/figma/add_movie.png)
+![Add Content - Component](./assets/figma/add-movie.png)
 
 Add Media - YouTube: a felhasználó URL-el és megjelenítési név megadásával tud hozzáadni YouTube videót a követett műveihez.
 
-![Add Content - Component](./assets/figma/add_youtube.png)
+![Add Content - Component](./assets/figma/add-youtube.png)
+
+### View Media
+A felhasználó a dashbordon rá tud menni az egyes művekre és bővebb információt kap az adott műről.
+
+#### View Media - Books
+![View Media - Books](./assets/figma/view-book.png)
+
+#### View Media - TV Shows
+![View Media - TV Shows](./assets/figma/view-tv.png)
+
+#### View Media - Movies
+![View Media - Movies](./assets/figma/view-movie.png)
+
+#### View Media - YouTube
+![View Media - YouTube](./assets/figma/view-youtube.png)
 
 ### Edit Media
 
 Edit Media - Books: A felhasználó frissíteni tudja hanyadik oldalon tart a könyvben.
 
-![Edit Media - Books](./assets/figma/edit_book.png)
+![Edit Media - Books](./assets/figma/edit-book.png)
 
 Edit Media - TV Shows: A felhasználó frissíeni tudja hanyadik epizódnál tart a sorozatban.
 
-![Edit Media - TV Shows](./assets/figma/edit_tv_show.png)
+![Edit Media - TV Shows](./assets/figma/edit-tv.png)
 
 Edit Media - Movies: A felhasználó frissíteni tudja hanyadik percnél tart a filmben.
 
-![Edit Media - Movies](./assets/figma/edit_movie.png)
+![Edit Media - Movies](./assets/figma/edit-movie.png)
 
 Edit Media - YouTube: A felhasználó meg tudja változtatni a videó követett művei közötti megjelenítési nevét.
 
-![Edit Media - YouTube](./assets/figma/edit_youtube.png)
+![Edit Media - YouTube](./assets/figma/edit-youtube.png)
 
 Delete Confirmation: A felhasználónak a törlés gomb megnyomása után válaszolnia kell a törlés megerősítés dialógusra, hogy végbe menjen egy mű törlése.
 
-![Delete Confirmation](./assets/figma/delete_confirmation.png)
+![Delete Confirmation](./assets/figma/delete-modal.png)
 
 ## Forgatókönyvek
 - Haladását módosítja egy adott műben a felhasználó: mű melletti szerkesztés gomb -> módosítás ablak -> átírja a haladást -> mentés
