@@ -78,7 +78,7 @@
 					</div>
 					<div>{series.title}</div>
 					<div>{series.first_air_date}</div>
-					<div>{series.vote_average}</div>
+					<div>{series.vote_average.toFixed(1)}</div>
 					<div class="text-center">
 						<button
 							class="h-fit w-fit text-center disabled:opacity-35"
