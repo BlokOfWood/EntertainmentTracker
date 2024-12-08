@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { updateWork } from '$lib/works.api';
     import type { Book, Movie, TvShow, Work, UpdateWorkRequest } from '$lib/api.model';
-    import { getBookByISBN, getTVShowByIMDb, getTVShowByIMDbId, getMovieByIMDb, getMovie } from '$lib/addmedia.api';
+    import { getBookByISBN, getTVShowByIMDbId, getMovie, getBookByGoogleId } from '$lib/addmedia.api';
     import { writable } from 'svelte/store';
     import { goto } from '$app/navigation';
 
@@ -12,6 +12,7 @@
 	let description = '';
 	let categories!: String[];
 	let author = '';
+	let isbn='';
 	let YTURL = 'https://www.youtube.com/embed/dQw4w9WgXcQ?si=dourAMMy3-5pBbJr';
 
 	let newProgress = -1;
@@ -28,34 +29,50 @@
 
         if (currentWork.type == 'book') {
 			if(currentWork.third_party_id!=""){
-				getBookByISBN(currentWork.third_party_id).then(response => {
+				getBookByGoogleId(currentWork.third_party_id).then(response => {
 					const currentBook = response.body.book; // Get the book object directly
 					book.set(response.body.book); // Use .set to update the store
 					if (currentBook) { // Check if currentBook is not null
-					author = currentBook.author; // Access author directly
-					description = currentBook.description; // Access description
-					mediaArtSource = currentBook.thumbnail; // Access thumbnail
-					categories = currentBook.categories; // Access categories
+						author = currentBook.author; // Access author directly
+						description = currentBook.description; // Access description
+						mediaArtSource = currentBook.thumbnail; // Access thumbnail
+						categories = currentBook.categories; // Access categories
+						isbn=currentBook.isbn;
+						console.log("Fetched with getBookByGoogleId function.");
+					} else {
+						// Handle the case where currentBook is null
+						console.error("Book data is not available - Google Books API");
 
-				} else {
-					// Handle the case where currentBook is null
-					console.error("Book data is not available");
+						getBookByISBN(currentWork.third_party_id).then(response => {
+							const currentBook = response.body.book; // Get the book object directly
+							book.set(response.body.book); // Use .set to update the store
+							if (currentBook) { // Check if currentBook is not null
+								author = currentBook.author; // Access author directly
+								description = currentBook.description; // Access description
+								mediaArtSource = currentBook.thumbnail; // Access thumbnail
+								categories = currentBook.categories; // Access categories
+								isbn=currentBook.isbn;
+								console.log("Fetched with getBookByISBN function.");
+							} else {
+								console.error("Book data is not available - ISBN");
 
-					const mockbook : Book = {
-						id: "",
-						isbn: "",
-						title: "",
-						author: "",
-						description: "",
-						page_count: 0,
-						thumbnail: "",
-						categories: [],
-						published_date: "",
-						publisher: "",
-						language: ""
-					}
-					book.set(mockbook);
-				}    
+								const mockbook : Book = {
+									id: "",
+									isbn: "",
+									title: "",
+									author: "",
+									description: "",
+									page_count: 0,
+									thumbnail: "",
+									categories: [],
+									published_date: "",
+									publisher: "",
+									language: ""
+								}
+								book.set(mockbook);
+							}
+						});
+					}   
 				});   
 			}
 			else{
@@ -189,6 +206,8 @@
 			console.log('New progress: ' + newDetails.current_progress);
 		}
 
+		console.log(newDetails);
+
 		updateWork(currentWork.id, newDetails);
 
 		//reset these values so it can be checked wether the user filled the fields or not
@@ -222,7 +241,7 @@
                         <img src={mediaArtSource} alt="Cover art" class="rounded-md h-auto" />
                         {#if currentWork.type === 'book'}
                             <div class="text-xxs Ubuntu-font pt-1 text-center">
-                                {currentWork.third_party_id}
+                                {isbn}
                             </div>
                         {/if}
                         <div class="text-xxs Ubuntu-font p-1 text-center">Categories:</div>
@@ -245,39 +264,6 @@
                     <div class="text-xxs Ubuntu-font pt-3 text-start" style="line-height: 2.5;">
                         {description}
                     </div>
-                    <div class="Ubuntu-font pb-2 pt-6 text-sm font-bold">Progress</div>
-                    <div>
-                        {#if currentWork.type === 'show'}
-                            <input
-                                type="progress"
-                                placeholder="Episode number / {currentWork.target_progress}"
-                                on:input={setNewProgress}
-                                class="mr-1 rounded-md border p-1.5 text-sm"
-                            />
-                        {/if}
-                        {#if currentWork.type === 'book'}
-                            <input
-                                type="progress"
-                                placeholder="Page number / {currentWork.target_progress}"
-                                on:input={setNewProgress}
-                                class="mr-1 rounded-md border p-1.5 text-sm"
-                            />
-                        {/if}
-                        {#if currentWork.type === 'movie'}
-                            <input
-                                type="progress"
-                                placeholder="Minutes / {currentWork.target_progress}"
-                                on:input={setNewProgress}
-                                class="mr-1 rounded-md border p-1.5 text-sm"
-                            />
-                        {/if}
-                        <button
-                            class="bg-background rounded-md px-6 py-1.5 text-sm text-white"
-                            on:click={mediaEdited}
-                        >
-                            Save
-                        </button>
-                    </div>
                 </div>
             </div>
         {/if}
@@ -285,21 +271,6 @@
             <div class="ml-24 mr-24 mt-6 flex flex-col">
                 <div class="flex items-center justify-center">
                     <iframe title="video" class="aspect-[18/10] w-full" src="{YTURL}"> </iframe>
-                </div>
-                <div class="Ubuntu-font pb-2 pt-6 text-sm font-bold">Progress</div>
-                <div class="flex">
-                    <input
-                        type="progress"
-                        placeholder="Minutes"
-                        on:input={setNewProgress}
-                        class="mr-1 rounded-md border p-1.5 text-sm"
-                    />
-                    <button
-                        class="bg-background rounded-md px-6 py-1.5 text-sm text-white"
-                        on:click={mediaEdited}
-                    >
-                        Save
-                    </button>
                 </div>
             </div>
         {/if}

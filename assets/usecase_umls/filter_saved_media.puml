@@ -3,10 +3,9 @@ left to right direction
 
 actor :Bejelentkezett \n felhasználó: as LoggedInUser
 
-usecase "Már hozzáadott \n művek között szűrés" as FilterMedia
-usecase "Művek szűrésnek \n megfelelő megjelenítése" as DisplayFilteredMedia
+usecase "Már hozzáadott \n művek rendezése" as FilterMedia
+usecase "Művek rendezésnek \n megfelelő megjelenítése" as DisplayFilteredMedia
 
 LoggedInUser --> FilterMedia
 FilterMedia --> DisplayFilteredMedia
-
 @enduml

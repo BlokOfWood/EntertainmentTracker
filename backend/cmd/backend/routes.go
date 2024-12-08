@@ -38,6 +38,7 @@ func (app *application) routes() http.Handler {
 
 	router.HandlerFunc(http.MethodPost, "/v1/share", app.requireAuthenticatedUser(app.shareMediaEntryHandler))
 	router.HandlerFunc(http.MethodGet, "/v1/shared", app.requireAuthenticatedUser(app.listSharedEntriesHandler))
+	router.HandlerFunc(http.MethodDelete, "/v1/shared/:id", app.requireAuthenticatedUser(app.deleteSharedEntryHandler))
 
 	return app.recoverPanic(app.enableCORS(app.authenticate(router)))
 }

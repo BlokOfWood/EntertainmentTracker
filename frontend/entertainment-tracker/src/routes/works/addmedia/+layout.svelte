@@ -12,36 +12,38 @@
 	});
 </script>
 
-<div class="mx-auto my-8 w-full max-w-screen-md rounded bg-white p-6">
-	<div class="mb-6 flex justify-center text-xl gap-6">
-		<a
-			href="/works/addmedia/books"
-			class="Ubuntu-font active:font-bold
-            {$page.url.pathname.endsWith('addmedia/books') ? 'font-bold' : ''}
-            ">Books</a
-		>
-		<a
-			href="/works/addmedia/tvseries"
-			class="Ubuntu-font active:font-bold
-            {$page.url.pathname.endsWith('addmedia/tvseries') ? 'font-bold' : ''}
-            ">TV Series</a
-		>
-		<a
-			href="/works/addmedia/movies"
-			class="Ubuntu-font active:font-bold
-            {$page.url.pathname.endsWith('addmedia/movies') ? 'font-bold' : ''}
-            ">Movies</a
-		>
+<div class="mx-auto w-full h-full max-w-screen-md py-3">
+	<div class="rounded bg-white py-4 h-full grid grid-rows-[auto_1fr] gap-6">
+		<div class="flex justify-center gap-6 text-xl">
+			<a
+				href="/works/addmedia/books"
+				class="Ubuntu-font active:font-bold
+		{$page.url.pathname.endsWith('addmedia/books') ? 'font-bold' : ''}
+		">Books</a
+			>
+			<a
+				href="/works/addmedia/tvseries"
+				class="Ubuntu-font active:font-bold
+		{$page.url.pathname.endsWith('addmedia/tvseries') ? 'font-bold' : ''}
+		">TV Series</a
+			>
+			<a
+				href="/works/addmedia/movies"
+				class="Ubuntu-font active:font-bold
+		{$page.url.pathname.endsWith('addmedia/movies') ? 'font-bold' : ''}
+		">Movies</a
+			>
 
-		<a
-			href="/works/addmedia/youtube"
-			class="Ubuntu-font active:font-bold
-            {$page.url.pathname.endsWith('addmedia/youtube') ? 'font-bold' : ''}
-            ">YouTube</a
-		>
-	</div>
+			<a
+				href="/works/addmedia/youtube"
+				class="Ubuntu-font active:font-bold
+		{$page.url.pathname.endsWith('addmedia/youtube') ? 'font-bold' : ''}
+		">YouTube</a
+			>
+		</div>
 
-	<div class="Inter-font">
-		{@render children()}
+		<div class="Inter-font overflow-auto h-full px-6">
+			{@render children()}
+		</div>
 	</div>
 </div>

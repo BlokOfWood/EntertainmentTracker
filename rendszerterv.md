@@ -4,14 +4,16 @@
 
 ## Projekt terv
 ### Projekt munkások
-- Kozák Bálint: backend fejlesztő, web designer
-- Pap Sándor Dániel: frontend fejlesztő, scrum master
-- Szász Hanna Rebeka: frontend fejlesztő, jegyző
+- Kozák Bálint: backend fejlesztő, web designer, backend tesztelő
+- Pap Sándor Dániel: frontend fejlesztő, scrum master, frontend tesztelő
+- Szász Hanna Rebeka: frontend fejlesztő, jegyző, frontend tesztelő
 ### Projekt szerepkörök
 - Backend fejlesztő: A backend architektúra fejlesztéséért felelős, pl. adatbázis-tervezés, API tervezés.
-- Web designer: A weboldalak kinézetének megtervezéséért felelős, pl. képernyőtervek megvalósítása.
+- Web designer: A weboldalak kinézetének megtervezéséért felelős, pl. képernyőtervek elkészítése.
+- Backen tesztelő: backend oldalon történő műveletek tesztelése.
 - Frontend fejlesztő: A frontend megvalósításáért felelős, pl. a képernyőtervek implementációja a weboldalon, a UX kialakítása.
 - Scrum master: A csapat irányításáért és a terméktulajdonossal való kommunikációért felelős.
+- Frontend tesztelő: frontend oldalon történő műveletek tesztelése.
 - Jegyző: A meeting-ek jegyzeteléséért és a projektre vonatkozó információk gyűjtéséért felelős.
 ### Ütemterv és mérföldkövek
 #### Sprint 1 - Fejlesztés
@@ -21,7 +23,7 @@
 #### Sprint 2 - Fejlesztés
 - Művek módosítása, törlése
 - Művek hozzáadása third party api-ok alapján
-- Művek szűrése
+- Művek rendezése
 Mérföldkő: A rendszer funkcionális, használható és tesztelhető.
 #### Sprint 3 - Fejlesztés
 - Demós visszajelzés feldolgozása, észrevételek megfontolása
@@ -47,7 +49,7 @@ MediaMind üzleti folyamatainak modellje:
 |:----|:-|:--|:--|:-------|
 |Felület|K1|Mű táblázat|1.0|A felület, amelyen az összes követett mű kijelzésre kerül.|
 |Felület|K2|Mű hozzáadás/módosítás ablak|1.0|A felület, amelyen új követett művet lehet felvenni vagy módosítani egy meglévőt.|
-|Felület|K3|Művek szűrése|1.0|Lehessen szűrni a műveket a név és állapot alapján.|
+|Felület|K3|Művek rendezése|1.0|Lehessen rendezni a műveket a név, típus, haladás és megosztás alapján.|
 |Felület|K4|Mű előrehaladás kezelése|1.0|A különböző típusú művekkel az előrehaladást típusnak megfelelően lehet követni. Például: Könyvnél lap szám/max lapszám, filmnél idő/max idő|
 |Felület|K5|Mű törlése megerősítése|1.0|A törlés megerősítésére szolgáló felugró ablak.|
 |Modifikáció|K6|Mű felvétele|1.0|A felhasználó fel tudjon venni egy új művet.|
@@ -99,9 +101,9 @@ Rendszerhasználati esetek és lefutásaik:
 
 ![Mentett művek megtekintése](./assets/usecase_umls/view_saved_media.jpg)
 
-- bejelentkezett felhasználó szűr a mentett művek között
+- bejelentkezett felhasználó rendez a mentett művek között
 
-![Szűrés mentett művek között](./assets/usecase_umls/filter_saved_media.jpg)
+![Rendezés mentett művek között](./assets/usecase_umls/filter_saved_media.jpg)
 
 - bejelentkezett felhasználó műben való haladást oszt meg
 
@@ -115,8 +117,7 @@ Menü-hierarchiák:
   - kijelentkezés
 - Dashboard:
   - mentett művek megtekintése
-  - szűrés mentett művek között
-  - művek rendszerezése
+  - rendezés mentett művek között
   - műben való haladás megosztása
   - mű szerkesztése
   - mű törlése
@@ -146,7 +147,7 @@ Menü-hierarchiák:
   - percszám frissítése
   - változások mentése
 - Edit Media - YouTube:
-  - másodpercszám frissítése
+  - percszám frissítése
   - változások mentése
 - Share With Friend:
   - barát e-mailcímének megadása
@@ -256,10 +257,10 @@ erDiagram
 A tesztelés célja a frontend megfelelő működésének vizsgálata.
 
 A frontendnek a felület megnyitásakor a felhasználónak elérhetővé kell tenni a regisztráció vagy bejelentkezés opciót.
-Bejelentkezés után a Dashboard-on a mentett műveknek megtekinhetőnek kell lenniük, köztük szűrni lehessen, új mű hozzáadásának vagy már létező mű szerkesztésének, törlésének lehetségesnek kell lenni.
+Bejelentkezés után a Dashboard-on a mentett műveknek megtekinhetőnek kell lenniük, köztük rendezni lehessen, új mű hozzáadásának vagy már létező mű szerkesztésének, törlésének lehetségesnek kell lenni.
 A felhasználónak lehetősége kell legyen műben való haladást megosztani, megosztott műben való haladást megtekinteni.
 
-Unit teszt:
+Unit teszt, end to end teszt:
 A tesztelés fejlesztési idő alatt történik.
 A megjelenített adatok pontosságának ellenőrzése, új mű hozzádása vagy már hozzáadott műveken végzett műveletek a megfelelő következményeket vonja maga után.
 Megbizonyosodni a frontend komponenseinek jelenlétéről a megfelelő funkciókkal, megjelenéssel.
@@ -281,7 +282,6 @@ A backendnek biztosítania kell az adatbázis műveletek megfelelő végrehajtá
 - **Tesztelendő területek:**
   - **Felhasználói hitelesítés:** Regisztráció és bejelentkezés végpontjainak tesztelése, helyes és helytelen adatokra adott válaszok ellenőrzése.
   - **CRUD műveletek művekhez:** Mű hozzáadásának, módosításának, törlésének tesztelése, ellenőrizve az adatbázis frissülését és a helyes válaszok visszaadását.
-  - **Szűrés és lekérdezés:** Szűrési funkciók tesztelése különböző paraméterekkel (például név, státusz) a helyes találati eredmények biztosítására.
   - **Megosztási funkció:** Megosztott művek kezelésének tesztelése, művek megosztása és megtekintése, jogosultságok ellenőrzése.
   - **Adat integritás:** A backend biztosítja, hogy minden adatbázis-módosítás konzisztense legyen, például a törölt művek nem maradhatnak megosztva.
 - **Módszer:** Minden végponthoz külön tesztesetek létrehozása, pozitív és negatív esetek lefuttatása, illetve adatbázis állapotok ellenőrzése.

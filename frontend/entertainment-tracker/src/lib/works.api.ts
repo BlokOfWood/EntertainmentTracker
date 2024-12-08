@@ -28,6 +28,11 @@ export async function deleteWork(id: number): ApiResponse<void> {
 	return api.delete(`/mediaentries/${id}`);
 }
 
+export async function deleteSharedWork(id: number): ApiResponse<void> {
+	console.log("unsharing media as we speapk");
+	return api.delete(`/shared/${id}`);
+}
+
 export async function shareWork(req: ShareWorkRequest): ApiResponse<void> {
 	return api.post('/share', req);
 }

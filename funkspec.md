@@ -21,9 +21,9 @@ Regisztráció/belépés:
 
 ![Új mű hozzáadása, mű szerkesztése, mű törlése, mű megosztása use case ábra](./assets/usecase_umls/media_actions_uml.jpg)
 
-Művek megtekintése, művek szűrése, kijelentkezés:
+Művek megtekintése, művek rendezése, kijelentkezés:
 
-![Művek megtekintése, művek szűrése, kijelentkezés use case ábra](./assets/usecase_umls/check-media_filter-media_log-out_uml.jpg)
+![Művek megtekintése, művek rendezése, kijelentkezés use case ábra](./assets/usecase_umls/check-media_filter-media_log-out_uml.jpg)
 
 ### Regisztáció
 - leírás: a felhasználó felveszi magát mint új még nem szereplő elem a rendszerben
@@ -58,8 +58,8 @@ Művek megtekintése, művek szűrése, kijelentkezés:
 - leírás: a felhasználó megtekinti a rendszerben tárolt műveket
 - előfeltételek: a felhasználó bejelentkezve van
 - egyéb: az összes tárolt mű megtekinthető
-### Művek szűrése
-- leírás: a felhasználó a tárolt művek között szűr, a rendszer csak a szűrésnek megfelelő műveket jeleníti meg
+### Művek rendezése
+- leírás: a felhasználó a tárolt műveket rendezi növekvő/csökkenő/eredeti sorrendbe, a rendszer a rendezésnek megfelelően jeleníti meg a műveket
 - előfeltételek: a felhasználó bejelentkezve van
 ### Mű megosztása
 - leírás: a felhasználó a tárolt műveket más felhasználókkal meg tudja osztani
@@ -75,7 +75,7 @@ Művek megtekintése, művek szűrése, kijelentkezés:
 |Meglévő mű szerkesztése|K2, K4, K7, K9|
 |Meglévő mű törlése|K5, K8, K9|
 |Művek megtekíntése|K1,K12|
-|Művek szűrése|K3|
+|Művek rendezése|K3|
 |Mű megosztása|K13|
 
 ## Képernyő tervek
@@ -83,12 +83,12 @@ Művek megtekintése, művek szűrése, kijelentkezés:
 ### Register Page
 Felhasználó új fiókot tud létrehozni, e-mail cím, felhasználónév és jelszó megadásával, majd a 'Register' gombra kattintva létrejön a felhasználói fiók.
 
-![Register Page](./assets/figma/register_page.png)
+![Register Page](./assets/figma/register-page.png)
 
 ### Login Page
 Már regisztrált felhasználó be tud jelentkezni e-mail címmel és jelszóval.
 
-![Login Page](./assets/figma/login_page.png)
+![Login Page](./assets/figma/login-page.png)
 
 ### Navbar Component
 A felhasználó a navigációs sáv Dashboard gombjára kattintva megtekintheti a Dashboard-ot, Add Media gombbal új művet tud hozzáadni, valamint profilképére mozdítva a kurzort és a Logout-ra kattintva pedig ki tud lépni fiókjából.
@@ -96,7 +96,7 @@ A felhasználó a navigációs sáv Dashboard gombjára kattintva megtekintheti 
 ![Navbar Component](./assets/figma/navbar.png)
 
 ### Dashboard
-A felhasználó meg tudja tekinteni a hozzáadott műveket, ezeket tudja szerkeszteni a ceruza ikonnal, törölni a piros szemetesláda ikonnal, vagy meg tudja osztani másik felhasználóval a megosztás ikonnal.
+A felhasználó meg tudja tekinteni a hozzáadott műveket, ezeket tudja szerkeszteni a könyvjelző ikonnal, törölni a piros szemetesláda ikonnal, vagy meg tudja osztani másik felhasználóval a megosztás ikonnal. A felhasználó a vele megosztott művet tudja törölni (a megosztást visszavonni) a piros szemetesláda ikonnal, olyan műnél, ami vele megosztásra került (ezt jelzi a kis emberke ikon a 'Shared' oszlopban).
 A felhasználó a Title, Type, Progress és Shared fejléc elemekkel tudja változtatni a tárolt művek megjelenítési sorrendjét.
 
 ![Dashboard](./assets/figma/dashboard.png)
@@ -104,74 +104,74 @@ A felhasználó a Title, Type, Progress és Shared fejléc elemekkel tudja vált
 ### Share with Friend
 E-mail cím megadásával meg oszthatja a felhasználó egy másik felhasználóval a haladását egy médiában.
 
-![Share with Friend](./assets/figma/share_modal.png)
+![Share with Friend](./assets/figma/share-modal.png)
 
 ### Add Media
 A felhasználó az Add Media oldalon tudja kiválasztani milyen médiatípust szeretne hozzáadni - könyvet, sorozatot, filmet, YouTube videót.
 
-![Add Media](./assets/figma/add_media.png)
+![Add Media](./assets/figma/add-media.png)
 
 #### Add Content - Component
 
 Add Media - Books: a felhasználó cím vagy ISBN azonosítóval tud keresni a Google Books adatbázisban és a találatok közül tud felvenni a követett művei közé könyvet.
 
-![Add Content - Component](./assets/figma/add_book.png)
+![Add Content - Component](./assets/figma/add-book.png)
 
 Add Media - Movies: a felhasználó cím vagy IMBDb azonosítóval tud keresni az TMDB adatbázisban és a találatok közül tud felvenni a követett művei közé filmet.
 
-![Add Content - Component](./assets/figma/add_tv_show.png)
+![Add Content - Component](./assets/figma/add-tv.png)
 
 Add Media - TV Shows: a felhasználó cím vagy IMBDb azonosítóval tud keresni az TMDB adatbázisban és a találatok közül tud felvenni a követett művei közé sorozatot.
 
-![Add Content - Component](./assets/figma/add_movie.png)
+![Add Content - Component](./assets/figma/add-movie.png)
 
 Add Media - YouTube: a felhasználó URL megadásával tud hozzáadni YouTube videót a követett műveihez.
 
-![Add Content - Component](./assets/figma/add_youtube.png)
+![Add Content - Component](./assets/figma/add-youtube.png)
 
 ### View Media
 A felhasználó a dashbordon rá tud menni az egyes művekre és bővebb információt kap az adott műről.
 
 #### View Media - Books
-![View Media - Books](./assets/figma/view_book.png)
+![View Media - Books](./assets/figma/view-book.png)
 
 #### View Media - TV Shows
-![View Media - TV Shows](./assets/figma/view_tv.png)
+![View Media - TV Shows](./assets/figma/view-tv.png)
 
 #### View Media - Movies
-![View Media - Movies](./assets/figma/view_movie.png)
+![View Media - Movies](./assets/figma/view-movie.png)
 
 #### View Media - YouTube
-![View Media - YouTube](./assets/figma/view_youtube.png)
+![View Media - YouTube](./assets/figma/view-youtube.png)
 
 ### Edit Media
 
 Edit Media - Books: A felhasználó frissíteni tudja hanyadik oldalon tart a könyvben.
 
-![Edit Media - Books](./assets/figma/edit_book.png)
+![Edit Media - Books](./assets/figma/edit-book.png)
 
 Edit Media - TV Shows: A felhasználó frissíeni tudja hanyadik epizódnál tart a sorozatban.
 
-![Edit Media - TV Shows](./assets/figma/edit_tv_show.png)
+![Edit Media - TV Shows](./assets/figma/edit-tv.png)
 
 Edit Media - Movies: A felhasználó frissíteni tudja hanyadik percnél tart a filmben.
 
-![Edit Media - Movies](./assets/figma/edit_movie.png)
+![Edit Media - Movies](./assets/figma/edit-movie.png)
 
 Edit Media - YouTube: A felhasználó frissíteni tudja hanyadik másodpercnél tart a videóban.
 
-![Edit Media - YouTube](./assets/figma/edit_youtube.png)
+![Edit Media - YouTube](./assets/figma/edit-youtube.png)
 
 Delete Confirmation: A felhasználónak a törlés gomb megnyomása után válaszolnia kell a törlés megerősítés dialógusra, hogy végbe menjen egy mű törlése.
 
-![Delete Confirmation](./assets/figma/delete_confirmation.png)
+![Delete Confirmation](./assets/figma/delete-modal.png)
 
 ## Forgatókönyvek
 - Haladását módosítja egy adott műben a felhasználó: mű melletti szerkesztés gomb -> módosítás ablak -> átírja a haladást -> mentés
 - Új mű hozzáadása: új mű gomb -> új mű ablak -> kitölti az űrlapot -> mentés gomb
 - Mű szerkesztése: adott művön szerkesztés gomb -> mű szerkesztés ablak -> átírja amit szeretne -> mentés gomb
 - Mű törlése: mű törlése gomb -> törlés megerősítés felugró ablak -> megerősítés gomb
-- Művek szűrése: adott kategória szűrő mező -> szűrési minta beírása
+- Művek rendezése: megfelelő fejlécmező kattintás -> művek rendezési sorrendjének változása
 - Regsiztáció: email cím megadása -> felhasználó név megadása -> jelszó megadása -> regisztráció gomb megnyomása
 - Bejelentkezés: felhasználó név megadása -> jelszó megadása -> bejelentkezés gomb megnyomása
 - Kijelentkezés: jobb felül profil gomb -> kijelentkezés gomb

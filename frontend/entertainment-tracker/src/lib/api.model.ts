@@ -29,6 +29,13 @@ export type LoginResponse = {
 	};
 };
 
+export type User = {
+	id: number;
+	email: string;
+	name: string;
+	created_at: Date;
+};
+
 export type UpdateWorkRequest = {
 	title: string;
 	type: WorkType;
@@ -83,6 +90,7 @@ export type MovieSearchResponse = {
 	title: string;
 	release_date: string;
 	popularity: number;
+	vote_average: number;
 	thumbnail: string;
 };
 
@@ -102,6 +110,7 @@ export type TvSearchResponse = {
 	title: string;
 	first_air_date: string;
 	popularity: number;
+	vote_average: number;
 	thumbnail: string;
 };
 

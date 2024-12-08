@@ -1,22 +1,37 @@
 <script lang="ts">
-	import { logout as logoutRequest } from '$lib/user.api';
+	import { logout as logoutRequest, getCurrentUser } from '$lib/user.api';
 	import { goto } from '$app/navigation';
 	import api from './api';
-    import { page } from '$app/stores';
+	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
 
-    $: currentUrlValue = $page.url.pathname;
+	$: currentUrlValue = $page.url.pathname;
 
-    const isDashboardPage = () => currentUrlValue.includes('dashboard');
-    const isAddMediaPage = () => currentUrlValue.includes('addmedia');
+	const isDashboardPage = () => currentUrlValue.includes('dashboard');
+	const isAddMediaPage = () => currentUrlValue.includes('addmedia');
 
 	let showLogout = false;
+
+	let username = writable('User');
+
+	onMount(() => {
+		getCurrentUser().then((response) => {
+			if (response.ok) {
+				console.log(response);
+				$username = response.body.user.name;
+			} else {
+				console.log('Failed to get current user');
+			}
+		});
+	});
 
 	function toggleLogout() {
 		showLogout = !showLogout;
 	}
 
 	function hideLogout(event: MouseEvent) {
-		if(typeof window === 'undefined') return;
+		if (typeof window === 'undefined') return;
 
 		const profileButton = document.querySelector('.profile-picture-button')!;
 		if (!profileButton.contains(event.target as Node)) {
@@ -35,15 +50,17 @@
 			await goto('/user/login');
 		});
 	}
-
 </script>
+
 <svelte:document on:click={hideLogout} />
 <div class="w-100 bg-header relative flex items-center justify-between pl-3 pr-3 shadow-md">
 	<div class="flex items-center">
-		<div class="w-fit pl-2 pr-1 text-right text-white">
-			<img src="/mediamindlogo.png" alt="MediaMind Logo" class="h-6 w-6" />
-		</div>
-		<div class="Ubuntu-font w-fit pr-8 text-left text-2xl text-white">MediaMind</div>
+		<a class="flex items-center" href="/works/dashboard">
+			<div class="w-fit pl-2 pr-1 text-right text-white">
+				<img src="/mediamindlogo.png" alt="MediaMind Logo" class="h-6 w-6" />
+			</div>
+			<div class="Ubuntu-font w-fit pr-8 text-left text-2xl text-white">MediaMind</div>
+		</a>
 		<a
 			href="/works/dashboard"
 			class="text-l w-fit p-2 text-white {isDashboardPage() ? 'font-bold' : ''} Ubuntu-font"
@@ -60,7 +77,18 @@
 		on:click|stopPropagation={toggleLogout}
 		aria-expanded={showLogout}
 	>
-		<img src="/profilepicture.png" alt="Profile" class="h-10 w-10 rounded-full" />
+		<div class="flex items-center gap-4">
+			<div>{$username}</div>
+			<div class="leading-10 h-10 w-10 align-middle content-center rounded-full bg-gray-600">
+				<div class="mb-0.5 text-lg uppercase">
+					{$username
+						.split(' ')
+						.map((part) => (part.length > 0 ? part[0] : ''))
+						.slice(0, 2)
+						.join('')}
+				</div>
+			</div>
+		</div>
 	</button>
 	{#if showLogout}
 		<button
