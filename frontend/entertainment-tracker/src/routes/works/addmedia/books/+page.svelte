@@ -76,7 +76,7 @@
 		{:else}
 			{#each $displayedBooks as book, idx}
 				<div class="text-center">
-					<img src={book.thumbnail} alt={book.title} class="h-24 w-16" />
+					<img src={book.thumbnail} alt={book.title} class="h-24 w-16 content-center" />
 				</div>
 				<div>{book.title}</div>
 				<div>{book.author}</div>

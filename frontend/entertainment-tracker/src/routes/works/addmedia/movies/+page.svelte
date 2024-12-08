@@ -74,7 +74,7 @@
 			{:else}
 				{#each $displayedSeries as series, idx}
 					<div class="text-center">
-						<img src={series.thumbnail} alt={series.title} class="h-24 w-16" />
+						<img src={series.thumbnail} alt={series.title} class="h-24 w-16 content-center" />
 					</div>
 					<div>{series.title}</div>
 					<div>{series.release_date}</div>
